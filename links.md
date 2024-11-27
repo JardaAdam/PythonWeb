@@ -41,10 +41,14 @@ python manage.py showmigrations
 ```
 
 # Zálohování a testování
-## Zálohování databáze
+
+## Zálohování databáze Export (DUMP):
 ```bash
 python manage.py dumpdata > backup.json
-
+```
+## Načítání ze zalohy Import (LOAD):
+```bash
+python manage.py loaddatautf8 ./files/fixtures.json
 ```
 ## Spuštění testů
 ```bash
@@ -52,8 +56,13 @@ python manage.py test
 ```
 
 
-##aktualizace slozky s balicky
+## Aktualizace slozky s balicky
 ```bash
 pip freeze > requirements.txt
+```
+
+## ? 
+```bash
+python manage.py shell
 ```
 
