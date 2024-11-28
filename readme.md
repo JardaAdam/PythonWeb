@@ -76,22 +76,22 @@ postup bych videl tak ze kalkulator bude mit ve sloupci polozka uvedeny odkaz a 
 
 - [ ] seznam druhů oopp
   - [ ] id - primární klíč, jedinečné ID pro každou položku ceny.
-  - [ ] druh - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
+  - [ ] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
   - [ ] cena - cena za revizi jednoho kusu daného druhu OOPP.
 - [ ] hromadny_evidencni_list_oopp
   - [ ] id - primární klíč, jedinečné ID pro každou položku OOPP
     - [ ] firma_list_id - cizí klíč na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
     - [ ] zakaznik_id - cizí klíč na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
-    - [ ] nazev_oopp - název OOPP (např. lano, helma, apod.)
-    - [ ] norma - norma OOPP (např. EN 358, EN 361)
-    - [ ] vyrobce - výrobce dané položky
-    - [ ] seriove_cislo - sériové číslo položky
-    - [ ] datum_vyroby - datum výroby položky
-    - [ ] datum_prvniho_pouziti - datum, kdy byla položka poprvé použita
-    - [ ] datum_revize - datum poslední revize
-    - [ ] datum_pristi_revize - datum příští revize
-    - [ ] zaver - výsledek revize (např. "vyhovuje" nebo "nevyhovuje")
-    - [ ] poznamky - další poznámky k revizi položky
+    - [x] name_ppe - název OOPP (např. lano, helma, apod.)
+    - [ ] PPE category  - norma OOPP (např. EN 358, EN 361)
+    - [ ] manufacturer - výrobce dané položky
+    - [ ] serial_number - sériové číslo položky
+    - [ ] date_manufakture - datum výroby položky
+    - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
+    - [ ] date_of_revision - datum poslední revize
+    - [ ] date_of_next_revision - datum příští revize
+    - [ ] verdict - výsledek revize (např. "vyhovuje" nebo "nevyhovuje")
+    - [ ] notes - další poznámky k revizi položky
 - [ ] firma_list_id #TODO dořešit strukturu tabulky 
   - Firma vytvoří v systému různé seznamy OOPP pro svá pracoviště nebo jednotlivé zaměstnance.
   - Každá položka OOPP, která je přidána, se přiřadí k odpovídajícímu evidenčnímu listu (např. „Stavba A – pracovník Novák“).
@@ -110,7 +110,7 @@ postup bych videl tak ze kalkulator bude mit ve sloupci polozka uvedeny odkaz a 
   - [ ] prijmeni - příjmení zákazníka
   - [ ] nazev_firmy - název firmy zákazníka
   - [ ] adresa - adresa zákazníka (s možností rozdělení na ulice, město, PSČ, pokud je potřeba)
-- [ ] revizni_technik
+- [ ] Revision
   - [ ] id - primární klíč, jedinečné ID pro každou revizi
   - [ ] druh_oopp - druh OOPP
   - [ ] vyrobce - výrobce položky
