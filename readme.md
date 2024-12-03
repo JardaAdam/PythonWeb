@@ -4,24 +4,37 @@ zamyslet se nad pouzitim forms pro kalkulacku,
 
 ## Struktura webu 
 
-### revision
+### Revision
 - zde se budou vkladat revize oopp a manipulovat s mini 
-- 
+- Formulář pro poptání revize ktery spocita cenu za revizi. Uživatel vloží do formuláře počtz jednostlivých 
+položek a fotmulař mu spočítá cenu.
+
+### Rope access work
+- část vebu kde nabízím práci ve výškách 
+- Formulář pro yadání poptávky
+
 ## Strukturovaný popis projektu a fáze vývoje
-1. Kalkulačka ceny revize OOPP
-- Funkce: Počítání ceny revize na základě počtu a typu položek, zohlednění formy dopravy (zákazníkova adresa / uživatelova adresa).
+1. Vztvoření databáze tabulek:
+    - Profile = rozšiřující uživatele (adresa, telefon, email)
+    - TypeOfPpe = název skupin, ceny jednotlivých skupin PPE
+    - SheetOfPpe = seznam všech revidovaných položek
+    - Revision = pomocna jsou zde všechny vyráběné položky a jejich návodz na provedení revize
+    - 
+2. Kalkulačka ceny revize OOPP ( Formulář )
+- Funkce: Počítání ceny revize na základě počtu a typu položek, zohlednění formy dopravy 
+(zákazníkova adresa / uživatelova adresa).
 - Registrace: Po výpočtu se zákazníkům nabídne formulář pro registraci a odeslání poptávky.
 - Backend integrace: Kalkulačka a registrace se propojí s backendem, kde se poptávka ukládá do databáze.
- 2. Efektivní zpracování záznamů o revizi.
+3. Efektivní zpracování záznamů o revizi.
 - Skenování QR kódů: Automatické nahrávání údajů z QR kódů do databáze.
 - Automatizace protokolů: Export dokumentů s výsledky revize a přehledem položek.
 - Upozornění na expiraci revizí: Systém upozorňuje zákazníky před vypršením platnosti revize a nabízí termíny k nové revizi.
-3. Poptávky na optimalizaci pracovních postupů
+4. Poptávky na optimalizaci pracovních postupů
 - Formulář optimalizace: Obsahuje rozvinuté otázky, které pomáhají získat klíčové informace o potřebách zákazníka.
 - Správa dat: Zpracování poptávek a přehled o konzultacích.
-4. Fakturace
+5. Fakturace
 - Automatické faktury: Systém generuje faktury na základě poptávek a záznamů o provedené revizi.
- 5. Kalendář s dostupnými termíny
+6. Kalendář s dostupnými termíny
 - Interní správa: Vložíte objednávky a dostupné termíny ručně.
 - Automatické rezervace: Zákazníci si mohou sami rezervovat volné termíny.
 
@@ -37,30 +50,50 @@ zamyslet se nad pouzitim forms pro kalkulacku,
 ## Kalkulačka
 - Příklad dat pro tabulku kalkulator:
 
-| ID  | Druh OOPP                  | Cena (Kč) |
-|-----|----------------------------|-----------|
-| 1   | Karabina                  | 100       |
-| 2   | Lano                      | 200       |
-| 3   | Celotělový úvazek         | 500       |
-| 4   | Arboristický úvazek       | 550       |
-| 5   | Lezecký úvazek            | 450       |
-| 6   | Helma                     | 150       |
-| 7   | Arboristická helma        | 180       |
-| 8   | Slaňovací brzda běžná     | 250       |
-| 9   | Slaňovací brzda antipanic | 300       |
-| 10  | Slaňovací brzda speciální | 350       |
-| 11  | Tlumič pádu "I"           | 400       |
-| 12  | Tlumič pádu "Y"           | 450       |
-| 13  | Zachycovač pádu jednoduchý| 100       |
-| 14  | Zachycovač pádu složitý   | 150       |
-| 15  | Kladka                    | 200       |
+| ID  | Druh OOPP                  | Cena (Kč/ks)              | ks |
+|-----|----------------------------|---------------------------|----|
+| 1   | Karabina                   | 100                       |    |
+| 2   | Lano                       | 3 / m                     |    |
+| 3   | Celotělový úvazek          | 500                       |    |
+| 4   | Arboristický úvazek        | 550                       |    |
+| 5   | Lezecký úvazek             | 450                       |    |
+| 6   | Helma                      | 150                       |    |
+| 7   | Arboristická helma         | 180                       |    |
+| 8   | Slaňovací brzda běžná      | 250                       |    |
+| 9   | Slaňovací brzda antipanic  | 300                       |    |
+| 10  | Slaňovací brzda speciální  | 350                       |    |
+| 11  | Tlumič pádu "I"            | 400                       |    |
+| 12  | Tlumič pádu "Y"            | 450                       |    |
+| 13  | Zachycovač pádu jednoduchý | 100                       |    |
+| 14  | Zachycovač pádu složitý    | 150                       |    |
+| 15  | Kladka                     | 200                       |    |
+
+
+| id | Další volitelné položky  | Cena                    | ks |
+|----|--------------------------|-------------------------|---|
+| 16 | Revize u zákazníka cesta | 10kč/km<br/>Praha=500kč |   |
+| 17 | Přepravní služba         | 200 kč                  |   |
+| 18 | Osobní předání Úvaly     | 0 kč                    |   |
+| 19 | Celková cena za revizi   | spocitaná cena          |---|
 
 
 
+- [ ] **Formulář** ve kterém uživatel zadá počet jednotlivých položek u každé **group_type_ppe** bude klikací 
+  odkaz na výčet jednotlivých **name_ppe** abz uživatel správně zařadil položku 
+  - [ ] formulář musí být chráněný proti bezpečnostnímu limitu odeslání tak abz mohl uživatel vzplnovat jak dlouho chce 
+  a nestalo se že v půlce vyplnování nbo na konci vyplnění kdz chce formulář odeslat přijde o data
+  - [ ] propojení s **Models** 
+    - [ ] TypeOfPpe -> daje o cene
+    - [ ] Revision -> proklikávací odkaz co spadá do této **group_type_ppe**
+    - [ ] User -> adresa pro výpočet cesty k zákazníkovy
+    - [ ] po zadání všech položek a kliknutí na spočítat se ukáže uživately celková částka za revizi a nabídne se mu 
+    odeslat objednávku na revizi -> **Button odeslat** odešle informace uživatelem zadaných počtech a zvoleném způsobu revize 
+    na email Admin ( rezervace@revizeOOPP.cz)
 
 kalkulator na frontendu upravit tak aby jsem nemusel vkladat data jak to index.html tak do tabulky v databazi. 
 
-postup bych videl tak ze kalkulator bude mit ve sloupci polozka uvedeny odkaz a pokud budu nekdy menit nazvy zmenim je pouze na jednom miste a zmena se provede vsude. 
+postup bych videl tak ze kalkulator bude mit ve sloupci polozka uvedeny odkaz a pokud budu nekdy menit nazvy zmenim 
+je pouze na jednom miste a zmena se provede vsude. 
 
 - [ ]
 - [ ] zadavani počtu jednotlivich položek
@@ -73,51 +106,65 @@ postup bych videl tak ze kalkulator bude mit ve sloupci polozka uvedeny odkaz a 
 ## Databáze 
 
 ### Modely 
+- [ ] Profile
+  - [ ] User 
+  - [ ] adress
+  - [ ] email
+  - [ ] phone
+  - [ ] IČO 
 
-- [ ] seznam druhů oopp
-  - [ ] id - primární klíč, jedinečné ID pro každou položku ceny.
-  - [ ] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
-  - [ ] cena - cena za revizi jednoho kusu daného druhu OOPP.
-- [ ] hromadny_evidencni_list_oopp
-  - [ ] id - primární klíč, jedinečné ID pro každou položku OOPP
-    - [ ] firma_list_id - cizí klíč na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
-    - [ ] zakaznik_id - cizí klíč na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
-    - [x] name_ppe - název OOPP (např. lano, helma, apod.)
-    - [ ] PPE category  - norma OOPP (např. EN 358, EN 361)
-    - [ ] manufacturer - výrobce dané položky
-    - [ ] serial_number - sériové číslo položky
-    - [ ] date_manufakture - datum výroby položky
-    - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
-    - [ ] date_of_revision - datum poslední revize
-    - [ ] date_of_next_revision - datum příští revize
-    - [ ] verdict - výsledek revize (např. "vyhovuje" nebo "nevyhovuje")
-    - [ ] notes - další poznámky k revizi položky
-- [ ] firma_list_id #TODO dořešit strukturu tabulky 
-  - Firma vytvoří v systému různé seznamy OOPP pro svá pracoviště nebo jednotlivé zaměstnance.
-  - Každá položka OOPP, která je přidána, se přiřadí k odpovídajícímu evidenčnímu listu (např. „Stavba A – pracovník Novák“).
-  - Tím se zajistí, že každá firma může spravovat své OOPP dle svých interních struktur – podle pracovních míst nebo zaměstnanců.
+- [ ] User 
+  - [ ] id - primární klíč, jedinečné ID pro každého zákazníka
+  - [ ] jmeno - jméno zákazníka
+  - [ ] prijmeni - příjmení zákazníka
+  - [ ] nazev_firmy - název firmy zákazníka
+  - [ ] adresa - adresa zákazníka (s možností rozdělení na ulice, město, PSČ, pokud je potřeba)
 
-- [ ]  firma_evidencni_listy
+- [ ]  Company_evidencni_listy
   - [ ] id - primární klíč, jedinečné ID pro každý seznam
   - [ ] firma_id - cizí klíč na tabulku zakaznici, identifikuje firmu, které evidenční list patří
   - [ ] nazev_listu - pojmenování seznamu (např. jméno zaměstnance nebo název pracoviště, např. „Stavba A – pracovník Novák“)
   - [ ] datum_vytvoreni - datum vytvoření tohoto evidenčního listu
   - [ ] popis - doplňkový popis, který přiblíží účel nebo podrobnosti evidenčního listu
 
-- [ ] zakaznici 
-  - [ ] id - primární klíč, jedinečné ID pro každého zákazníka
-  - [ ] jmeno - jméno zákazníka
-  - [ ] prijmeni - příjmení zákazníka
-  - [ ] nazev_firmy - název firmy zákazníka
-  - [ ] adresa - adresa zákazníka (s možností rozdělení na ulice, město, PSČ, pokud je potřeba)
-- [ ] Revision
-  - [ ] id - primární klíč, jedinečné ID pro každou revizi
-  - [ ] druh_oopp - druh OOPP
-  - [ ] vyrobce - výrobce položky
-  - [ ] norma - norma revizního vybavení
-  - [ ] manual_odkaz - odkaz na manuál, který obsahuje pokyny k provádění revize
-  - [ ] zivotnost - maximální životnost položky od data výroby a prvního použití (např. „10 let od prvního použití, 15 let od výroby“)
-  - [ ] Další funkcionalita: Bude propojená s tabulkou hromadny_evidencni_list_oopp prostřednictvím druhu a normy položky. Systém bude sledovat expiraci životnosti položky na základě data prvního použití a data výroby.
+- [ ] **TypeOfPpe**
+  - [ ] id - primární klíč, jedinečné ID pro každou položku ceny.
+  - [ ] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
+  - [ ] price - cena za revizi jednoho kusu daného druhu OOPP.
+  - [ ] spojení této tabulkz tak aby se zákazník mohl podívat co do této skupiny spadá
+
+- [ ] **SheetOfPpe**
+  - [ ] id - primární klíč, jedinečné ID pro každou položku OOPP
+  - [ ] ? company_list_id - cizí klíč na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
+  - [ ] user_id - cizí klíč na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
+  - [ ] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
+  - [x] name_ppe - Jmeno OOPP (Tripel Lock, Expert  III, Adjust)
+  - [ ] standart_ppe  - norma OOPP (např. EN 358, EN 361)
+  - [ ] manufacturer - výrobce dané položky
+  - [ ] serial_number - sériové číslo položky
+  - [ ] date_manufakture - datum výroby položky
+  - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
+  - [ ] date_of_revision - datum poslední revize
+  - [ ] date_of_next_revision - datum příští revize
+  - [ ] verdict - výsledek revize (např. "vyhovuje" nebo "nevyhovuje")
+  - [ ] notes - další poznámky k revizi položky
+
+- [ ] **Revision**
+  - [ ] id - primární klíč, jedinečné ID pro každou položku
+  - [ ] name_ppe - jmeno položky
+  - [ ] manufacturer - výrobce položky
+  - [ ] standart_ppe - norma revizního vybavení
+  - [ ] manual_for_revision - odkaz na manuál, který obsahuje pokyny k provádění revize
+  - [ ] lifetime_use - maximální životnost položky od prvního použití (např. 10 let od prvního použití)
+  - [ ] lifetime_manufacture - maximální životnost položky od data výroby (např. 15 let od výroby“)
+  - [ ] Další funkcionalita: Bude propojená s tabulkou **SheetOfPpe** prostřednictvím **name_ppe** a **manufacturer**. 
+  Systém bude sledovat expiraci životnosti položky na základě data prvního použití a data výroby. 
+  - [ ] Do budoucna bych chtěl tuto tabulku propojit se stránkamy výrobců a hlídat u nich 
+    bezpečnostní upozornění na vady výrobků a stahování výrobků z trhu.
+
+
+
+
 
 
 

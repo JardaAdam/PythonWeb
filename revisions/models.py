@@ -13,9 +13,10 @@ class TypeOfPpe(Model):
 
 
 class SheetOfPpe(Model):
-    user = ForeignKey(User)
-    name_ppe = ManyToManyField()
-    category =
+    user = ForeignKey(User?Profile)
+    group_type_ppe =
+    name_ppe =
+    standart_ppe =
     manufacturer =
     serial_number =
     date_of_manufacture =
@@ -28,6 +29,8 @@ class SheetOfPpe(Model):
 
 class Revision(Model):
     name_ppe =
+    manufacturer =
+    standart_ppe =
     manual_for_revision =
     lifetime_use =
     lifetime_manufacture =
