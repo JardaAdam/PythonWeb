@@ -45,6 +45,9 @@ python manage.py showmigrations
 ## Zálohování databáze Export (DUMP):
 ```bash
 python manage.py dumpdata > backup.json
+nebo 
+python manage.py dumpdatautf8 viewer --output ./files/fixtures1.json
+
 ```
 ## Načítání ze zalohy Import (LOAD):
 ```bash
