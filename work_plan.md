@@ -1,53 +1,49 @@
-zamyslet se nad pouzitim forms pro kalkulacku, 
+zamyslet se nad pouzitim forms pro kalkulacku 
 
 # Projekt revize OOPP a Práce ve výškách
 
-## Struktura webu 
+## Web structure
 
-### Revision
+### app Revision
 - zde se budou vkladat revize oopp a manipulovat s mini 
-- Formulář pro poptání revize ktery spocita cenu za revizi. Uživatel vloží do formuláře počtz jednostlivých 
+- Formulář pro poptání revize ktery spocita cenu za revizi. Uživatel vloží do formuláře počty jednostlivých 
 položek a fotmulař mu spočítá cenu.
-
-### Rope access work
-- část vebu kde nabízím práci ve výškách 
-- Formulář pro yadání poptávky
 
 ## Strukturovaný popis projektu a fáze vývoje
 1. Vztvoření databáze tabulek:
     - Profile = rozšiřující uživatele (adresa, telefon, email)
     - TypeOfPpe = název skupin, ceny jednotlivých skupin PPE
     - SheetOfPpe = seznam všech revidovaných položek
-    - Revision = pomocna jsou zde všechny vyráběné položky a jejich návodz na provedení revize
-    - 
+    - Revision = pomocna jsou zde všechny vyráběné položky a jejich návody na provedení revize
+    - Inquiries = výstup z kalkulatoru 
 2. Kalkulačka ceny revize OOPP ( Formulář )
-- Funkce: Počítání ceny revize na základě počtu a typu položek, zohlednění formy dopravy 
-(zákazníkova adresa / uživatelova adresa).
-- Registrace: Po výpočtu se zákazníkům nabídne formulář pro registraci a odeslání poptávky.
-- Backend integrace: Kalkulačka a registrace se propojí s backendem, kde se poptávka ukládá do databáze.
-3. Efektivní zpracování záznamů o revizi.
-- Skenování QR kódů: Automatické nahrávání údajů z QR kódů do databáze.
-- Automatizace protokolů: Export dokumentů s výsledky revize a přehledem položek.
-- Upozornění na expiraci revizí: Systém upozorňuje zákazníky před vypršením platnosti revize a nabízí termíny k nové revizi.
-4. Poptávky na optimalizaci pracovních postupů
-- Formulář optimalizace: Obsahuje rozvinuté otázky, které pomáhají získat klíčové informace o potřebách zákazníka.
-- Správa dat: Zpracování poptávek a přehled o konzultacích.
-5. Fakturace
-- Automatické faktury: Systém generuje faktury na základě poptávek a záznamů o provedené revizi.
-6. Kalendář s dostupnými termíny
-- Interní správa: Vložíte objednávky a dostupné termíny ručně.
-- Automatické rezervace: Zákazníci si mohou sami rezervovat volné termíny.
+**Funkce:**
+  - [ ] Počítání ceny revize na základě počtu a typu položek
+    - [ ] ošetření platnosti formuláře při delší době vyplnování nesmí
+    zákazník přijít o vyplněná data
+  - [ ] Počítání nákladů na dopravu
+    - [ ] revize u zákazníka (sídlo revizního technika -> zákazníkova adresa).
+    - [ ] revize u revizního technika
+      - [ ] osobní předání 
+      - [ ] přepravní společnost
+- [ ] spočítání ceny revize
+  - [ ] tlačítko spočítat cenu revize
+    - [ ] zobrazí výslednou cenu revize a uloží zadané informace -> Table Inquiries
+    - [ ] pokud zákazník má zájem o revizi odesle poptávkoví formulář
+      - [ ] registrovaný 
+        - [ ] cena revize i s dopravou
+        - [ ] odešle poptávku na email 
+          - [ ] informace o velikosti zakázky
+          - [ ] deadline 
+      - [ ] neregistrovaný 
+        - [ ] ukládání informaci o zakázce
+          - před odesláním formuláře kolonka email -> pro identifikaci zakazníka 
+        - [ ] cena revize bez dopravy 
+        - [ ] nabídka registrace
 
+**použité tabulky** ->
 
-## Funkcionalita 
-- [ ]  Kalkulačka ceny revize OOPP
-    - [ ] Funkce: Počítání ceny revize na základě počtu a typu položek, zohlednění formy dopravy 
-        (zákazníkova adresa / uživatelova adresa).
-    - [ ] Registrace: Po výpočtu se zákazníkům nabídne formulář pro registraci a odeslání poptávky.
-    - [ ] Backend integrace: Kalkulačka a registrace se propojí s backendem, kde se poptávka ukládá do databáze.
-
-
-## Kalkulačka
+**atributy kalkulačky**
 - Příklad dat pro tabulku kalkulator:
 
 | ID  | Druh OOPP                  | Cena (Kč/ks)              | ks |
@@ -75,6 +71,22 @@ položek a fotmulař mu spočítá cenu.
 | 17 | Přepravní služba         | 200 kč                  |   |
 | 18 | Osobní předání Úvaly     | 0 kč                    |   |
 | 19 | Celková cena za revizi   | spocitaná cena          |---|
+
+3. Efektivní zpracování záznamů o revizi.
+- Skenování QR kódů: Automatické nahrávání údajů z QR kódů do databáze.
+- Automatizace protokolů: Export dokumentů s výsledky revize a přehledem položek.
+- Upozornění na expiraci revizí: Systém upozorňuje zákazníky před vypršením platnosti revize a nabízí termíny k nové revizi.
+4. Poptávky na optimalizaci pracovních postupů
+- Formulář optimalizace: Obsahuje rozvinuté otázky, které pomáhají získat klíčové informace o potřebách zákazníka.
+- Správa dat: Zpracování poptávek a přehled o konzultacích.
+5. Fakturace
+- Automatické faktury: Systém generuje faktury na základě poptávek a záznamů o provedené revizi.
+6. Kalendář s dostupnými termíny
+- Interní správa: Vložíte objednávky a dostupné termíny ručně.
+- Automatické rezervace: Zákazníci si mohou sami rezervovat volné termíny.
+
+
+
 
 
 
@@ -166,5 +178,7 @@ je pouze na jednom miste a zmena se provede vsude.
 
 
 
-
+### Rope access work
+- část webu kde nabízím práci ve výškách 
+- Formulář pro yadání poptávky
 
