@@ -151,70 +151,85 @@ je pouze na jednom miste a zmena se provede vsude.
 
 ## Models
 
-- [ ] User 
-  - [ ] user_name
-  - [ ] password
+- [?] **User** 
+  - [ ] user_name - (CharField)
+  - [ ] first_name - (CharField)
+  - [ ] last_name - (CharField)
+  - [ ] email - (EmailField)
+  - [ ] password - (CharField)
+  - [ ] is_active (BooleanField): Určuje, zda je účet aktivní (např. deaktivovaný uživatel nebude mít přístup).
+  - [ ] last_login (DateTimeField): Datum a čas posledního přihlášení uživatele.
+  - [ ] date_joined (DateTimeField): Datum a čas vytvoření uživatelského účtu.
 ### accounts
-- [ ] Profile
-  - [ ] User 
-  - [ ] first_name
-  - [ ] last_name
-  - [ ] company_name
-  - [ ] adress
-  - [ ] email
-  - [ ] phone
-  - [ ] IČO 
-  - [ ] group of items
-  - [ ] discount ( sleva uzivatele )
+- [ ] **Profile**
+  - [x] User one to one
+  - [x] company_name
+  - [x] adress
+  - [x] city
+  - [x] state
+  - [x] phone
+  - [x] IČO
+  - [x] DIC
+  - [?] sheet_name (ProfileItemList)
+  - [x] discount ( sleva uzivatele )
 
 ### config
 #### revisions
 
-- [ ]  **CompanyLists** spojovaci tabulka
-  - [ ] id - primární klíč, jedinečné ID pro každý seznam
-  - [ ] Profile - cizí klíč na tabulku zakaznici, identifikuje firmu, které evidenční list patří
-  - [ ] sheet_name - pojmenování seznamu (např. jméno zaměstnance nebo název pracoviště, např. „Stavba A – pracovník Novák“)
-  - [ ] create_date - datum vytvoření tohoto evidenčního listu
-  - [ ] information - doplňkový popis, který přiblíží účel nebo podrobnosti evidenčního listu
+- [ ]  **ProfileItemList** spojovaci tabulka
+  - [x] Profile - cizí klíč na tabulku zakaznici, identifikuje firmu, které evidenční list patří
+  - [x] sheet_name - pojmenování seznamu (např. jméno zaměstnance nebo název pracoviště, např. „Stavba A – pracovník Novák“)
+  - [x] create - datum vytvoření tohoto evidenčního listu
+  - [x] update - datum provedení změn
+  - [x] information - doplňkový popis, který přiblíží účel nebo podrobnosti evidenčního listu
 
 - [ ] **TypeOfPpe**
-  - [ ] id - primární klíč, jedinečné ID pro každou položku ceny.
-  - [ ] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
-  - [ ] price - cena za revizi jednoho kusu daného druhu OOPP.
+  - [x] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
+  - [x] price - cena za revizi jednoho kusu daného druhu OOPP.
   - [ ] spojení této tabulky tak aby se zákazník mohl podívat co do této skupiny spadá
 
 - [ ] **SheetOfPpe**
-  - [ ] id - primární klíč, jedinečné ID pro každou položku OOPP
-  - [ ] ? company_lists - cizí klíč na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
-  - [ ] user - cizí klíč na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
-  - [ ] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
-  - [x] name_ppe - Jmeno OOPP (Tripel Lock, Expert  III, Adjust)
-  - [ ] standart_ppe  - norma OOPP (např. EN 358, EN 361)
-  - [ ] manufacturer - výrobce dané položky
+  - [ ] ? company_lists - ForeignKey na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
+  - [ ] Profile - ForeignKey  na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
+  - [ ] group_type_ppe - ForeignKey popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
+  - [ ] name_ppe - ForeignKey Type OOPP (Tripel Lock, Expert  III, Adjust)
+  - [ ] manufacturer - ForeignKey výrobce dané položky
   - [ ] serial_number - sériové číslo položky
   - [ ] date_manufakture - datum výroby položky
   - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
-  - [ ] date_of_revision - datum poslední revize
-  - [ ] date_of_next_revision - datum příští revize
-  - [ ] verdict - výsledek revize (např. "vyhovuje" nebo "nevyhovuje")
-  - [ ] notes - další poznámky k revizi položky
+  - [ ] date_of_revision -datefield datum poslední revize
+  - [ ] date_of_next_revision -datefield datum příští revize
+  - [ ] verdict - výsledek revize anum(např. "vyhovuje" nebo "nevyhovuje")
+  - [ ] notes -chrfield další poznámky k revizi položky
 
 - [ ] **Revision**
-  - [ ] id - primární klíč, jedinečné ID pro každou položku
-  - [ ] name_ppe - jmeno položky
-  - [ ] manufacturer - výrobce položky
-  - [ ] standart_ppe - norma revizního vybavení
-  - [ ] manual_for_revision - odkaz na manuál, který obsahuje pokyny k provádění revize
-  - [ ] lifetime_use - maximální životnost položky od prvního použití (např. 10 let od prvního použití)
-  - [ ] lifetime_manufacture - maximální životnost položky od data výroby (např. 15 let od výroby“)
-  - [ ] warning - notifikace výrobce o vadách a stahování z trhu
+  - [x] image - obrazek položky
+  - [x] name_ppe - type OOPP (Tripel Lock, Expert  III, Adjust)
+  - [x] manufacturer - výrobce položky
+  - [?] material - bude stacit kdyz si to bude pamatovat podle vyrobce? 
+  od výroby/od 1.použití Postroje-10/15,Textilní OOPP-10/15, Lana10/15, Kovové OOPP-neomezeně, Přilby-10
+  - [x] manual_for_revision - odkaz na manuál, který obsahuje pokyny k provádění revize
+  - [?] lifetime_use - maximální životnost položky od prvního použití (např. 10 let od prvního použití)
+  - [?] lifetime_manufacture - maximální životnost položky od data výroby (např. 15 let od výroby“)
+  - [?] warning - webscraping prefix notifikace výrobce o vadách a stahování z trhu
     - [ ] pokud bude součástí notifikace např. šarže zohlední se to i v upozornění pouze dotčených položek
     nebude se informovat plošně celí výrobek 
   - [ ] expiration bude propojená s tabulkou **SheetOfPpe** prostřednictvím **name_ppe** a **manufacturer**. 
   Systém bude sledovat expiraci životnosti položky na základě data prvního použití a data výroby. 
   
 
+- [ ] **Expiration**
+  - [x] manufacturer - 
+  - [x] material -
+  - [x] lifetime_use - 
+  - [x] lifetime_manufacture -
 
+- [ ] **Kalkulator**
+  - [ ] Profile
+  - [ ] boline = mezipamet/odeslana poptavka
+  - [ ] group_type_ppe
+  - [ ] price
+  
 
 
 
