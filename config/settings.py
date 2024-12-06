@@ -132,5 +132,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 """ Prihlasovaci odkazy pro aplikaci accounts"""
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+
+
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = 'images/'
