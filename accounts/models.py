@@ -19,7 +19,12 @@ class Profile(Model):
     company_name = CharField(max_length=32, null=True, blank=True)
     address = CharField(max_length=128, null=True, blank=True)
     city = CharField(max_length=32, null=True, blank=True)
-    state = CharField(max_length=32, null=True, blank=True)
+    postcode = CharField(max_length=6, null=True, blank=True,validators=[
+            RegexValidator(
+                regex=r'^\d{3}\s?\d{2}$',  # Formát: 3 číslice + volitelná mezera + 2 číslice
+                message="Poštovní směrovací číslo musí mít formát XXX XX (např. 11000 nebo 110 00)."
+            )
+        ],verbose_name="Poštovní směrovací číslo")
     phone_number = CharField(
         max_length=17,  # +420123456789 = 13 znaků, ale ponechte rezervu
         blank=True,
@@ -29,8 +34,8 @@ class Profile(Model):
                         message="Telefonní číslo musí být ve formátu: '+420123456789'. Až 15 číslic je povoleno.")],
         help_text="Zadejte telefonní číslo v mezinárodním formátu, např. +420123456789."
     )
-    ICO = CharField(max_length=32, null=True, blank=True)
-    DIC = CharField(max_length=32, null=True, blank=True)
+    ICO = CharField(max_length=8, null=True, blank=True)
+    DIC = CharField(max_length=11, null=True, blank=True)
     discount = DecimalField(
         max_digits=5,
         decimal_places=2,
