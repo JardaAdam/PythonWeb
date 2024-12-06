@@ -14,7 +14,7 @@ class TypeOfPpe(Model):
     price = DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.group_type_ppe} {self.price}"
+        return f"{self.group_type_ppe} cena: {self.price} kč"
 
 class Expiration(Model):
     manufacturer = CharField(max_length=32, null=False, blank=False)
@@ -22,6 +22,11 @@ class Expiration(Model):
     lifetime_use = CharField(max_length=32, null=False, blank=False)
     lifetime_manufacture = CharField(max_length=32, null=False, blank=False)
 
+    def __str__(self):
+        return f"{self.manufacturer} {self.material}"
+
+    def __repr__(self):
+        return f"{self.manufacturer} {self.material} {self.lifetime_use}"
 
 class Revision(Model):
     image = ImageField(upload_to="images/", default=None, null=False, blank=False)
@@ -33,6 +38,8 @@ class Revision(Model):
     # lifetime_use =
     # lifetime_manufacture =
 # TODO vytvořit složku pro manuáli k revizím
+    def __str__(self):
+        return f"{self.group_type_ppe} {self.name_ppe} {self.manufacturer}"
 
 
 

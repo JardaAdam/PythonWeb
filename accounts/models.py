@@ -6,27 +6,27 @@ from django.db.models import Model, OneToOneField, CASCADE, CharField, DecimalFi
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-""" validace napríč backend """
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
+# """ validace napríč backend """
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+#
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
+#
 phone_regex = RegexValidator(
     regex=r'^\+?1?\d{9,15}$',
     message="Telefonní číslo musí být ve formátu: '+420123456789'. Až 15 číslic je povoleno."
 )
-
+#
 def validate_discount(value):
     if value < 0 or value > 100:
         raise ValidationError("Sleva musí být mezi 0 a 100%.")
-# TODO použití AbstractUser pro základní funkcionalitu a
-#  Profile použít jen pro položky které nejsou v User
-# Create your models here.
+# # TODO použití AbstractUser pro základní funkcionalitu a
+# #  Profile použít jen pro položky které nejsou v User
+# # Create your models here.
 class Profile(Model):
     user = OneToOneField(User, on_delete=CASCADE)
     company_name = CharField(max_length=32, null=True, blank=True)
@@ -49,4 +49,8 @@ class Profile(Model):
         validators=[validate_discount],
         help_text="Zadejte slevu v procentech (např. 10.5 = 10.5%).")
 
+    def __str__(self):
+        return self.user.username
+
+    # TODO doresit odkud se budou brat Jméno, přijmení, email,
 
