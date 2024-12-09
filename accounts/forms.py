@@ -64,6 +64,7 @@ class SignUpForm(UserCreationForm):
             message="Telefonní číslo musí být ve formátu: '+420123456789'. Až 15 číslic je povoleno.")],
         label="Telefonní číslo"
     )
+    # TODO změnit na malé písmena.
     ICO = CharField(
         max_length=8,
         widget=TextInput(attrs={

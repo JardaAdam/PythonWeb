@@ -20,13 +20,13 @@ class AuthenticationTests(TestCase):
         user = User.objects.create_user(username='testuser', password='testpassword')
         response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'testpassword'})
         self.assertRedirects(response, reverse('index'))
-    @skip
+
     def test_login_with_invalid_credentials(self):
         """Test, že přihlášení s neplatnými údaji neprojde"""
         user = User.objects.create_user(username='testuser', password='testpassword')
         response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'wrongpassword'})
-        self.assertFormError(response, 'form', 'password', 'This password is incorrect.')
-    @skip
+        self.assertContains(response, "Please enter a correct username and password.")
+    #@skip
     def test_logout(self):
         """Test, že odhlášení funguje"""
         user = User.objects.create_user(username='testuser', password='testpassword')

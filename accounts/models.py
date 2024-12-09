@@ -25,6 +25,7 @@ class Profile(Model):
                 message="Poštovní směrovací číslo musí mít formát XXX XX (např. 11000 nebo 110 00)."
             )
         ],verbose_name="Poštovní směrovací číslo")
+    # předvolby = foreingkey
     phone_number = CharField(
         max_length=17,  # +420123456789 = 13 znaků, ale ponechte rezervu
         blank=True,
@@ -34,6 +35,7 @@ class Profile(Model):
                         message="Telefonní číslo musí být ve formátu: '+420123456789'. Až 15 číslic je povoleno.")],
         help_text="Zadejte telefonní číslo v mezinárodním formátu, např. +420123456789."
     )
+    # TODO přepsat do malích písmen !!
     ICO = CharField(max_length=8, null=True, blank=True)
     DIC = CharField(max_length=11, null=True, blank=True)
     discount = DecimalField(
