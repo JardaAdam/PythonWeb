@@ -1,69 +1,84 @@
 from unittest import skip
-from django.test import TestCase
 
-# Create your tests here.
+from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
 
 class AuthenticationTests(TestCase):
+    def setUp(self):
+        # Vytvoření uživatelského modelu a uživatele pro opakované použití v testech
+        self.User = get_user_model()
+        self.user_data = {
+            'username': 'testuser',
+            'password': 'testpassword',
+            'first_name': 'Jan',
+            'last_name': 'Novak',
+            'email': 'jan@novak.cz',
+        }
+        self.user = self.User.objects.create_user(**self.user_data)
 
     def test_login_page_loads(self):
-        """Test, že stránka přihlášení se správně načte"""
+        """Test, že stránka přihlášení se správně načte."""
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration/login.html')
 
     def test_login_with_valid_credentials(self):
-        """Test, že přihlášení s platnými údaji funguje"""
-        user = User.objects.create_user(username='testuser', password='testpassword')
+        """Test, že přihlášení s platnými údaji funguje."""
         response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'testpassword'})
-        self.assertRedirects(response, reverse('index'))
+        self.assertRedirects(response, reverse('login_success'))
 
     def test_login_with_invalid_credentials(self):
-        """Test, že přihlášení s neplatnými údaji neprojde"""
-        user = User.objects.create_user(username='testuser', password='testpassword')
+        """Test, že přihlášení s neplatnými údaji neprojde."""
         response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'wrongpassword'})
         self.assertContains(response, "Please enter a correct username and password.")
-    #@skip
+
     def test_logout(self):
-        """Test, že odhlášení funguje"""
-        user = User.objects.create_user(username='testuser', password='testpassword')
+        """Test, že odhlášení funguje správně pomocí POST."""
         self.client.login(username='testuser', password='testpassword')
-        response = self.client.get(reverse('logout'))
+
+        response = self.client.post(reverse('logout'))
         self.assertRedirects(response, reverse('index'))
-        # Ověření, že uživatel je odhlášen
+
         response = self.client.get(reverse('index'))
         self.assertNotContains(response, 'Hi, testuser')
 
     def test_signup_page_loads(self):
-        """Test, že stránka registrace funguje"""
+        """Test, že stránka registrace funguje."""
         response = self.client.get(reverse('signup'))
         self.assertEqual(response.status_code, 200)
     @skip
-    def test_successful_signup(self):
-        """Test úspěšné registrace uživatele"""
-        response = self.client.post(reverse('signup'), {
+    def test_redirect_to_login_if_not_logged_in(self):
+        """Testuje, že nezalogovaný uživatel je přesměrován na login stránku."""
+        response = self.client.get(reverse('protected_view'))  # Změňte 'protected_view' na název pohledu
+        self.assertRedirects(response, f"{reverse('login')}?next={reverse('protected_view')}")
+
+
+class SignUpViewTests(TestCase):
+    def setUp(self):
+        self.User = get_user_model()
+        self.new_user_data = {
             'username': 'newuser',
-            'password1': 'newpassword',
-            'password2': 'newpassword',
+            'password1': 'newpassword123',
+            'password2': 'newpassword123',
             'first_name': 'Jan',
             'last_name': 'Novak',
             'email': 'jan@novak.cz',
-        })
-        self.assertRedirects(response, reverse('index'))
-        user = get_user_model().objects.get(username='newuser')
-        self.assertTrue(user.is_active)
-    @skip
-    def test_signup_with_mismatched_passwords(self):
-        """Test, že registrace selže, když hesla neodpovídají"""
-        response = self.client.post(reverse('signup'), {
-            'username': 'newuser',
-            'password1': 'newpassword',
-            'password2': 'wrongpassword',
-            'first_name': 'Jan',
-            'last_name': 'Novak',
-            'email': 'jan@novak.cz',
-        })
-        self.assertFormError(response, 'form', 'password2', 'The two password fields didn’t match.')
+            'company_name': 'Test Company',
+            'address': 'Test Address',
+            'city': 'Prague',
+            'postcode': '12345',
+            'phone_number': '+420123456789',
+            'ico': '12345678',
+            'dic': 'CZ123456789'
+        }
+
+    def test_signup(self):
+        """Test úspěšné registrace uživatele."""
+        response = self.client.post(reverse('signup'), self.new_user_data)
+        self.assertRedirects(response, reverse('login_success'))
+        self.assertTrue(self.User.objects.filter(username='newuser').exists())
+        user = self.User.objects.get(username='newuser')
+        self.assertEqual(user.company_name, 'Test Company')
+

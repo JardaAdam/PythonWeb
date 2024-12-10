@@ -1,6 +1,10 @@
 from django.contrib import admin
-from accounts.models import Profile
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
-# Register your models here.
-admin.site.register(Profile)
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('company_name', 'address', 'city', 'postcode', 'phone_number', 'ico', 'dic', 'discount')}),
+    )
 
+admin.site.register(CustomUser, CustomUserAdmin)

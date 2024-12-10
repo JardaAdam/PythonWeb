@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Model, ManyToManyField, ForeignKey, CharField, DateTimeField, TextField, DecimalField, \
     CASCADE, SET_NULL, ImageField, URLField, FileField
 
-from accounts.models import Profile
+
 
 
 # Create your models here.
