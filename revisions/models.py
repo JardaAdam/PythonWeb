@@ -1,23 +1,24 @@
 from datetime import date
 from django.db import models
-from django.db.models import Model, ManyToManyField, ForeignKey, CharField, DateTimeField, TextField, DecimalField, \
-    CASCADE, SET_NULL, ImageField, URLField, FileField
+from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, CASCADE
 
-
+from accounts.models import CustomUser
 
 
 # Create your models here.
-
-
-class TypeOfPpe(Model):
-    group_type_ppe = CharField(max_length=32, null=False, blank=False, unique=True)
-    price = DecimalField(max_digits=10, decimal_places=2)
+class Manufacturer(Model):
+    name = CharField(max_length=32)
 
     def __str__(self):
-        return f"{self.group_type_ppe} cena: {self.price} kč"
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Manufacturer"
+        ordering = ['name']
+
 
 class Expiration(Model):
-    manufacturer = CharField(max_length=32, null=False, blank=False)
+    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, null=False, blank=False)
     material = CharField(max_length=32, null=False, blank=False)
     lifetime_use = CharField(max_length=32, null=False, blank=False)
     lifetime_manufacture = CharField(max_length=32, null=False, blank=False)
@@ -28,22 +29,26 @@ class Expiration(Model):
     def __repr__(self):
         return f"{self.manufacturer} {self.material} {self.lifetime_use}"
 
+
+class TypeOfPpe(Model):
+    group_type_ppe = CharField(max_length=32, null=False, blank=False, unique=True)
+    price = DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.group_type_ppe} cena: {self.price} kč"
+
 class Revision(Model):
     image = ImageField(upload_to="images/", default=None, null=False, blank=False)
+    manufacturer = ForeignKey(Manufacturer, null=False, blank=False, on_delete=CASCADE, related_name='revisions')
+    expiration = ForeignKey(Expiration, null=False, blank=False, on_delete=CASCADE, related_name='revisions')
     group_type_ppe = ForeignKey(TypeOfPpe, null=False, blank=False, on_delete=CASCADE, related_name='revisions')
     name_ppe = CharField(max_length=32, null=False, blank=False)
-    manufacturer = ForeignKey(Expiration, null=False, blank=False, on_delete=CASCADE, related_name='revisions')
     standard_ppe = CharField(max_length=32, null=False, blank=False)
     manual_for_revision = FileField(upload_to='manuals/', null=False, blank=False)
-    # lifetime_use =
-    # lifetime_manufacture =
-# TODO vytvořit složku pro manuáli k revizím
+
+    # TODO vytvořit složku pro manuáli k revizím
     def __str__(self):
         return f"{self.group_type_ppe} {self.name_ppe} {self.manufacturer}"
-
-
-
-
 
 # TODO jakým mechanizmem bude dedit tato tabulka
 # class SheetOfPpe(Model):
@@ -73,7 +78,3 @@ class Revision(Model):
 #         constraints = [
 #             models.UniqueConstraint(fields=['profile', 'sheet_name'], name='unique_sheet_per_profile')
 #         ]
-
-
-
-

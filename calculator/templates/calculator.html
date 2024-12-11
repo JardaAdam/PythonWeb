@@ -1,0 +1,39 @@
+**Formulář a uložený stav**: V HTML šabloně načtěte data pomocí kontextu a použijte JavaScript pro uložení a načtení stavu z `localStorage`.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kalkulačka OOPP</title>
+    <script>
+        // Načtení stavu z localStorage při načtení stránky
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedData = JSON.parse(localStorage.getItem('calculatorData') || '{}');
+            for (const id in savedData) {
+                const input = document.querySelector(`input[data-id="${id}"]`);
+                if (input) {
+                    input.value = savedData[id];
+                }
+            }
+        });
+
+        // Uložení stavu do localStorage při změně inputů
+        function saveData(id, value) {
+            const savedData = JSON.parse(localStorage.getItem('calculatorData') || '{}');
+            savedData[id] = value;
+            localStorage.setItem('calculatorData', JSON.stringify(savedData));
+        }
+    </script>
+</head>
+<body>
+    <h1>Kalkulačka OOPP</h1>
+    <form id="calculator-form">
+        {% for ppe in ppes %}
+        <div>
+            <label>{{ ppe.group_type_ppe }} ({{ ppe.price }} Kč/ks): </label>
+            <input type="number" min="0" data-id="{{ ppe.id }}" oninput="saveData('{{ ppe.id }}', this.value)">
+        </div>
+        {% endfor %}
+    </form>
+</body>
+</html>

@@ -47,23 +47,35 @@ položek a fotmulař mu spočítá cenu.
 **atributy kalkulačky**
 - Příklad dat pro tabulku kalkulator:
 
-| ID  | Druh OOPP                  | Cena (Kč/ks)              | ks |
-|-----|----------------------------|---------------------------|----|
-| 1   | Karabina                   | 100                       |    |
-| 2   | Lano                       | 3 / m                     |    |
-| 3   | Celotělový úvazek          | 500                       |    |
-| 4   | Arboristický úvazek        | 550                       |    |
-| 5   | Lezecký úvazek             | 450                       |    |
-| 6   | Helma                      | 150                       |    |
-| 7   | Arboristická helma         | 180                       |    |
-| 8   | Slaňovací brzda běžná      | 250                       |    |
-| 9   | Slaňovací brzda antipanic  | 300                       |    |
-| 10  | Slaňovací brzda speciální  | 350                       |    |
-| 11  | Tlumič pádu "I"            | 400                       |    |
-| 12  | Tlumič pádu "Y"            | 450                       |    |
-| 13  | Zachycovač pádu jednoduchý | 100                       |    |
-| 14  | Zachycovač pádu složitý    | 150                       |    |
-| 15  | Kladka                     | 200                       |    |
+| **id** | **TypeOfPpe**               | **price** | **ks** |
+|--------|----------------------------|-----------|-------|
+| 1      | helmets                     | 1000 CZK  | 0     |
+| 2      | arborist_helmets            | 1200 CZK  |       |
+| 3      | fall_arrest_harness         | 1500 CZK  | 15    |
+| 4      | height_work_harness         | 1800 CZK  | 7     |
+| 5      | arborist_harness            | 2000 CZK  | 5     |
+| 6      | chest_harness               | 1100 CZK  | 12    |
+| 7      | seat_harness                | 1300 CZK  | 10    |
+| 8      | rescue_equipments           | 5000 CZK  | 3     |
+| 9      | descenders                  | 900 CZK   | 20    |
+| 10     | arborist_descenders         | 1200 CZK  | 6     |
+| 11     | asaps                       | 2500 CZK  | 5     |
+| 12     | fall_arrests                | 3000 CZK  | 4     |
+| 13     | ascenders                   | 1100 CZK  | 10    |
+| 14     | pulleys                     | 800 CZK   | 25    |
+| 15     | block_pulleys               | 950 CZK   | 20    |
+| 16     | special_pulleys             | 1500 CZK  | 8     |
+| 17     | carbines                    | 300 CZK   | 50    |
+| 18     | slings                      | 600 CZK   | 30    |
+| 19     | steel_lanyard               | 1800 CZK  | 10    |
+| 20     | positioning_lanyards        | 1400 CZK  | 12    |
+| 21     | fall_absorbers              | 2200 CZK  | 8     |
+| 22     | fall_absorbers_with_conectors | 2500 CZK | 5     |
+| 23     | cambium_savers              | 1900 CZK  | 7     |
+| 24     | cambium_savers_special      | 2500 CZK  | 4     |
+| 25     | rigging plate               | 1300 CZK  | 15    |
+| 26     | rope                        | 2500 CZK  | 20    |
+| 27     | rope_spliced_eye            | 3500 CZK  | 3     |
 
 
 | id | Další volitelné položky  | Cena                    | ks |
@@ -151,22 +163,20 @@ je pouze na jednom miste a zmena se provede vsude.
 
 ## Models
 
-- [?] **User** 
-  - [ ] user_name - (CharField)
-  - [ ] first_name - (CharField)
-  - [ ] last_name - (CharField)
-  - [ ] email - (EmailField)
-  - [ ] password - (CharField)
-  - [ ] is_active (BooleanField): Určuje, zda je účet aktivní (např. deaktivovaný uživatel nebude mít přístup).
-  - [ ] last_login (DateTimeField): Datum a čas posledního přihlášení uživatele.
-  - [ ] date_joined (DateTimeField): Datum a čas vytvoření uživatelského účtu.
+- [x] **User** 
+  - [x] user_name - (CharField)
+  - [x] first_name - (CharField)
+  - [x] last_name - (CharField)
+  - [x] email - (EmailField)
+  - [x] password - (CharField)
+  - [x] is_active (BooleanField): Určuje, zda je účet aktivní (např. deaktivovaný uživatel nebude mít přístup).
+  - [x] last_login (DateTimeField): Datum a čas posledního přihlášení uživatele.
+  - [x] date_joined (DateTimeField): Datum a čas vytvoření uživatelského účtu.
 ### accounts
-- [ ] **Profile**
-  - [x] User one to one
+- [x] **CustomUser**
   - [x] company_name
   - [x] adress
   - [x] city
-  - [x] state
   - [x] phone
   - [x] IČO
   - [x] DIC
@@ -183,24 +193,28 @@ je pouze na jednom miste a zmena se provede vsude.
   - [x] update - datum provedení změn
   - [x] information - doplňkový popis, který přiblíží účel nebo podrobnosti evidenčního listu
 
+- [ ] **Manufacturer**
+  - [ ] name = name of manufacturer of PPE
+
+- [ ] **Expiration**
+  - [x] manufacturer - ForeinKey 
+  - [x] material - 
+  - [x] lifetime_use - 
+  - [x] lifetime_manufacture - 
+
 - [ ] **TypeOfPpe**
   - [x] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
   - [x] price - cena za revizi jednoho kusu daného druhu OOPP.
   - [ ] spojení této tabulky tak aby se zákazník mohl podívat co do této skupiny spadá
 
-- [ ] **SheetOfPpe**
-  - [ ] ? company_lists - ForeignKey na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
-  - [ ] Profile - ForeignKey  na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
-  - [ ] group_type_ppe - ForeignKey popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
-  - [ ] name_ppe - ForeignKey Type OOPP (Tripel Lock, Expert  III, Adjust)
-  - [ ] manufacturer - ForeignKey výrobce dané položky
-  - [ ] serial_number - sériové číslo položky
-  - [ ] date_manufakture - datum výroby položky
-  - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
-  - [ ] date_of_revision -datefield datum poslední revize
-  - [ ] date_of_next_revision -datefield datum příští revize
-  - [ ] verdict - výsledek revize anum(např. "vyhovuje" nebo "nevyhovuje")
-  - [ ] notes -chrfield další poznámky k revizi položky
+
+
+- [ ] **CalculatorOutPut**
+- uklada data vkladana do formulare ktery pocita cenu za revizi. 
+- varianta pro
+    - nepřihlášeného uživatele -> použití `localStorage` v prohlížeči uživatele pomocí JavaScriptu
+    - přihlášeného uživatele -> CustomUser
+
 
 - [ ] **Revision**
   - [x] image - obrazek položky
@@ -216,19 +230,25 @@ je pouze na jednom miste a zmena se provede vsude.
     nebude se informovat plošně celí výrobek 
   - [ ] expiration bude propojená s tabulkou **SheetOfPpe** prostřednictvím **name_ppe** a **manufacturer**. 
   Systém bude sledovat expiraci životnosti položky na základě data prvního použití a data výroby. 
-  
 
-- [ ] **Expiration**
-  - [x] manufacturer - 
-  - [x] material -
-  - [x] lifetime_use - 
-  - [x] lifetime_manufacture -
 
-- [ ] **Kalkulator**
-  - [ ] Profile
-  - [ ] boline = mezipamet/odeslana poptavka
-  - [ ] group_type_ppe
-  - [ ] price
+- [ ] **SheetOfPpe**
+  - [?] company_lists - ForeignKey na tabulku firma_evidencni_listy, propojuje jednotlivé položky OOPP s konkrétním seznamem firmy
+  - [ ] CustomUser - ForeignKey  na tabulku zakaznici, umožňuje spojit jednotlivé položky OOPP s konkrétním zákazníkem
+  - [ ] group_type_ppe - ForeignKey popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
+  - [ ] name_ppe - ForeignKey Type OOPP (Tripel Lock, Expert  III, Adjust)
+  - [ ] manufacturer - ForeignKey výrobce dané položky
+  - [ ] serial_number - sériové číslo položky
+  - [ ] date_manufakture - datum výroby položky
+  - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
+  - [ ] date_of_revision -datefield datum poslední revize
+  - [ ] date_of_next_revision -datefield datum příští revize
+  - [ ] verdict - výsledek revize anum(např. "vyhovuje" nebo "nevyhovuje")
+  - [ ] notes -chrfield další poznámky k revizi položky
+
+
+
+
   
 
 

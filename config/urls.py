@@ -23,6 +23,8 @@ from config import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),  # Přidání URL z aplikace accounts
+    path('calculator/', include('calculator.urls')),  # Propojení s aplikací
     path('', index, name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# TODO kde ma spravne byt ulozeny home (index.html)
