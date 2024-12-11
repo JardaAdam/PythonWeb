@@ -1,0 +1,9 @@
+pip install -r .\requirements.txt instalace balicku ze souboru
+-r = říká pip, že má zpracovat soubor se seznamem balíčků (requirements file).
+cd .\.venv\
+.\Scripts\activate
+python manage.py createsuperuser => vitvoreni administratora pro projekt
+python manage.py runserver => spustim server
+
+" Vytvoreni nove aplikace "
+python manage.py startapp accounts

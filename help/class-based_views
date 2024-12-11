@@ -1,0 +1,17 @@
+vyhody jsom pri slozitejsich views a usetrime tim praci
+
+uklada se do -> views.py
+
+uprava v urls stejna jako v def
+
+kratsi zapis s zakladni podobe funkcionality
+
+jednoduse vytvorim listview
+
+v pripade slozitejsiho zobrazeni je lepsi pouzit funkce (def)
+
+vyuzivame funkce django a optimalizujeme kod
+
+
+posloupnost urls.py, creators.html, views.py
+

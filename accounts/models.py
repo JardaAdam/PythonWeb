@@ -1,50 +1,91 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.db.models import DecimalField, CharField, BooleanField, Model, ManyToManyField, ForeignKey, CASCADE, \
+    SET_NULL, DateTimeField
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+
+from revisions.models import RevisionRecord
 
 def validate_discount(value):
     """Validuje, zda je sleva mezi 0 a 100%."""
     if value < 0 or value > 100:
         raise ValidationError("Sleva musí být mezi 0 a 100%.")
 
+class Country(Model):
+    name = CharField(max_length=32, unique=True)
+    postcode_format = CharField(max_length=6, blank=True, help_text="Regex pro validaci poštovního směrovacího čísla")
+    phone_number_prefix = CharField(max_length=10, blank=True, help_text="Telefonní předvolba")
+    business_id_format = CharField(max_length=10, blank=True)  # Regex pro validaci business ID
+    tax_id_format = CharField(max_length=12, blank=True)  # Regex pro validaci tax ID
+    tax_id_prefix = CharField(max_length=4, blank=True, help_text="Tax ID prefix (např. CZ)")
+
+    def __str__(self):
+        return self.name
+
 class CustomUser(AbstractUser):
-    company_name = models.CharField(max_length=32, null=True, blank=True)
-    address = models.CharField(max_length=128, null=True, blank=True)
-    city = models.CharField(max_length=32, null=True, blank=True)
-    postcode = models.CharField(
-        max_length=6, null=True, blank=True,
-        validators=[
-            RegexValidator(
-                regex=r'^\d{3}\s?\d{2}$',  # Formát: 3 číslice + volitelná mezera + 2 číslice
-                message="Poštovní směrovací číslo musí mít formát XXX XX (např. 11000 nebo 110 00)."
-            )
-        ],
-        verbose_name="Poštovní směrovací číslo"
-    )
-    phone_number = models.CharField(
-        max_length=17, blank=True, null=True,
-        validators=[
-            RegexValidator(
-                regex=r'^\+?1?\d{9,15}$',
-                message="Telefonní číslo musí být ve formátu: '+420123456789'. Až 15 číslic je povoleno."
-            )
-        ],
-        help_text="Zadejte telefonní číslo v mezinárodním formátu, např. +420123456789."
-    )
-    ico = models.CharField(max_length=8, null=True, blank=True)
-    dic = models.CharField(max_length=11, null=True, blank=True)
-    discount = models.DecimalField(
+    company_name = CharField(max_length=32, null=True, blank=True)
+    country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL)
+    address = CharField(max_length=128, null=True, blank=True)
+    city = CharField(max_length=32, null=True, blank=True)
+    postcode = CharField(max_length=6, null=True, blank=True)
+    phone_number = CharField(max_length=12, blank=True, null=True)
+    business_id = CharField(max_length=10, null=True, blank=True, verbose_name="Business ID")
+    tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
+    discount = DecimalField(
         max_digits=5, decimal_places=2, default=0.00,
         validators=[validate_discount],
         help_text="Zadejte slevu v procentech (např. 10.5 = 10.5%)."
     )
+    can_view_multiple_groups = BooleanField(default=False)  # Extra pole pro přístup
 
     class Meta:
         ordering = ['username']
 
+    def clean(self):
+        super().clean()
+
+        # Validace dle vybrané země
+        if self.country:
+            if self.country.business_id_format:
+                business_id_validator = RegexValidator(
+                    regex=self.country.business_id_format,
+                    message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}."
+                )
+                business_id_validator(self.business_id)
+
+            if self.country.tax_id_format:
+                tax_id_validator = RegexValidator(
+                    regex=self.country.tax_id_format,
+                    message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}."
+                )
+                tax_id_validator(self.tax_id)
+
+            if self.country.phone_number_prefix:
+                if self.phone_number is not None and not self.phone_number.startswith(self.country.phone_number_prefix):
+                    self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
+
+            if self.country.postcode_format:
+                postcode_validator = RegexValidator(
+                    regex=self.country.postcode_format,
+                    message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
+                )
+                postcode_validator(self.postcode)
+
+
+
     def __repr__(self):
-        return f"CustomUser(username={self.username})"
+        return f"CustomUser(username={self.username}, country={self.country})"
 
     def __str__(self):
-        return f"{self.username}"
+        return self.username
+
+
+
+class ItemGroup(Model):
+    name = CharField(max_length=64)
+    user = ForeignKey(CustomUser, on_delete=SET_NULL, null=True)
+    items = ManyToManyField(RevisionRecord, blank=True)  # Prázdné povolené pro flexibilitu
+    created = DateTimeField(auto_now_add=True)
+    updated = DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.name} skupina uživatele {self.user.username}"

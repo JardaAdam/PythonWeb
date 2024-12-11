@@ -7,6 +7,7 @@ from revisions.models import TypeOfPpe
 
 
 # Create your models here.
+'''Tento model reprezentuje záznam objednávky'''
 class CalculatorOutput(Model):
     customer = ForeignKey(CustomUser, related_name='orders', related_query_name='custom_order', default=None,
                           on_delete=CASCADE, null=False, blank=False)
@@ -26,6 +27,7 @@ class CalculatorOutput(Model):
         self.total_price = total
         self.save()
 
+'''Tento model bude udržovat informace o jednotlivých položkách v objednávce'''
 class CalculatorItem(Model):
     calculator = ForeignKey(CalculatorOutput, related_name='calculatoritems', on_delete=CASCADE)
     type_of_ppe = ForeignKey(TypeOfPpe, on_delete=CASCADE)

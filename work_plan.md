@@ -183,15 +183,18 @@ je pouze na jednom miste a zmena se provede vsude.
   - [?] sheet_name (ProfileItemList)
   - [x] discount ( sleva uzivatele )
 
-### config
-#### revisions
-
 - [ ]  **ProfileItemList** spojovaci tabulka
   - [x] Profile - cizí klíč na tabulku zakaznici, identifikuje firmu, které evidenční list patří
   - [x] sheet_name - pojmenování seznamu (např. jméno zaměstnance nebo název pracoviště, např. „Stavba A – pracovník Novák“)
   - [x] create - datum vytvoření tohoto evidenčního listu
   - [x] update - datum provedení změn
   - [x] information - doplňkový popis, který přiblíží účel nebo podrobnosti evidenčního listu
+
+### config
+
+
+
+### revisions
 
 - [ ] **Manufacturer**
   - [ ] name = name of manufacturer of PPE
@@ -206,14 +209,6 @@ je pouze na jednom miste a zmena se provede vsude.
   - [x] group_type_ppe - popis druhu OOPP (např. karabina, lano, celotělový úvazek, arboristický úvazek, helma, atd.).
   - [x] price - cena za revizi jednoho kusu daného druhu OOPP.
   - [ ] spojení této tabulky tak aby se zákazník mohl podívat co do této skupiny spadá
-
-
-
-- [ ] **CalculatorOutPut**
-- uklada data vkladana do formulare ktery pocita cenu za revizi. 
-- varianta pro
-    - nepřihlášeného uživatele -> použití `localStorage` v prohlížeči uživatele pomocí JavaScriptu
-    - přihlášeného uživatele -> CustomUser
 
 
 - [ ] **Revision**
@@ -243,13 +238,23 @@ je pouze na jednom miste a zmena se provede vsude.
   - [ ] date_of_first_use - datum, kdy byla položka poprvé použita
   - [ ] date_of_revision -datefield datum poslední revize
   - [ ] date_of_next_revision -datefield datum příští revize
-  - [ ] verdict - výsledek revize anum(např. "vyhovuje" nebo "nevyhovuje")
-  - [ ] notes -chrfield další poznámky k revizi položky
+  - [ ] verdict - výsledek revize ( new/fit to use/ retire)
+  - [ ] notes -charfield další poznámky k revizi položky
 
 
+### calculator
+
+- [ ] **CalculatorOutPut**
+- uklada data vkladana do formulare ktery pocita cenu za revizi. 
+- varianta pro
+    - nepřihlášeného uživatele -> použití `localStorage` v prohlížeči uživatele pomocí JavaScriptu
+    - přihlášeného uživatele -> CustomUser
 
 
-  
+- [ ] **CalculatorItem**
+ - [ ] calculator
+ - [ ] type_of_ppe
+ - [ ] quantity
 
 
 

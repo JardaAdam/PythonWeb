@@ -1,5 +1,5 @@
 import os
-
+# terminal -> python generate_structure.py
 
 def generate_structure(path='.', max_depth=2, ignore_dirs=None, output_file='struktura_projektu.txt'):
     """Generuje strukturu složek a souborů s omezením hloubky."""

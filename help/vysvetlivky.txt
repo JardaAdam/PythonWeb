@@ -1,0 +1,32 @@
+pk = Primari key
+
+vytvareni trid -> model.py -> views.py -> urls.py
+
+
+
+
+hesla ulozene v auth_user a jsou za hashovana
+takze ani admin nevidi realne heslo
+
+pro prihlaseni pouzijeme gui
+
+
+
+Authorization -> definovani a prideleni jednotlivich prav uzivatelum
+
+v Admin zasti stranky muzu vytvaret grupe a pridavat kazde skupine prava co muze v nasi aplikaci delat
+
+    po definovani techto prav -> musim v templates pridat specialni skratky {% if perms.viewer.add_movie %} kazda funkce ma
+    svoje presne zapisi techto funkci
+
+   !! pokud znam presnou adresu tak muzu i bez prav pouzivat funkcionalitu !!
+
+   dalsi krok je zamezit funkcionalite to provedeme v viewes.py
+   je tu ale jine pojmenovani pro permission
+
+   pro permision
+
+
+
+povina cast projektu nastavit uzivatelum permisions
+
