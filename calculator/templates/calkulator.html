@@ -1,0 +1,22 @@
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>TypeOfPpe</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in type_of_ppe %}
+            <tr>
+                <td>{{ item.group_type_ppe }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ form.quantity_{{ item.id }} }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Calculate</button>
+</form>

@@ -49,3 +49,47 @@ if moved:
 else:
     print("Položka již byla ve správné skupině.")
 ```
+
+### Použití při filtrování a řazení
+
+V databázových dotazech pak můžete využít tyto vztahy k filtrování či řazení záznamů:
+
+```python
+# Příklad filtrování nebo řazení v RevisionRecord podle material_type přes vztah na Manufacturer
+from revisions.models import RevisionRecord
+
+# Filtrovat záznamy podle určitého typu materiálu
+records_filtered_by_material = RevisionRecord.objects.filter(revision_data__manufacturer__material_type__name='Aluminum')
+
+# Řadit záznamy podle jména výrobce a poté podle typu materiálu
+ordered_records = RevisionRecord.objects.order_by('revision_data__manufacturer__name', 'revision_data__manufacturer__material_type__name')
+```
+
+### Vysvětlení
+
+- **`related_name='manufacturers'`** v `Manufacturer`: Tento název bude použitý k přístupu ke všem výrobcům daného materiálu z pohledu `MaterialType`. Např. `material_type.manufacturers.all()`.
+
+### Filtrovani podle jmena polozky
+
+Díky vazbě přes `ForeignKey` můžete jednoduše filtrovat záznamy v `RevisionRecord` podle `name_ppe` v `RevisionData`:
+
+```python
+from revisions.models import RevisionRecord
+
+# Filtrovat podle name_ppe
+filtered_records = RevisionRecord.objects.filter(revision_data__name_ppe='Název PPE')
+```
+
+### Zajistěte:
+
+- **Správná jména atributů**: Ověřte, že `name_ppe` je správně definované a že cesty přes ORM jsou správně zapsány (`revision_data__name_ppe`).
+  
+- **Tabulky a vazby**: Ujistěte se, že vztahy mezi modely jsou správně vytvořeny a že `foreignKey` na `RevisionData` je správně nastaven.
+
+### filtr pomoci vyrobce a materialu 
+
+- **Filtrování a řazení**: Umožňuje snadné filtrování přes ORM, např. aby bylo možné zobrazit všechny záznamy revizí spojené s určitým typem materiálu prostřednictvím vztahu:
+  ```python
+  RevisionRecord.objects.filter(revision_data__manufacturer__material_type__name='Some Material')
+  ```
+- **Čitelnost kódu**: Poskytuje pojmenování, které jasně ukazuje vztah mezi materiálem a výrobci, což usnadňuje údržbu kódu.

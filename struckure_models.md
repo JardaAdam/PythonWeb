@@ -113,3 +113,45 @@ typ použitých prostředků.
 - **`verdict`**: Hodnocení stavu položky.
 - **`notes`**: Poznámky.
 
+### Obecné doporučení
+1. **Pojmenování a konvence**: Udržujte konzistentní pojmenování proměnných a metod. To zlepší čitelnost a údržbu kódu.
+
+2. **Použití verbose_name**: Pro lepší čitelnost v administraci Django zvážit použití `verbose_name` a `verbose_name_plural` pro všechny modely a pole.
+
+3. **Dokumentace**: Podrobnější dokumentace tříd a metod pomůže v budoucnu s údržbou kódu.
+
+### Optimalizace k jednotlivým modelům
+
+#### `Country`
+
+- **Validace regex**: Pokud používáte regex pro validaci formátů, ujistěte se, že jsou tyto regexy správně definované a testované, abyste se vyhnuli problémům při validaci.
+
+#### `CustomUser`
+
+- **Polymorfismus**: Zvážit použití přístupu, který umožňuje rozšíření uživatelské třídy bez nutnosti přímých vazeb, což by později mohlo váš kód udělat flexibilnější.
+  
+- **Mechanismus pro úpravy validací**: Namísto validací v metodě `clean` by bylo lepší přesunout tyto logiky do vlastních validatorů nebo manažerů pro lepší udržovatelnost a opakovatelnou použitelnost.
+
+#### `ItemGroup`
+
+- **Vazby na uživatele**: Zajistit, že vztah mezi `ItemGroup` a `CustomUser` je správně dimenzován podle obchodní logiky. Pokud několik uživatelů může mít společnou skupinu, zvážit změnu vazby na ManyToManyField.
+
+#### `CalculatorOutput`
+
+- **Navrhování na úrovni vazeb**: Zajištění, že použitými cizími klíči a vazbami se správně reflektují vztahy v databázi tak, aby efektivně zvládaly mazání nebo změny dat.
+
+- **Logika pro výpočet ceny**: Otestovat logiku `calculate_total_revision` a zvažte, jak zajistit atomičnost a bezpečnost transakcí.
+
+#### `RevisionRecord`
+
+- **Výpočet data příští revize**: Ujistit se, že používáte správný časový interval pro specifikaci příští revize. Umožnit snadné změny dat (např. s pomocí konfigurace).
+
+- **Úložné struktury pro poznámky**: Velká pole textových dat (např. `notes`) by mohla ovlivnit paměť při četném přístupu v hromadných operacích. Zvážit optimalizaci pokud se prokáže jako úzké hrdlo.
+
+#### Další úvahy
+
+- **Indexování a dotazování**: Zvážit, kde mohou indexy na polích snížit zatížení dotazů (např. často filtrované pole).
+  
+- **Relace a referenční integrita**: Zajistit, že všechny vztahy jsou zohledněny - např. jakým způsobem bude propojena při smazání uživatele jeho data v `CalculatorOutput`.
+
+- **Testování a chyby**: Testovat validace, migrace, a výkonnost na vzorcích reálných dat, aby se předešlo problémům po zavedení do produkce.

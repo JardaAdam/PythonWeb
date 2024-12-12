@@ -77,6 +77,21 @@ Pamatujte, že budete muset implementovat logiku pro výpočet cen dle aktuáln�
 - **Flexibilita**: Měnit ceny OOPP bez nutnosti úprav kódu.
 - **Udržovatelnost**: Snadné rozšíření a údržba systému.
 
+#### `CalculatorOrder`
+
+- Obsahuje odkazy na uživatele (zákazníka) a sledování stavu objednávky.
+- Poskytuje prostředky pro výpočet celkové ceny revize.
+- Používá metody `__str__` a `__repr__` pro čitelnou a podrobnou reprezentaci.
+
+#### `CalculatorItem`
+
+- Modeluje jednotlivé položky v rámci objednávky `CalculatorOrder`.
+- Umožňuje uživatelům zadat množství pro každý typ položky, přičemž používá `MinValueValidator` pro zajištění, že množství je logické.
+
+### Závěrečné úvahy:
+
+- **Validace dat**: Zajistěte, že všechen váš logický kód pro výpočet ceny a zpracování objednávek je testován.
+- **Migration Mějte jistotu, že veškeré změny, které jste provedli v modelech, jsou správně reflektovány v migracích (pomocí `python manage.py makemigrations` a `python manage.py migrate`).
     helmets = IntegerField(default=0)
     arborist_helmets = IntegerField(default=0)
     fall_arrest_harness = IntegerField(default=0)
@@ -104,3 +119,44 @@ Pamatujte, že budete muset implementovat logiku pro výpočet cen dle aktuáln�
     rigging_plate = IntegerField(default=0)
     rope = IntegerField(default=0)
     rope_spliced_eye = IntegerField(default=0)
+
+**atributy kalkulačky**
+- Příklad dat pro tabulku kalkulator:
+
+| **id** | **TypeOfPpe**               | **price** | **ks** |
+|--------|----------------------------|-----------|-------|
+| 1      | helmets                     | 1000 CZK  | 0     |
+| 2      | arborist_helmets            | 1200 CZK  |       |
+| 3      | fall_arrest_harness         | 1500 CZK  | 15    |
+| 4      | height_work_harness         | 1800 CZK  | 7     |
+| 5      | arborist_harness            | 2000 CZK  | 5     |
+| 6      | chest_harness               | 1100 CZK  | 12    |
+| 7      | seat_harness                | 1300 CZK  | 10    |
+| 8      | rescue_equipments           | 5000 CZK  | 3     |
+| 9      | descenders                  | 900 CZK   | 20    |
+| 10     | arborist_descenders         | 1200 CZK  | 6     |
+| 11     | asaps                       | 2500 CZK  | 5     |
+| 12     | fall_arrests                | 3000 CZK  | 4     |
+| 13     | ascenders                   | 1100 CZK  | 10    |
+| 14     | pulleys                     | 800 CZK   | 25    |
+| 15     | block_pulleys               | 950 CZK   | 20    |
+| 16     | special_pulleys             | 1500 CZK  | 8     |
+| 17     | carbines                    | 300 CZK   | 50    |
+| 18     | slings                      | 600 CZK   | 30    |
+| 19     | steel_lanyard               | 1800 CZK  | 10    |
+| 20     | positioning_lanyards        | 1400 CZK  | 12    |
+| 21     | fall_absorbers              | 2200 CZK  | 8     |
+| 22     | fall_absorbers_with_conectors | 2500 CZK | 5     |
+| 23     | cambium_savers              | 1900 CZK  | 7     |
+| 24     | cambium_savers_special      | 2500 CZK  | 4     |
+| 25     | rigging plate               | 1300 CZK  | 15    |
+| 26     | rope                        | 2500 CZK  | 20    |
+| 27     | rope_spliced_eye            | 3500 CZK  | 3     |
+
+
+
+### Shrnutí
+
+- **Dynamická generace formulářů**: Vytvořte dynamická pole pro všechny položky.
+- **Validace a zpracování formulářových dat**: Zajistěte, že `quantity` bude vždy alespoň 0 a proveďte výpočty na serverové straně.
+- **Interaktivní šablona**: Použijte šablony Django k efektivnímu vykreslení tabulky a formuláře.
