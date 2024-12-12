@@ -1,25 +1,31 @@
 from django.core.validators import MinValueValidator
+
 from django.db.models import CASCADE, IntegerField, DateTimeField, BooleanField
 from django.db.models import Model, ForeignKey, DecimalField
 
 from accounts.models import CustomUser
 from revisions.models import TypeOfPpe
-
+#TODO related_name kde bude potreba pro funkce
+#TODO related_query_name kde bude potreba
 
 # Create your models here.
 '''Tento model reprezentuje záznam objednávky'''
 class CalculatorOutput(Model):
+    # TODO CASCADE z jake strany to ma vliv ? kdyz smazu uzivatele smazu zaznam -> vporadku ale nechci po smazani zaznamu v CalculkatorOutput smazat uzivatele!!
     customer = ForeignKey(CustomUser, related_name='orders', related_query_name='custom_order', default=None,
                           on_delete=CASCADE, null=False, blank=False)
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
     is_submitted = BooleanField(default=False)
+    total_price_revision = DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_price_transport = DecimalField(max_digits=10, decimal_places=2, default=0)
     total_price = DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    # TODO doladit format pro zobrazeni
     def __str__(self):
         return f"Order by {self.customer.username} with total {self.total_price} Kč"
-
-    def calculate_total(self):
+    #TODO dořešit vzpočet ceny dle zvolene dopravy
+    def calculate_total_revision(self):
         """ Metoda pro výpočet celkové ceny """
         total = 0
         for item in self.calculatoritems.all():

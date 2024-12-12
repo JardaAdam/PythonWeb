@@ -1,11 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import DecimalField, CharField, BooleanField, Model, ManyToManyField, ForeignKey, CASCADE, \
     SET_NULL, DateTimeField
+
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
 from revisions.models import RevisionRecord
 
+#TODO related_name kde bude potreba pro funkce
+#TODO related_query_name kde bude potreba
 def validate_discount(value):
     """Validuje, zda je sleva mezi 0 a 100%."""
     if value < 0 or value > 100:
@@ -83,9 +86,11 @@ class CustomUser(AbstractUser):
 
 class ItemGroup(Model):
     name = CharField(max_length=64)
+    # TODO lepsi by mohlo bit vypsani firmi pod kterou spada skupina, pro jednotlivce ?
     user = ForeignKey(CustomUser, on_delete=SET_NULL, null=True)
     items = ManyToManyField(RevisionRecord, blank=True)  # Prázdné povolené pro flexibilitu
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.name} skupina uživatele {self.user.username}"
