@@ -15,7 +15,7 @@ class CalculatorOrder(Model):
         - Poskytuje prostředky pro výpočet celkové ceny revize.
     """
     customer = ForeignKey(CustomUser, related_name='orders', related_query_name='custom_order', default=None,
-                          on_delete=SET_NULL, null=False, blank=False)
+                          on_delete=CASCADE, null=False, blank=False)
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
     is_submitted = BooleanField(default=False)
@@ -47,7 +47,7 @@ class CalculatorItem(Model):
         - Umožňuje uživatelům zadat množství pro každý typ položky, přičemž používá `MinValueValidator` pro zajištění, že množství je logické.
     """
     calculator_order = ForeignKey(CalculatorOrder, related_name='calculatoritems', on_delete=CASCADE)
-    type_of_ppe = ForeignKey(TypeOfPpe, on_delete=SET_NULL)
+    type_of_ppe = ForeignKey(TypeOfPpe, on_delete=SET_NULL, null=True)
     quantity = IntegerField(validators=[MinValueValidator(1)])
 
     def __str__(self):

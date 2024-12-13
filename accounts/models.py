@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, BooleanField, Model, ForeignKey, SET_NULL, DateTimeField
+from django.core.exceptions import ValidationError
+from django.db.models import CharField, BooleanField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint
 
 from django.core.validators import RegexValidator
 
@@ -80,7 +81,6 @@ class CustomUser(AbstractUser):
     phone_number = CharField(max_length=12, blank=True, null=True)
     business_id = CharField(max_length=10, null=True, blank=True, verbose_name="Business ID")
     tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
-    can_view_multiple_groups = BooleanField(default=False)  # Extra pole pro přístup
     last_updated = DateTimeField(auto_now=True)
 
     class Meta:
@@ -135,10 +135,20 @@ class ItemGroup(Model):
         - CustomUser rozdelene polozky do vice skupin podle pouziti (rescue bag, working at heihgt equipments
         - Company rozdelene polozky dle zamestnancu/pracovist/aut/atd."""
     name = CharField(max_length=64)
-    user = ForeignKey(CustomUser, on_delete=SET_NULL, null=True)
-    company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='item_groups')
+    user = ForeignKey(CustomUser, on_delete=SET_NULL, null=True, related_name='user_item_groups')
+    company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_item_groups')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name', 'user', 'company'], name='unique_name_user_company')
+        ]
+
+    def clean(self):
+        # Zajištění, že je vyplněno alespoň jedno z polí `user` nebo `company`
+        if not self.user and not self.company:
+            raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
 
     def __str__(self):
         user_name = f"{self.user.first_name} {self.user.last_name}" if self.user else "Žádný uživatel"

@@ -1,5 +1,5 @@
-from django import forms
-from revisions.models import TypeOfPpe
+
+# from revisions.models import TypeOfPpe
 
 # class CalculatorForm(forms.Form):
 """dynamicky generovaná pole pro každou položku. Uživatelé budou moci upravit pouze pole `quantity`."""
@@ -13,3 +13,4 @@ from revisions.models import TypeOfPpe
 #                 initial=0,
 #                 label=item.group_type_ppe
 #             )
+

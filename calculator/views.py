@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render, redirect
+# from django.shortcuts import render, redirect
 # from .forms import CalculatorForm
-from revisions.models import TypeOfPpe
+# from revisions.models import TypeOfPpe
 
 
 # def calculator_view(request):

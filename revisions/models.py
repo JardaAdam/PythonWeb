@@ -1,8 +1,8 @@
 from datetime import timedelta
 from django.utils import timezone
 
-from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, CASCADE, \
-    TextField, IntegerField, DateField, ManyToManyField, OneToOneField, SET_NULL, DateTimeField
+from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField,  \
+    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
 from accounts.models import CustomUser, ItemGroup
 '''PPE = PersonalProtectiveEquipment'''
@@ -61,17 +61,26 @@ class TypeOfPpe(Model):
     def __str__(self):
         return f"{self.group_type_ppe} cena: {self.price} kč"
 
+    def __repr__(self):
+        return (f"TypeOfPpe(id={self.id}, group_type_ppe='{self.group_type_ppe}', "
+                f"price={self.price})")
+
 class RevisionData(Model):
     """tabulka obsahujici jednotlive polozky v prubehu plneni databaze zjednodusuje vypracovavani reviznich zaznamu"""
     image = ImageField(upload_to="images/", default=None)
-    manufacturer = ForeignKey(Manufacturer, on_delete=CASCADE, related_name='revisions', related_query_name='revision')
-    group_type_ppe = ForeignKey(TypeOfPpe, on_delete=CASCADE)
+    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='revisions', related_query_name='revision')
+    group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT)
     name_ppe = CharField(max_length=32, null=False, blank=False)
     standard_ppe = ManyToManyField(StandardPpe, related_name='revision_data')  # Množství norem
     manual_for_revision = FileField(upload_to='manuals/')
     notes = TextField(blank=False, null=False)
 
+
     # TODO vytvořit složku pro manuáli k revizím, images
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['manufacturer', 'name_ppe'], name='unique_manufacturer_name_ppe')
+        ]
 
     def __str__(self):
         return f"{self.name_ppe} ({self.group_type_ppe}) by {self.manufacturer}"
@@ -89,15 +98,14 @@ class RevisionRecord(Model):
         - konec platnosti revize
         - konec zivotnosti
         - upozorneni od vyrobce podle serial_number"""
-    revision_data = ForeignKey(RevisionData, on_delete=SET_NULL)
+    revision_data = ForeignKey(RevisionData, on_delete=PROTECT)
     serial_number = CharField(max_length=64,null=False, blank=False, unique=True)
     date_manufacture = DateField(null=False, blank=False)
     date_of_first_use = DateField(null=False, blank=False)
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
-    item_group = OneToOneField(ItemGroup, null=True, blank=True, on_delete=SET_NULL,
-                                      related_name='revision_records', related_query_name='revision_record')     # `item_group.revision_records.all()`
-    owner = ForeignKey(CustomUser, on_delete=SET_NULL)
+    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records', related_query_name='revision_record')
+    owner = ForeignKey(CustomUser, on_delete=SET_NULL, null=True)
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
     VERDICT_RETIRE = 'retire'
@@ -109,10 +117,14 @@ class RevisionRecord(Model):
     ]
     verdict = CharField(max_length=64, choices=VERDICT_CHOICES, blank=True)
     notes = TextField(blank=True)
+    created_by = ForeignKey(CustomUser, on_delete=SET_NULL, null=True, related_name='created_revision_records')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
+        if not self.revision_data:
+            raise ValueError("Revision data cannot be None")
+
         # Automatické nastavení dat a výpočet nadcházející revize.
         if not self.date_of_revision:
             self.date_of_revision = timezone.now().date()

@@ -31,7 +31,8 @@ from .models import CustomUser, Company
 #
 #         return user
 #
-# class SignUpForm(UserCreationForm):
+class SignUpForm(UserCreationForm):
+    pass
 #     company_name = forms.CharField(max_length=32, required=False, label="Název společnosti")
 #     address = forms.CharField(max_length=128, required=False, label="Adresa")
 #     city = forms.CharField(max_length=32, required=False, label="Město")
@@ -112,3 +113,17 @@ from .models import CustomUser, Company
 #
 #
 
+# class ItemGroupForm(ModelForm):
+#     class Meta:
+#         model = ItemGroup
+#         fields = ['name', 'user', 'company']
+#
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         user = cleaned_data.get("user")
+#         company = cleaned_data.get("company")
+#
+#         if not user and not company:
+#             raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
+#
+#         return cleaned_data

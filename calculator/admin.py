@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CalculatorOutput, CalculatorItem
+from .models import CalculatorOrder, CalculatorItem
 # Register your models here.
-admin.site.register(CalculatorOutput)
+admin.site.register(CalculatorOrder)
 admin.site.register(CalculatorItem)

@@ -4,7 +4,8 @@ from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView
 from .forms import SignUpForm
 from django.views.generic import TemplateView
-
+from django.shortcuts import render, redirect
+# from .forms import ItemGroupForm
 
 # Create your views here.
 
@@ -29,3 +30,16 @@ class SignUpView(CreateView):
         user = form.save()
         login(self.request, user)
         return response
+#
+#
+#
+# def create_item_group(request):
+#     if request.method == 'POST':
+#         form = ItemGroupForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('success_url')  # Nahraďte 'success_url' vaší cílovou URL po uložení
+#     else:
+#         form = ItemGroupForm()
+#
+#     return render(request, 'item_group_form.html', {'form': form})
