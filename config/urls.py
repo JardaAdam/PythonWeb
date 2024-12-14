@@ -18,13 +18,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from revisions.views import index
+from revisions.views import home
 from config import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),  # Přidání URL z aplikace accounts
-    # path('calculator/', include('calculator.urls')),  # Propojení s aplikací
-    path('', index, name='index'),
+    path('', home, name='home'),
+    path('accounts/', include('accounts.urls')),
+    # path('calculator/', include('calculator.urls')),
+    path('revisions/', include('revisions.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# TODO kde ma spravne byt ulozeny home (index.html)
+# TODO kde ma spravne byt ulozeny home (home.html)

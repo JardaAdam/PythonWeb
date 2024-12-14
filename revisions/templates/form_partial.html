@@ -1,0 +1,9 @@
+{% if form %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+{% else %}
+    <p>Please select a model to input data.</p>
+{% endif %}

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Data{% endblock %}
+
+{% block content %}
+<h1>Add Data</h1>
+<form id="main-form" method="post">
+    {% csrf_token %}
+    <label for="model_type_select">Select Data Type:</label>
+    <select id="model_type_select" name="model_type">
+        <option value="" disabled {% if not model_type %}selected{% endif %}>Choose a model</option>
+        <option value="MaterialType" {% if model_type == 'MaterialType' %}selected{% endif %}>Material Type</option>
+        <option value="StandardPpe" {% if model_type == 'StandardPpe' %}selected{% endif %}>Standard PPE</option>
+        <option value="Manufacturer" {% if model_type == 'Manufacturer' %}selected{% endif %}>Manufacturer</option>
+        <option value="TypeOfPpe" {% if model_type == 'TypeOfPpe' %}selected{% endif %}>Type of PPE</option>
+        <option value="RevisionData" {% if model_type == 'RevisionData' %}selected{% endif %}>Revision Data</option>
+        <option value="RevisionRecord" {% if model_type == 'RevisionRecord' %}selected{% endif %}>Revision Record</option>
+    </select>
+    <div id="form-container">
+        <!-- Formulář form_partial.html bude načten sem -->
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Získání `<select>` elementu pro výběr typu modelu
+        const modelTypeSelect = document.getElementById('model_type_select');
+
+        // Načtení předvoleného typu modelu z `<select>` elementu
+        const modelType = modelTypeSelect.value;
+
+        // Pokud existuje předvolený typ modelu, načteme příslušný formulář při spuštění stránky
+        if (modelType) {
+            loadForm(modelType);
+        }
+
+        // Přidání posluchače pro změny ve `<select>` elementu
+        modelTypeSelect.addEventListener('change', function() {
+            // Získat vybraný typ modelu
+            const selectedModelType = this.value;
+            // Načíst formulář odpovídající vybranému typu modelu
+            loadForm(selectedModelType);
+        });
+    });
+
+    // Funkce pro načítání formuláře na základě zvoleného typu modelu
+    function loadForm(modelType) {
+        // Získání CSRF tokenu pro bezpečné odesílání požadavků
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        // Kontejner pro načtení formuláře
+        const formContainer = document.getElementById('form-container');
+
+        // Odeslat GET požadavek pro načtení HTML formuláře pro daný typ modelu
+        fetch(`/revisions/get_form/?model_type=${modelType}`, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Vložení získaného HTML formuláře do kontejneru
+            formContainer.innerHTML = html;
+
+            // Získání formuláře z kontejneru
+            const form = formContainer.querySelector('form');
+
+            // Pokud formulář existuje, přidání posluchače pro jeho odeslání
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    // Zabránit standardnímu odeslání formuláře
+                    event.preventDefault();
+
+                    // Shromažďování dat z formuláře
+                    const formData = new FormData(form);
+                    // Odeslat POST požadavek s daty z formuláře
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Pokud je odeslání úspěšné, zobrazit uživateli zprávu
+                            alert('Data submitted successfully.');
+                            form.reset(); // Reset formuláře
+                            // Přesměrování zpět na aktuální URL s parametrem `model_type`, aby zůstal stejný formulář
+                            window.location.href = `${window.location.pathname}?model_type=${modelType}`;
+                        } else {
+                            // Ošetření chybného stavu
+                            console.error('Error submitting form.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}
