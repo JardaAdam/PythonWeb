@@ -28,6 +28,9 @@ class StandardPpe(Model):
     """databaze norem pro OOPP"""
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
+    class Meta:
+        verbose_name = "Standard PPE"
+        verbose_name_plural = "Standards PPE"
 
     def __str__(self):
         return self.code
@@ -59,6 +62,11 @@ class TypeOfPpe(Model):
     image = ImageField(upload_to="images/", default=None)
     group_type_ppe = CharField(max_length=32, unique=True, blank=False, null=False)
     price = DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
+
+    class Meta:
+        verbose_name = "Type of PPE"
+        verbose_name_plural = "Types of PPE"
+
 
     def __str__(self):
         return f"{self.group_type_ppe} cena: {self.price} kč"
