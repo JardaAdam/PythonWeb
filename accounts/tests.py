@@ -48,9 +48,9 @@ class UserLoginTest(TestCase):
         self.client.login(username='testuser', password='testpassword')
 
         response = self.client.post(reverse('logout'))
-        self.assertRedirects(response, reverse('index'))
+        self.assertRedirects(response, reverse('home'))
 
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse('home'))
         self.assertNotContains(response, 'Hi, testuser')
 
     def test_register_page_loads(self):

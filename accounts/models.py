@@ -4,8 +4,7 @@ from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeFie
 
 from django.core.validators import RegexValidator
 
-
-
+from config import settings
 
 
 class Country(Model):
@@ -145,7 +144,7 @@ class ItemGroup(Model):
         - CustomUser rozdelene polozky do vice skupin podle pouziti (rescue bag, working at heihgt equipments
         - Company rozdelene polozky dle zamestnancu/pracovist/aut/atd."""
     name = CharField(max_length=64)
-    user = ForeignKey(CustomUser, on_delete=SET_NULL, null=True, related_name='user_item_groups')
+    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='user_item_groups')
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_item_groups')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)

@@ -4,6 +4,7 @@ from django.db.models import CASCADE, IntegerField, DateTimeField, BooleanField,
 from django.db.models import Model, ForeignKey, DecimalField
 
 from accounts.models import CustomUser
+from config import settings
 from revisions.models import TypeOfPpe
 
 """PPE = PersonalProtectiveEquipment"""
@@ -14,7 +15,7 @@ class CalculatorOrder(Model):
         - Obsahuje odkazy na uživatele (zákazníka) a sledování stavu objednávky.
         - Poskytuje prostředky pro výpočet celkové ceny revize.
     """
-    customer = ForeignKey(CustomUser, related_name='orders', related_query_name='custom_order', default=None,
+    customer = ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', related_query_name='custom_order', default=None,
                           on_delete=CASCADE, null=False, blank=False)
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)

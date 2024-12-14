@@ -5,6 +5,8 @@ from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT
     TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
 from accounts.models import CustomUser, ItemGroup
+from config import settings
+
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.
 
@@ -105,7 +107,7 @@ class RevisionRecord(Model):
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
     item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records', related_query_name='revision_record')
-    owner = ForeignKey(CustomUser, on_delete=SET_NULL, null=True)
+    owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True)
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
     VERDICT_RETIRE = 'retire'
@@ -117,7 +119,7 @@ class RevisionRecord(Model):
     ]
     verdict = CharField(max_length=64, choices=VERDICT_CHOICES, blank=True)
     notes = TextField(blank=True)
-    created_by = ForeignKey(CustomUser, on_delete=SET_NULL, null=True, related_name='created_revision_records')
+    created_by = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='created_revision_records')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
