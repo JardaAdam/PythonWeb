@@ -58,6 +58,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# Nastavení úrovně zpráv Django messages frameworku
+from django.contrib.messages import constants as message_constants
+MESSAGE_LEVEL = message_constants.INFO  # Nastavení výchozí úrovně zpráv
 
 ROOT_URLCONF = 'config.urls'
 

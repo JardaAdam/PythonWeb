@@ -4,7 +4,15 @@
 
 {% block content %}
 <h1>Add Data</h1>
-<form id="main-form" method="post">
+ <!-- Zobrazení zpráv -->
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form id="main-form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <label for="model_type_select">Select Data Type:</label>
     <select id="model_type_select" name="model_type">

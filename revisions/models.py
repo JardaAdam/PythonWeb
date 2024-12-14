@@ -30,6 +30,7 @@ class StandardPpe(Model):
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
     class Meta:
+        ordering = ['code']
         verbose_name = "Standard PPE"
         verbose_name_plural = "Standards PPE"
 
@@ -43,8 +44,8 @@ class Manufacturer(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
     name = CharField(max_length=32, blank=False, null=False)
     material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='manufacturers')
-    lifetime_use_months = IntegerField(blank=False, null=False, help_text="Maximální doba používání v měsících")
-    lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba od data výroby v letech")
+    lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání v letech")
+    lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od data výroby v letech")
 
     class Meta:
         verbose_name_plural = "Manufacturers"
