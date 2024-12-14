@@ -1,70 +1,28 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from django.core.validators import RegexValidator, EmailValidator
+from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
-from django.db.transaction import atomic
-import re
 
-from django.forms import CharField, ModelForm, TextInput
+
+
+from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField
 
 CustomUser = get_user_model()
 
 from .models import CustomUser, Company
 
 
-class CustomUserRegistrationForm(ModelForm):
-    company_name = CharField(max_length=255, required=False, help_text='Vyplňte, pokud patříte do firmy')
-
+class RegistrationForm(ModelForm):
+    password = CharField(widget=PasswordInput, label='Password')
+    confirm_password = CharField(widget=PasswordInput, label='Confirm Password')
+    company = ModelChoiceField(queryset=Company.objects.all(), required=False, empty_label="-- None --",
+                                     label='Existing Company')
     class Meta:
         model = CustomUser
-        fields = ['username', 'password', 'company_name', 'email']  # Zahrňte další požadovaná pole
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        company_name = self.cleaned_data.get('company_name')
-
-        if company_name:
-            company, _ = Company.objects.get_or_create(name=company_name)
-            user.company = company
-
-        if commit:
-            user.save()
-
-        return user
-
-class SignUpForm(UserCreationForm):
-    pass
-    company_name = CharField(max_length=32, required=False, label="Název společnosti")
-    address = CharField(max_length=128, required=False, label="Adresa")
-    city = CharField(max_length=32, required=False, label="Město")
-    postcode = CharField(
-        max_length=6, required=False, label="PČS",
-        widget=TextInput(attrs={'placeholder': '00000'}),
-        validators=[
-            RegexValidator(
-                regex=r'^\d{3}\s?\d{2}$',
-                message="Poštovní směrovací číslo musí mít formát XXX XX (např. 11000 nebo 110 00)."
-            )
+        fields = [
+            'username', 'password', 'confirm_password', 'first_name', 'last_name',
+            'email', 'country', 'address', 'city', 'postcode',
+            'phone_number', 'business_id', 'tax_id', 'company',
         ]
-    )
-    phone_number = CharField(
-        max_length=17, required=False, label="Telefonní číslo",
-        widget=TextInput(attrs={'placeholder': '+420123456789'}),
-        validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Telefonní číslo musí být ve formátu: '+420123456789'. Až 15 číslic je povoleno.")]
-    )
-    ico = CharField(
-        max_length=8, required=False, label="IČO",
-        widget=TextInput(attrs={'placeholder': '12345678'})
-    )
-    dic = CharField(
-        max_length=11, required=False, label="DIČ",
-        widget=TextInput(attrs={'placeholder': 'CZ123456789'})
-    )
-
-    class Meta(UserCreationForm.Meta):
-        model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
-
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '')
         return first_name.strip().title()
@@ -80,39 +38,33 @@ class SignUpForm(UserCreationForm):
             try:
                 validator(email)
             except ValidationError as e:
-                raise ValidationError("Zadejte platný email.")
+                raise ValidationError(f"Zadejte platný email. Chyba: {str(e)}")
         return email
 
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data.get('phone_number', '')
-        phone_number = re.sub(r'\D', '', phone_number)  # Odstraňte všechny nečíselné znaky.
-        if len(phone_number) < 9:
-            raise ValidationError("Telefonní číslo musí obsahovat alespoň 9 číslic.")
-        return phone_number
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
 
-    def clean_ico(self):
-        ico = self.cleaned_data.get('ico')
-        if ico:
-            ico = re.sub(r'\D', '', ico)  # Odstraňte všechny nečíselné znaky.
-            if len(ico) != 8:
-                raise ValidationError("IČO musí mít přesně 8 číslic.")
-        return ico
+        if password != confirm_password:
+            raise ValidationError("Passwords do not match.")
 
-    @atomic
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.company_name = self.cleaned_data['company_name']
-        user.address = self.cleaned_data['address']
-        user.city = self.cleaned_data['city']
-        user.postcode = self.cleaned_data['postcode']
-        user.phone_number = self.cleaned_data['phone_number']
-        user.ico = self.cleaned_data['ico']
-        user.dic = self.cleaned_data['dic']
-        if commit:
-            user.save()
-        return user
-#
-#
+        return cleaned_data
+
+class CompanyForm(ModelForm):
+   class Meta:
+       model = Company
+       fields = [
+           'name', 'country', 'address', 'city',
+           'postcode', 'phone_number', 'business_id', 'tax_id'
+       ]
+
+   def clean(self):
+       cleaned_data = super().clean()
+       # Další validace, pokud je potřeba
+       return cleaned_data
+
+
 
 # class ItemGroupForm(ModelForm):
 #     class Meta:

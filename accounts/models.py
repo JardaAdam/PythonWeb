@@ -18,15 +18,20 @@ class Country(Model):
     tax_id_format = CharField(max_length=12, blank=True)  # Regex pro validaci tax ID
     tax_id_prefix = CharField(max_length=4, blank=True, help_text="Tax ID prefix (např. CZ)")
 
+    class Meta:
+        ordering = ['name']
+        verbose_name = "Country"
+        verbose_name_plural = "Countries"
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return f"Country(name={self.name})"
 
+
 class Company(Model):
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
-    name = CharField(max_length=255, unique=True)
+    name = CharField(max_length=255, unique=True, blank=True,null=True)
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='companies')
     address = CharField(max_length=255, null=True, blank=True)
     city = CharField(max_length=32, null=True, blank=True)
@@ -37,8 +42,13 @@ class Company(Model):
     date_joined = DateTimeField(auto_now_add=True)
     last_updated = DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['name']
+        verbose_name = "Company"
+        verbose_name_plural = "Companies"
+
     def __str__(self):
-        return self.name
+        return self.name if self.name else 'Unknown company'
 
     def __repr__(self):
         return f"Company(name={self.name}, country={self.country})"

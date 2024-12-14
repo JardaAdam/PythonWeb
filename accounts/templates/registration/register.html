@@ -8,9 +8,10 @@
         <h2>Registrace</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }} <!-- Vykreslení uživatelského formuláře -->
-
-            <button type="submit" class="btn btn-primary">Registrovat</button>
+            {{ user_form.as_p }} <!-- Vykreslení uživatelského formuláře -->
+            <hr>
+            {{ company_form.as_p }}
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
     </div>
 </div>
