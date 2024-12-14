@@ -26,6 +26,7 @@ class MaterialType(Model):
 
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
+    image = ImageField(upload_to='images/', blank=False, null=False)
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
     class Meta:

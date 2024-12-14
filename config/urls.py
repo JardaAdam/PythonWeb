@@ -29,4 +29,3 @@ urlpatterns = [
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# TODO kde ma spravne byt ulozeny home (home.html)
