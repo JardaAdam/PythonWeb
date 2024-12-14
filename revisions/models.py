@@ -26,7 +26,7 @@ class MaterialType(Model):
 
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
-    image = ImageField(upload_to='images/', blank=False, null=False)
+    image = ImageField(upload_to='images/', blank=True, null=True)
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
     class Meta:
@@ -60,7 +60,7 @@ class Manufacturer(Model):
 
 class TypeOfPpe(Model):
     """definuje cenu jednotlivich skupin polozek pro vypocet finalni ceny za revizi"""
-    image = ImageField(upload_to="images/", default=None)
+    image = ImageField(upload_to="images/",blank=False, null=False, default=None)
     group_type_ppe = CharField(max_length=32, unique=True, blank=False, null=False)
     price = DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
 
