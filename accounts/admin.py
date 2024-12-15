@@ -10,6 +10,8 @@ class CustomUserAdmin(UserAdmin):
         (None, {'fields': ('company', 'country', 'address', 'city', 'postcode',
                            'phone_number', 'business_id', 'tax_id')}),
     )
+
+
 admin.site.register(Country)
 admin.site.register(Company)
 admin.site.register(CustomUser, CustomUserAdmin)

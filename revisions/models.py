@@ -88,7 +88,7 @@ class RevisionData(Model):
     notes = TextField(blank=False, null=False)
 
 
-    # TODO vytvořit složku pro manuáli k revizím, images
+    # FIXME upravit zobrazovani nazvu kolonek
     class Meta:
         verbose_name = "Revision Data"
         verbose_name_plural = "Revision Data"

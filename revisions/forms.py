@@ -27,6 +27,7 @@ class TypeOfPpeForm(forms.ModelForm):
 
 
 class RevisionDataForm(forms.ModelForm):
+    # FIXME upravit formularove data v oblasti Standart ppe aby se nemuselo listovat v okne
     class Meta:
         model = RevisionData
         fields = '__all__'
