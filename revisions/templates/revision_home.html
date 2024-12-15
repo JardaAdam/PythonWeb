@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Revision home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<!-- Pomocí Contextu Bootstrap pro zarovnání vlevo -->
+    <div class="text-start">
+        <a href="{% url 'add_data' %}" class="btn btn-primary">Add New Data</a>
+    </div>
+{% else %}
+
+{% endif %}
+<h2 class="text-2xl text-center">Vítejte v revivion části mé stránky!</h2>
+<p class="text-center">Toto je revision home page.</p>
+
+{% endblock %}

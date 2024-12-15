@@ -5,6 +5,8 @@ from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT
     TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
 from accounts.models import CustomUser, ItemGroup
+from config import settings
+
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.
 
@@ -24,8 +26,13 @@ class MaterialType(Model):
 
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
+    image = ImageField(upload_to='images/', blank=True, null=True)
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
+    class Meta:
+        ordering = ['code']
+        verbose_name = "Standard PPE"
+        verbose_name_plural = "Standards PPE"
 
     def __str__(self):
         return self.code
@@ -37,8 +44,8 @@ class Manufacturer(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
     name = CharField(max_length=32, blank=False, null=False)
     material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='manufacturers')
-    lifetime_use_months = IntegerField(blank=False, null=False, help_text="Maximální doba používání v měsících")
-    lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba od data výroby v letech")
+    lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od 1.použití v letech")
+    lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od data výroby v letech")
 
     class Meta:
         verbose_name_plural = "Manufacturers"
@@ -54,9 +61,14 @@ class Manufacturer(Model):
 
 class TypeOfPpe(Model):
     """definuje cenu jednotlivich skupin polozek pro vypocet finalni ceny za revizi"""
-    image = ImageField(upload_to="images/", default=None)
+    image = ImageField(upload_to="images/",blank=False, null=False, default=None)
     group_type_ppe = CharField(max_length=32, unique=True, blank=False, null=False)
     price = DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
+
+    class Meta:
+        verbose_name = "Type of PPE"
+        verbose_name_plural = "Types of PPE"
+
 
     def __str__(self):
         return f"{self.group_type_ppe} cena: {self.price} kč"
@@ -76,8 +88,10 @@ class RevisionData(Model):
     notes = TextField(blank=False, null=False)
 
 
-    # TODO vytvořit složku pro manuáli k revizím, images
+    # FIXME upravit zobrazovani nazvu kolonek
     class Meta:
+        verbose_name = "Revision Data"
+        verbose_name_plural = "Revision Data"
         constraints = [
             UniqueConstraint(fields=['manufacturer', 'name_ppe'], name='unique_manufacturer_name_ppe')
         ]
@@ -89,9 +103,8 @@ class RevisionData(Model):
         return (f"RevisionData(id={self.id}, name_ppe='{self.name_ppe}', "
                 f"manufacturer='{self.manufacturer.name}')")
 
-    class Meta:
-        verbose_name = "Revision Data"
-        verbose_name_plural = "Revision Data"
+
+
 
 class RevisionRecord(Model):
     """ uchovava informace o revizi jednotlivich polozek a ma informace potrebne k upozornovani na
@@ -105,7 +118,7 @@ class RevisionRecord(Model):
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
     item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records', related_query_name='revision_record')
-    owner = ForeignKey(CustomUser, on_delete=SET_NULL, null=True)
+    owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True)
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
     VERDICT_RETIRE = 'retire'
@@ -117,7 +130,7 @@ class RevisionRecord(Model):
     ]
     verdict = CharField(max_length=64, choices=VERDICT_CHOICES, blank=True)
     notes = TextField(blank=True)
-    created_by = ForeignKey(CustomUser, on_delete=SET_NULL, null=True, related_name='created_revision_records')
+    created_by = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='created_revision_records')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Data{% endblock %}
+
+{% block content %}
+<h1>Add Data</h1>
+ <!-- Zobrazení zpráv -->
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<form id="main-form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="model_type_select">Select Data Type:</label>
+    <select id="model_type_select" name="model_type">
+        <option value="" disabled {% if not model_type %}selected{% endif %}>Choose a model</option>
+        <option value="MaterialType" {% if model_type == 'MaterialType' %}selected{% endif %}>Material Type</option>
+        <option value="StandardPpe" {% if model_type == 'StandardPpe' %}selected{% endif %}>Standard PPE</option>
+        <option value="Manufacturer" {% if model_type == 'Manufacturer' %}selected{% endif %}>Manufacturer</option>
+        <option value="TypeOfPpe" {% if model_type == 'TypeOfPpe' %}selected{% endif %}>Type of PPE</option>
+        <option value="RevisionData" {% if model_type == 'RevisionData' %}selected{% endif %}>Revision Data</option>
+        <option value="RevisionRecord" {% if model_type == 'RevisionRecord' %}selected{% endif %}>Revision Record</option>
+    </select>
+    <div id="form-container">
+        <!-- Formulář form_partial.html bude načten sem -->
+    </div>
+</form>
+
+<script src="{% static 'js/add_data.js' %}"></script>
+{% endblock %}

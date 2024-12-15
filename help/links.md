@@ -44,10 +44,11 @@ python manage.py showmigrations
 
 ## Zálohování databáze Export (DUMP):
 ```bash
-python manage.py dumpdata > backup.json
-nebo 
-python manage.py dumpdatautf8 viewer --output ./files/fixtures1.json
-
+python manage.py dumpdata --natural-primary --natural-foreign --indent 4 > backup.json
+```
+## Zálohování databáze určité aplikace a modelu 
+```bash
+python manage.py dumpdata app_name.ModelName --indent 4 --output ./files/fixtures1.json
 ```
 ## Načítání ze zalohy Import (LOAD):
 ```bash

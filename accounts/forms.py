@@ -1,13 +1,7 @@
-from django.contrib.auth import get_user_model
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 
-
-
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField
-
-CustomUser = get_user_model()
-
 from .models import CustomUser, Company
 
 
@@ -15,7 +9,8 @@ class RegistrationForm(ModelForm):
     password = CharField(widget=PasswordInput, label='Password')
     confirm_password = CharField(widget=PasswordInput, label='Confirm Password')
     company = ModelChoiceField(queryset=Company.objects.all(), required=False, empty_label="-- None --",
-                                     label='Existing Company')
+                               label='Existing Company')
+
     class Meta:
         model = CustomUser
         fields = [
@@ -23,6 +18,7 @@ class RegistrationForm(ModelForm):
             'email', 'country', 'address', 'city', 'postcode',
             'phone_number', 'business_id', 'tax_id', 'company',
         ]
+
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '')
         return first_name.strip().title()
@@ -51,20 +47,19 @@ class RegistrationForm(ModelForm):
 
         return cleaned_data
 
+
 class CompanyForm(ModelForm):
-   class Meta:
-       model = Company
-       fields = [
-           'name', 'country', 'address', 'city',
-           'postcode', 'phone_number', 'business_id', 'tax_id'
-       ]
+    class Meta:
+        model = Company
+        fields = [
+            'name', 'country', 'address', 'city',
+            'postcode', 'phone_number', 'business_id', 'tax_id'
+        ]
 
-   def clean(self):
-       cleaned_data = super().clean()
-       # Další validace, pokud je potřeba
-       return cleaned_data
-
-
+    def clean(self):
+        cleaned_data = super().clean()
+        # Další validace, pokud je potřeba
+        return cleaned_data
 
 # class ItemGroupForm(ModelForm):
 #     class Meta:
