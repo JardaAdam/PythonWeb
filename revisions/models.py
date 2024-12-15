@@ -44,7 +44,7 @@ class Manufacturer(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
     name = CharField(max_length=32, blank=False, null=False)
     material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='manufacturers')
-    lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání v letech")
+    lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od 1.použití v letech")
     lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od data výroby v letech")
 
     class Meta:
@@ -90,6 +90,8 @@ class RevisionData(Model):
 
     # TODO vytvořit složku pro manuáli k revizím, images
     class Meta:
+        verbose_name = "Revision Data"
+        verbose_name_plural = "Revision Data"
         constraints = [
             UniqueConstraint(fields=['manufacturer', 'name_ppe'], name='unique_manufacturer_name_ppe')
         ]
@@ -101,9 +103,8 @@ class RevisionData(Model):
         return (f"RevisionData(id={self.id}, name_ppe='{self.name_ppe}', "
                 f"manufacturer='{self.manufacturer.name}')")
 
-    class Meta:
-        verbose_name = "Revision Data"
-        verbose_name_plural = "Revision Data"
+
+
 
 class RevisionRecord(Model):
     """ uchovava informace o revizi jednotlivich polozek a ma informace potrebne k upozornovani na

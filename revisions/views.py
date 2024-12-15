@@ -24,6 +24,7 @@ def add_data(request):
     if request.method == 'POST':
         model_type = request.POST.get('model_type')
 
+        # Ověření, zda model_type existuje a je platný
         if model_type == 'MaterialType':
             form = MaterialTypeForm(request.POST)
         elif model_type == 'StandardPpe':
@@ -37,7 +38,7 @@ def add_data(request):
         elif model_type == 'RevisionRecord':
             form = RevisionRecordForm(request.POST)
 
-        if form.is_valid():
+        if form is not None and form.is_valid():
             if model_type == 'RevisionRecord':
                 revision_record = form.save(commit=False)
                 revision_record.created_by = request.user
@@ -48,7 +49,8 @@ def add_data(request):
             messages.success(request, 'The item was successfully saved.')
             return redirect(f"{reverse('add_data')}?model_type={model_type}")
 
-    else:
+    # Inicializace formuláře při GET požadavku nebo při nevalidním POST
+    if form is None:
         if model_type == 'MaterialType':
             form = MaterialTypeForm()
         elif model_type == 'StandardPpe':
