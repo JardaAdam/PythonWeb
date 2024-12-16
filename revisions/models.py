@@ -71,7 +71,7 @@ class TypeOfPpe(Model):
 
 
     def __str__(self):
-        return f"{self.group_type_ppe} cena: {self.price} kč"
+        return f"{self.group_type_ppe} cena: {self.price:.2f} kč"
 
     def __repr__(self):
         return (f"TypeOfPpe(id={self.id}, group_type_ppe='{self.group_type_ppe}', "
@@ -97,7 +97,7 @@ class RevisionData(Model):
         ]
 
     def __str__(self):
-        return f"{self.name_ppe} ({self.group_type_ppe}) by {self.manufacturer}"
+        return f"{self.name_ppe} ({self.group_type_ppe}) by {self.manufacturer.name}"
 
     def __repr__(self):
         return (f"RevisionData(id={self.id}, name_ppe='{self.name_ppe}', "
@@ -134,16 +134,6 @@ class RevisionRecord(Model):
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        if not self.revision_data:
-            raise ValueError("Revision data cannot be None")
-
-        # Automatické nastavení dat a výpočet nadcházející revize.
-        if not self.date_of_revision:
-            self.date_of_revision = timezone.now().date()
-        if not self.date_of_next_revision:
-            self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         manufacturer_name = self.revision_data.manufacturer.name if self.revision_data.manufacturer else "Neznámý výrobce"
@@ -159,4 +149,13 @@ class RevisionRecord(Model):
                 f"owner='{self.owner.username if self.owner else None}', "
                 f"verdict='{self.verdict}')")
 
+    def save(self, *args, **kwargs):
+        if not self.revision_data:
+            raise ValueError("Revision data cannot be None")
 
+        # Automatické nastavení dat a výpočet nadcházející revize.
+        if not self.date_of_revision:
+            self.date_of_revision = timezone.now().date()
+        if not self.date_of_next_revision:
+            self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
+        super().save(*args, **kwargs)
