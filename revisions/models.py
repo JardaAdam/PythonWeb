@@ -45,11 +45,14 @@ class StandardPpe(Model):
 class Manufacturer(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
     name = CharField(max_length=32, blank=False, null=False)
-    material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='manufacturers')
+    material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='material_type')
     lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od 1.použití v letech")
     lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od data výroby v letech")
 
     class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name', 'material_type'], name='unique_constraint_material_type')
+        ]
         verbose_name_plural = "Manufacturers"
         ordering = ['name']
 
@@ -63,7 +66,7 @@ class Manufacturer(Model):
 
 class TypeOfPpe(Model):
     """definuje cenu jednotlivich skupin polozek pro vypocet finalni ceny za revizi"""
-    image = ImageField(upload_to="images/",blank=False, null=False, default=None)
+    image = ImageField(upload_to="images/",blank=True, null=True, default=None)
     group_type_ppe = CharField(max_length=32, unique=True, blank=False, null=False)
     price = DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
 
@@ -82,12 +85,12 @@ class TypeOfPpe(Model):
 class RevisionData(Model):
     """tabulka obsahujici jednotlive polozky v prubehu plneni databaze zjednodusuje vypracovavani reviznich zaznamu"""
     image = ImageField(upload_to="images/", default=None)
-    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='revisions', related_query_name='revision')
-    group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT)
+    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='manufacturer', related_query_name='manufacturer')
+    group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
     name_ppe = CharField(max_length=32, null=False, blank=False)
-    standard_ppe = ManyToManyField(StandardPpe, related_name='revision_data')  # Množství norem
+    standard_ppe = ManyToManyField(StandardPpe, related_name='standard_ppe')  # Množství norem
     manual_for_revision = FileField(upload_to='manuals/')
-    notes = TextField(blank=False, null=False)
+    notes = TextField(blank=True, null=True)
 
 
     # FIXME upravit zobrazovani nazvu kolonek
@@ -115,12 +118,12 @@ class RevisionRecord(Model):
         - upozorneni od vyrobce podle serial_number"""
     revision_data = ForeignKey(RevisionData, on_delete=PROTECT)
     serial_number = CharField(max_length=64,null=False, blank=False, unique=True)
-    date_manufacture = DateField(null=False, blank=False)
+    date_manufacture = DateField(null=True, blank=True)
     # FIXME dořešit zapisování těchto hodnot ve formuláři!!
-    date_of_first_use = DateField(null=False, blank=False)
+    date_of_first_use = DateField(null=True, blank=True)
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
-    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records', related_query_name='revision_record')
+    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='item_group', related_query_name='item_group')
     owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True)
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
