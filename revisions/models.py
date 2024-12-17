@@ -1,4 +1,6 @@
 from datetime import timedelta
+
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField,  \
@@ -114,6 +116,7 @@ class RevisionRecord(Model):
     revision_data = ForeignKey(RevisionData, on_delete=PROTECT)
     serial_number = CharField(max_length=64,null=False, blank=False, unique=True)
     date_manufacture = DateField(null=False, blank=False)
+    # FIXME dořešit zapisování těchto hodnot ve formuláři!!
     date_of_first_use = DateField(null=False, blank=False)
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
@@ -122,11 +125,12 @@ class RevisionRecord(Model):
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
     VERDICT_RETIRE = 'retire'
-
+    VERDICT_FIT_UNTIL = 'Fit Until'
     VERDICT_CHOICES = [
         (VERDICT_NEW, 'New'),
         (VERDICT_FIT, 'Fit to Use'),
         (VERDICT_RETIRE, 'Retire'),
+        (VERDICT_FIT_UNTIL, 'Fit Until'),
     ]
     verdict = CharField(max_length=64, choices=VERDICT_CHOICES, blank=True)
     notes = TextField(blank=True)
@@ -146,16 +150,104 @@ class RevisionRecord(Model):
 
     def __repr__(self):
         return (f"RevisionRecord(id={self.id}, serial_number='{self.serial_number}', "
-                f"owner='{self.owner.username if self.owner else None}', "
+                f"owner='{self.owner.username if self.owner else None}','created_by={self.created_by.username if self.created_by else None}', "
                 f"verdict='{self.verdict}')")
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         if not self.revision_data:
-            raise ValueError("Revision data cannot be None")
+            raise ValidationError("Data revize nemohou být prázdná.")
 
-        # Automatické nastavení dat a výpočet nadcházející revize.
+        # Nastavení date_of_first_use na date_manufacture, pokud není zadán
+        if self.date_of_first_use is None:
+            self.date_of_first_use = self.date_manufacture
+
+        # Zkontrolujeme, zda date_of_first_use >= date_manufacture
+        if self.date_of_first_use < self.date_manufacture:
+            raise ValidationError("Datum prvního použití nemůže být dříve než datum výroby.")
+
+        # Získání hodnot životnosti od výrobce
+        manufacturer = self.revision_data.manufacturer
+        lifetime_use_years = manufacturer.lifetime_use_years
+        lifetime_manufacture_years = manufacturer.lifetime_manufacture_years
+
+        current_date = timezone.now().date()
+
+        # Kontrola konce životnosti od prvního použití
+        max_use_date = self.date_of_first_use + timedelta(days=365 * lifetime_use_years)
+        if current_date > max_use_date:
+            self.verdict = self.VERDICT_RETIRE
+            raise ValidationError("The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
+
+        # Kontrola konce životnosti od výroby
+        max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
+        if current_date > max_manufacture_date:
+            self.verdict = self.VERDICT_RETIRE
+            raise ValidationError("The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
+
+        # Zbývající dny do konce životnosti z obou pohledů
+        days_until_use_expiry = (max_use_date - current_date).days
+        days_until_manufacture_expiry = (max_manufacture_date - current_date).days
+
+        # Nejkratší čas (nejsilnější omezující faktor životnosti)
+        days_until_expiry = min(days_until_use_expiry, days_until_manufacture_expiry)
+
+        # Aktualizace verdiktu a kontrola blížícího se konce životnosti
+        if days_until_expiry <= 365 and self.verdict != self.VERDICT_RETIRE:
+            self.verdict = self.VERDICT_FIT_UNTIL
+            raise ValidationError(f"Životnost tohoto prostředku končí za {days_until_expiry} dní.")
+        elif self.verdict != self.VERDICT_RETIRE:
+            self.verdict = self.VERDICT_FIT
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Spustí metodu clean()
         if not self.date_of_revision:
             self.date_of_revision = timezone.now().date()
         if not self.date_of_next_revision:
             self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
         super().save(*args, **kwargs)
+
+    # def clean(self):
+    #     if not self.revision_data:
+    #         raise ValidationError("Revision data cannot be None")
+    #
+    #     # Zkontrolujeme, zda date_of_first_use >= date_manufacture
+    #     if self.date_of_first_use < self.date_manufacture:
+    #         raise ValidationError("Date of first use cannot be before date of manufacture.")
+    #
+    #     # Získání hodnot životnosti od výrobce
+    #     manufacturer = self.revision_data.manufacturer
+    #     lifetime_use_years = manufacturer.lifetime_use_years
+    #     lifetime_manufacture_years = manufacturer.lifetime_manufacture_years
+    #
+    #     # Kontrola, zda date_of_first_use nepřekračuje lifetime_use_years od prvního použití
+    #     if (self.date_of_first_use + timedelta(days=365 * lifetime_use_years)) < timezone.now().date():
+    #         raise ValidationError(
+    #             "The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
+    #
+    #     # Kontrola, zda date_manufacture nepřekračuje lifetime_manufacture_years od výroby
+    #     if (self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)) < timezone.now().date():
+    #         raise ValidationError(
+    #             "The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
+    #
+    # def save(self, *args, **kwargs):
+    #     # Ujistěte se, že se volá clean před uložením
+    #     self.full_clean()  # Tímto se provede validace z clean()
+    #
+    #     # Automatické nastavení dat a výpočet dat nadcházející revize
+    #     if not self.date_of_revision:
+    #         self.date_of_revision = timezone.now().date()
+    #     if not self.date_of_next_revision:
+    #         self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
+    #
+    #     super().save(*args, **kwargs)
+
+    # def save(self, *args, **kwargs):
+    #     if not self.revision_data:
+    #         raise ValueError("Revision data cannot be None")
+    #
+    #     # Automatické nastavení dat a výpočet nadcházející revize.
+    #     if not self.date_of_revision:
+    #         self.date_of_revision = timezone.now().date()
+    #     if not self.date_of_next_revision:
+    #         self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
+    #     super().save(*args, **kwargs)

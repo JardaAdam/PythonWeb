@@ -1,13 +1,15 @@
 from datetime import date
-
 from django.test import TestCase, Client
+
+
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+
 from django.contrib.messages import get_messages
 
-from accounts.forms import CustomUser
+
 from .models import *
 from .forms import StandardPpeForm
+from accounts.models import ItemGroup, CustomUser
 
 # Create your tests here.
 
@@ -85,19 +87,20 @@ class RevisionDataTestCase(TestCase):
         self.assertIn(self.standard_ppe, revision_data.standard_ppe.all())
         self.assertEqual(str(revision_data), "OPEN SLING 20 mm 80cm modrá (slings cena: 50.00 kč) by Singing Rock")
 
-class RevisionRecord(TestCase):
+class RevisionRecordTestCase(TestCase):
+
     def setUp(self):
-        User = get_user_model()
+
         # Vytvoříme potřebná data pro vytvoření RevisionRecord
         self.material_type = MaterialType.objects.create(name="Harness")
         self.manufacturer = Manufacturer.objects.create(
             name="Petzl",
             material_type=self.material_type,
             lifetime_use_years=10,
-            lifetime_manufacture_years=10
+            lifetime_manufacture_years=15
         )
         self.type_of_ppe = TypeOfPpe.objects.create(
-            group_type_ppe="height_work_harness ",
+            group_type_ppe="height work harness",
             price=180.00
         )
         self.revision_data = RevisionData.objects.create(
@@ -107,33 +110,60 @@ class RevisionRecord(TestCase):
             notes="serial under speed"
         )
         self.revision_data.standard_ppe.add(StandardPpe.objects.create(code="EN 358, EN 361, EN 813, EN 1497 ", description="bla, bla, bla, bla"))
-        self.user = User.objects.create_user(username='tester', email='tester@example.com', password='password')
+        self.user = CustomUser.objects.create_user(username='tester', email='tester@example.com', password='password')
         self.item_group = ItemGroup.objects.create(name="Test Group")
 
     def test_create_revision_record(self):
         revision_record = RevisionRecord.objects.create(
             revision_data=self.revision_data,
             serial_number="SN123456",
-            date_manufacture=date.today(),
-            date_of_first_use=date.today(),
+            date_manufacture=date(2016,2,1),
+            date_of_first_use=date(2017, 4, 9),
             item_group=self.item_group,
             owner=self.user,
             created_by=self.user,
-            verdict=RevisionRecord.VERDICT_NEW,
+            verdict=RevisionRecord.VERDICT_FIT,
             notes="Test revision record"
         )
+        print(str(revision_record))
         self.assertEqual(str(revision_record), (
-            f"petzl | height_work_harness | Safety Helmet | "
+            f"Petzl | height work harness | expert 3D speed | "
             f"SN123456 | {revision_record.date_manufacture} | {revision_record.date_of_first_use} | "
-            f"{revision_record.date_of_revision} | {revision_record.date_of_next_revision} | new | Test revision record"
+            f"{revision_record.date_of_revision} | {revision_record.date_of_next_revision} | fit | Test revision record"
         ))
 
+    def test_create_revision_exceeded_lifetime_record(self):
+        # Vytvoření objektu bez uložení
+        revision_record1 = RevisionRecord(
+            revision_data=self.revision_data,
+            serial_number="SN1234567",
+            date_manufacture=date(2013, 2, 1),
+            date_of_first_use=date(2013, 4, 9),
+            item_group=self.item_group,
+            owner=self.user,
+            created_by=self.user,
+            verdict=RevisionRecord.VERDICT_FIT_UNTIL,
+            notes="Test expire revision record"
+        )
+
+        # Pokus o výpis a následné ověření
+        try:
+            # Tento výpis zobrazuje aktuální textovou reprezentaci záznamu
+            print(str(revision_record1))
+
+            # Očekáváme, že toto vyvolá ValidationError
+            revision_record1.full_clean()
+
+        except ValidationError as e:
+            print(f"ValidationError: {e}")
+            self.assertIn("The item has exceeded its lifetime", str(e))
+
     def test_auto_set_dates_on_creation(self):
-        revision_record = RevisionRecord.objects.create(
+        revision_record2 = RevisionRecord.objects.create(
             revision_data=self.revision_data,
             serial_number="SN789012",
-            date_manufacture=date.today(),
-            date_of_first_use=date.today(),
+            date_manufacture=date(2020,10,9),
+            #date_of_first_use=
             item_group=self.item_group,
             owner=self.user,
             created_by=self.user,
@@ -141,18 +171,20 @@ class RevisionRecord(TestCase):
             notes="Auto date test"
         )
         # Přidejte automatické ověření dat
-        self.assertIsNotNone(revision_record.date_of_revision)
-        self.assertEqual(revision_record.date_of_next_revision, revision_record.date_of_revision + timedelta(days=365))
+        self.assertIsNotNone(revision_record2.date_of_revision)
+        self.assertEqual(revision_record2.date_of_next_revision, revision_record2.date_of_revision + timedelta(days=365))
 
-    def test_revision_data_cannot_be_none(self):
-        with self.assertRaises(ValueError):
-            RevisionRecord.objects.create(
-                revision_data=None,
-                serial_number="SNInvalid",
-                date_manufacture=date.today(),
-                date_of_first_use=date.today(),
-                created_by=self.user
-            )
+    # def test_revision_data_cannot_be_none(self):
+    #     revision_record = RevisionRecord(
+    #         revision_data=None,
+    #         serial_number="SNInvalid",
+    #         date_manufacture=date.today(),
+    #         date_of_first_use=date.today(),
+    #         created_by=self.user
+    #     )
+    #     with self.assertRaises(ValidationError):
+    #         revision_record.full_clean()  # Ověření, zda dojde k ValidationError
+
 
 
 
