@@ -160,12 +160,8 @@ class RevisionRecord(Model):
         if not self.revision_data:
             raise ValidationError("Data revize nemohou být prázdná.")
 
-        # Nastavení date_of_first_use na date_manufacture, pokud není zadán
-        if self.date_of_first_use is None:
-            self.date_of_first_use = self.date_manufacture
-
         # Zkontrolujeme, zda date_of_first_use >= date_manufacture
-        if self.date_of_first_use < self.date_manufacture:
+        if self.date_of_first_use is not None and self.date_of_first_use < self.date_manufacture:
             raise ValidationError("Datum prvního použití nemůže být dříve než datum výroby.")
 
         # Získání hodnot životnosti od výrobce
@@ -175,19 +171,22 @@ class RevisionRecord(Model):
 
         current_date = timezone.now().date()
 
-        # Kontrola konce životnosti od prvního použití
-        max_use_date = self.date_of_first_use + timedelta(days=365 * lifetime_use_years)
+        # Zjistit max. použití a výrobu datum
+        max_use_date = (self.date_of_first_use or self.date_manufacture) + timedelta(days=365 * lifetime_use_years)
+        max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
+
+        # Kontrola přesažení životnosti
         if current_date > max_use_date:
             self.verdict = self.VERDICT_RETIRE
-            raise ValidationError("The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
+            raise ValidationError(
+                "The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
 
-        # Kontrola konce životnosti od výroby
-        max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
         if current_date > max_manufacture_date:
             self.verdict = self.VERDICT_RETIRE
-            raise ValidationError("The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
+            raise ValidationError(
+                "The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
 
-        # Zbývající dny do konce životnosti z obou pohledů
+        # Zbývající dny do konce životnosti
         days_until_use_expiry = (max_use_date - current_date).days
         days_until_manufacture_expiry = (max_manufacture_date - current_date).days
 
@@ -195,18 +194,30 @@ class RevisionRecord(Model):
         days_until_expiry = min(days_until_use_expiry, days_until_manufacture_expiry)
 
         # Aktualizace verdiktu a kontrola blížícího se konce životnosti
-        if days_until_expiry <= 365 and self.verdict != self.VERDICT_RETIRE:
-            self.verdict = self.VERDICT_FIT_UNTIL
-            raise ValidationError(f"Životnost tohoto prostředku končí za {days_until_expiry} dní.")
+        if days_until_expiry <= 365:
+            if self.verdict != self.VERDICT_RETIRE:
+                # Nastavit 'Fit Until' a udržet next revision jako None
+                self.verdict = self.VERDICT_FIT_UNTIL
+                self.date_of_revision = current_date
+                self.date_of_next_revision = None
+                raise ValidationError(f"The lifetime of this item will end in {days_until_expiry} days.")
         elif self.verdict != self.VERDICT_RETIRE:
             self.verdict = self.VERDICT_FIT
 
     def save(self, *args, **kwargs):
+        # Nastavení date_of_first_use na date_manufacture, pokud není zadáno
+        if not self.date_of_first_use:
+            self.date_of_first_use = self.date_manufacture
+
         self.full_clean()  # Spustí metodu clean()
+
         if not self.date_of_revision:
             self.date_of_revision = timezone.now().date()
-        if not self.date_of_next_revision:
+
+        # Automatické nastavení data následující revize pouze pokud není nastavena v clean()
+        if self.date_of_next_revision is None:
             self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
+
         super().save(*args, **kwargs)
 
     # def clean(self):

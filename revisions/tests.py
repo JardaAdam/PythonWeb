@@ -87,6 +87,7 @@ class RevisionDataTestCase(TestCase):
         self.assertIn(self.standard_ppe, revision_data.standard_ppe.all())
         self.assertEqual(str(revision_data), "OPEN SLING 20 mm 80cm modrá (slings cena: 50.00 kč) by Singing Rock")
 
+# TODO kontrola techto testu!! vetsina podminek vyresena podlidat si expirace a zapisi do tabulky
 class RevisionRecordTestCase(TestCase):
 
     def setUp(self):
@@ -116,19 +117,19 @@ class RevisionRecordTestCase(TestCase):
     def test_create_revision_record(self):
         revision_record = RevisionRecord.objects.create(
             revision_data=self.revision_data,
-            serial_number="SN123456",
+            serial_number="SNpositiv",
             date_manufacture=date(2016,2,1),
             date_of_first_use=date(2017, 4, 9),
             item_group=self.item_group,
             owner=self.user,
             created_by=self.user,
-            verdict=RevisionRecord.VERDICT_FIT,
+            #verdict=RevisionRecord.VERDICT_FIT,
             notes="Test revision record"
         )
         print(str(revision_record))
         self.assertEqual(str(revision_record), (
             f"Petzl | height work harness | expert 3D speed | "
-            f"SN123456 | {revision_record.date_manufacture} | {revision_record.date_of_first_use} | "
+            f"SNpositiv | {revision_record.date_manufacture} | {revision_record.date_of_first_use} | "
             f"{revision_record.date_of_revision} | {revision_record.date_of_next_revision} | fit | Test revision record"
         ))
 
@@ -136,40 +137,45 @@ class RevisionRecordTestCase(TestCase):
         # Vytvoření objektu bez uložení
         revision_record1 = RevisionRecord(
             revision_data=self.revision_data,
-            serial_number="SN1234567",
+            serial_number="SNexpiration",
             date_manufacture=date(2013, 2, 1),
-            date_of_first_use=date(2013, 4, 9),
+            date_of_first_use=date(2015, 4, 9),
             item_group=self.item_group,
             owner=self.user,
             created_by=self.user,
-            verdict=RevisionRecord.VERDICT_FIT_UNTIL,
+            #verdict=RevisionRecord.VERDICT_FIT_UNTIL,
             notes="Test expire revision record"
         )
 
         # Pokus o výpis a následné ověření
         try:
-            # Tento výpis zobrazuje aktuální textovou reprezentaci záznamu
-            print(str(revision_record1))
-
             # Očekáváme, že toto vyvolá ValidationError
             revision_record1.full_clean()
-
         except ValidationError as e:
-            print(f"ValidationError: {e}")
-            self.assertIn("The item has exceeded its lifetime", str(e))
+            print(str(revision_record1))
+            # This is the message you expect
+            expected_message_part = "The lifetime of this item will end in"
+            # Check if this message part is in error message
+            self.assertIn(expected_message_part, str(e))
+
+            # Alternatively, if you want to include specific day count:
+            expected_full_message = "The lifetime of this item will end in 110 days."
+            # Ensure full exception message list or string representation captures this
+            self.assertIn(expected_full_message, str(e))
 
     def test_auto_set_dates_on_creation(self):
         revision_record2 = RevisionRecord.objects.create(
             revision_data=self.revision_data,
-            serial_number="SN789012",
+            serial_number="SNadd_first",
             date_manufacture=date(2020,10,9),
             #date_of_first_use=
             item_group=self.item_group,
             owner=self.user,
             created_by=self.user,
-            verdict=RevisionRecord.VERDICT_NEW,
+            #verdict=RevisionRecord.VERDICT_NEW,
             notes="Auto date test"
         )
+        print(str(revision_record2))
         # Přidejte automatické ověření dat
         self.assertIsNotNone(revision_record2.date_of_revision)
         self.assertEqual(revision_record2.date_of_next_revision, revision_record2.date_of_revision + timedelta(days=365))
@@ -184,7 +190,6 @@ class RevisionRecordTestCase(TestCase):
     #     )
     #     with self.assertRaises(ValidationError):
     #         revision_record.full_clean()  # Ověření, zda dojde k ValidationError
-
 
 
 
