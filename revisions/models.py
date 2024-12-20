@@ -196,7 +196,7 @@ class RevisionRecord(Model):
         # Aktualizace verdiktu a kontrola blížícího se konce životnosti
         if days_until_expiry <= 365:
             if self.verdict != self.VERDICT_RETIRE:
-                # Nastavit 'Fit Until' a udržet next revision jako None
+                # Nastavit 'Fit Until' a pole next revision nastavit jako None
                 self.verdict = self.VERDICT_FIT_UNTIL
                 self.date_of_revision = current_date
                 self.date_of_next_revision = None

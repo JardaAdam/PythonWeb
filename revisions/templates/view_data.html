@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Zobrazení dat</h1>
+
+<!-- Filtrační/formulářová část -->
+<form method="get">
+    <label for="model_type_select">Vyber typ dat:</label>
+    <select id="model_type_select" name="model_type">
+        <option value="MaterialType" {% if model_type == 'MaterialType' %}selected{% endif %}>Material Type</option>
+        <option value="StandardPpe" {% if model_type == 'StandardPpe' %}selected{% endif %}>Standard PPE</option>
+        <option value="Manufacturer" {% if model_type == 'Manufacturer' %}selected{% endif %}>Manufacturer</option>
+        <option value="TypeOfPpe" {% if model_type == 'TypeOfPpe' %}selected{% endif %}>Type PPE</option>
+        <option value="RevisionData" {% if model_type == 'RevisionData' %}selected{% endif %}>Revision Data</option>
+        <option value="RevisionRecord" {% if model_type == 'RevisionRecord' %}selected{% endif %}>Revision Record</option>
+    </select>
+    <button type="submit">Zobrazit</button>
+</form>
+
+<!-- Zobrazení dat -->
+<table>
+    <thead>
+        <!-- Definuj své nadpisy podle modelu -->
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <!-- Zobraz specifické atributy modelu -->
+            <td>{{ item.name }}</td> <!-- jako příklad -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

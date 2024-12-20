@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField
 from .models import CustomUser, Company
 
-
+# Fixme Expected
 class RegistrationForm(ModelForm):
     password = CharField(widget=PasswordInput, label='Password')
     confirm_password = CharField(widget=PasswordInput, label='Confirm Password')

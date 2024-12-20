@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .forms import MaterialTypeForm, StandardPpeForm, ManufacturerForm, TypeOfPpeForm, RevisionDataForm, \
     RevisionRecordForm
+from .models import MaterialType, StandardPpe, Manufacturer, TypeOfPpe, RevisionData, RevisionRecord
 
 
 def home(request):
@@ -14,7 +15,40 @@ def home(request):
 
 def some_view(request):
     return render(request, 'revision_home.html')
+# TODO predelat zobrazovani a definovat kazdy model zvlast!!
+# TODO ukladani dat je vporadku. zobrazovani se musi upravit tak aby se dal v kazdem modelu pridavat a mazat
+# TODO pohrat si s navbarem a revision_home.html
+@login_required
+def view_data(request):
+    model_type = request.GET.get('model_type', 'RevisionRecord')
+    form = None
+    data = None
 
+    if model_type == 'MaterialType':
+        data = MaterialType.objects.all()
+        form = MaterialTypeForm()
+    elif model_type == 'StandardPpe':
+        data = StandardPpe.objects.all()
+        form = StandardPpeForm()
+    elif model_type == 'Manufacturer':
+        data = Manufacturer.objects.all()
+        form = ManufacturerForm()
+    elif model_type == 'TypeOfPpe':
+        data = TypeOfPpe.objects.all()
+        form = TypeOfPpeForm()
+    elif model_type == 'RevisionData':
+        data = RevisionData.objects.all()
+        form = RevisionDataForm()
+    elif model_type == 'RevisionRecord':
+        data = RevisionRecord.objects.all()
+        form = RevisionRecordForm()
+
+    context = {
+        'data': data,
+        'form': form,
+        'model_type': model_type,
+    }
+    return render(request, 'view_data.html', context)
 
 @login_required
 def add_data(request):
