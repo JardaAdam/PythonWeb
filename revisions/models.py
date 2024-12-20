@@ -157,7 +157,7 @@ class RevisionRecord(Model):
                 f"verdict='{self.verdict}')")
 
     def clean(self):
-        if not self.revision_data:
+        if not self.revision_data_id:
             raise ValidationError("Data revize nemohou být prázdná.")
 
         # Zkontrolujeme, zda date_of_first_use >= date_manufacture
@@ -220,48 +220,3 @@ class RevisionRecord(Model):
 
         super().save(*args, **kwargs)
 
-    # def clean(self):
-    #     if not self.revision_data:
-    #         raise ValidationError("Revision data cannot be None")
-    #
-    #     # Zkontrolujeme, zda date_of_first_use >= date_manufacture
-    #     if self.date_of_first_use < self.date_manufacture:
-    #         raise ValidationError("Date of first use cannot be before date of manufacture.")
-    #
-    #     # Získání hodnot životnosti od výrobce
-    #     manufacturer = self.revision_data.manufacturer
-    #     lifetime_use_years = manufacturer.lifetime_use_years
-    #     lifetime_manufacture_years = manufacturer.lifetime_manufacture_years
-    #
-    #     # Kontrola, zda date_of_first_use nepřekračuje lifetime_use_years od prvního použití
-    #     if (self.date_of_first_use + timedelta(days=365 * lifetime_use_years)) < timezone.now().date():
-    #         raise ValidationError(
-    #             "The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
-    #
-    #     # Kontrola, zda date_manufacture nepřekračuje lifetime_manufacture_years od výroby
-    #     if (self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)) < timezone.now().date():
-    #         raise ValidationError(
-    #             "The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
-    #
-    # def save(self, *args, **kwargs):
-    #     # Ujistěte se, že se volá clean před uložením
-    #     self.full_clean()  # Tímto se provede validace z clean()
-    #
-    #     # Automatické nastavení dat a výpočet dat nadcházející revize
-    #     if not self.date_of_revision:
-    #         self.date_of_revision = timezone.now().date()
-    #     if not self.date_of_next_revision:
-    #         self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
-    #
-    #     super().save(*args, **kwargs)
-
-    # def save(self, *args, **kwargs):
-    #     if not self.revision_data:
-    #         raise ValueError("Revision data cannot be None")
-    #
-    #     # Automatické nastavení dat a výpočet nadcházející revize.
-    #     if not self.date_of_revision:
-    #         self.date_of_revision = timezone.now().date()
-    #     if not self.date_of_next_revision:
-    #         self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
-    #     super().save(*args, **kwargs)
