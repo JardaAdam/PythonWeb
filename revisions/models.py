@@ -14,6 +14,7 @@ from config import settings
 
 class MaterialType(Model):
     """rozdeluje polozky do jednotlivich skupin podle materialu"""
+    symbol = ImageField(upload_to='static/material/', null=True, blank=True)
     name = CharField(max_length=32, unique=True, blank=False, null=False)
 
     def __str__(self):
@@ -28,6 +29,7 @@ class MaterialType(Model):
 
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
+    #FIXME upravit cestu kde budou ulozeny obrazky ( chci je do Static )
     image = ImageField(upload_to='images/', blank=True, null=True)
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
@@ -44,11 +46,12 @@ class StandardPpe(Model):
 
 class Manufacturer(Model):
     """Uchovává základní informace o výrobci."""
+    logo = ImageField(upload_to='static/manufacturer_logo/', blank=True, null=True)  # logo vyrobce
     name = CharField(max_length=32, blank=False, null=False)
-    abbreviation = CharField(max_length=10, blank=True, null=True)
+
 
     def __str__(self):
-        return f"{self.name} {self.abbreviation}"
+        return self.name
 
     def __repr__(self):
         return f"Manufacturer(id={self.id}, name='{self.name}')"
@@ -77,7 +80,7 @@ class LifetimeOfPpe(Model):
 
 class TypeOfPpe(Model):
     """definuje cenu jednotlivich skupin polozek pro vypocet finalni ceny za revizi"""
-    image = ImageField(upload_to="images/",blank=True, null=True, default=None)
+    image = ImageField(upload_to="static/type_of_ppe/",blank=True, null=True, default=None)
     group_type_ppe = CharField(max_length=32, unique=True, blank=False, null=False)
     price = DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
 
@@ -95,7 +98,7 @@ class TypeOfPpe(Model):
 
 class RevisionData(Model):
     """tabulka obsahujici jednotlive polozky v prubehu plneni databaze zjednodusuje vypracovavani reviznich zaznamu"""
-    image = ImageField(upload_to="images/", default=None)
+    image_items = ImageField(upload_to="revision_data/", default=None)
     manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='manufacturer', related_query_name='manufacturer')
     group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
     name_ppe = CharField(max_length=32, null=False, blank=False)
@@ -127,6 +130,7 @@ class RevisionRecord(Model):
         - konec platnosti revize
         - konec zivotnosti
         - upozorneni od vyrobce podle serial_number"""
+    photo_of_item = ImageField(upload_to='revision_record/', blank=True, null=True)
     revision_data = ForeignKey(RevisionData, on_delete=PROTECT)
     serial_number = CharField(max_length=64,null=False, blank=False, unique=True)
     date_manufacture = DateField(null=True, blank=True)

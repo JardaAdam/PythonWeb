@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 
 from config import settings
 
-
+# TODO hodilo by se sem jeste dodat nejake image do modelu
 class Country(Model):
     """ Slouzi k jednodussi registraci uzivatele a nastavuje format jednotlivich kolonek"""
     name = CharField(max_length=32, unique=True)
