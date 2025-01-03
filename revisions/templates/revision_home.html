@@ -1,19 +1,37 @@
 {% extends 'base.html' %}
 
-{% block title %}Revision home{% endblock %}
+{% block title %}
+Revision Home
+{% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
-<!-- Pomocí Contextu Bootstrap pro zarovnání vlevo -->
-    <div class="text-start">
-        <a href="{% url 'add_data' %}" class="btn btn-primary">Add New Data</a>
-    <!-- Přidání tlačítka pro zobrazení dat -->
-        <a href="{% url 'view_data' %}" class="btn btn-secondary">View Data</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-danger">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Revision Section</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#revisionNavbar"
+            aria-controls="revisionNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="revisionNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_data' %}">Add New Data</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'view_data' %}">Revision records</a>
+        </li>
+        <!-- Přidejte další odkazy podle potřeby -->
+      </ul>
     </div>
+  </div>
+</nav>
 {% else %}
-     <!-- Můžete také přidat nějakou zprávu pro nepřihlášené uživatele, pokud chcete -->
+<!-- Můžete také přidat nějakou zprávu pro nepřihlášené uživatele, pokud chcete -->
 {% endif %}
-<h2 class="text-2xl text-center">Vítejte v revivion části mé stránky!</h2>
-<p class="text-center">Toto je revision home page.</p>
 
+<div class="text-center">
+  <h2 class="text-2xl">Vítejte v revivion části mé stránky!</h2>
+  <p>Toto je revision home page.</p>
+</div>
 {% endblock %}
