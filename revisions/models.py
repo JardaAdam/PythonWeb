@@ -60,8 +60,10 @@ class LifetimeOfPpe(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
     manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='lifetime')
     material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='material_type')
-    lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od 1.použití v letech")
-    lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od data výroby v letech")
+    lifetime_use_years = IntegerField(blank=False, null=False,
+                                      help_text="Maximální doba používání od 1.použití v letech")
+    lifetime_manufacture_years = IntegerField(blank=False, null=False,
+                                              help_text="Maximální doba používání od data výroby v letech")
 
     class Meta:
         constraints = [
@@ -99,7 +101,8 @@ class TypeOfPpe(Model):
 class RevisionData(Model):
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
     image_items = ImageField(upload_to="revision_data/", default=None)
-    lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_data', related_query_name='revision_data')
+    lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_data',
+                                 related_query_name='revision_data')
     group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
     name_ppe = CharField(max_length=32, null=False, blank=False)
     standard_ppe = ManyToManyField(StandardPpe, related_name='standard_ppe')  # Množství norem
@@ -136,7 +139,8 @@ class RevisionRecord(Model):
     date_of_first_use = DateField(null=True, blank=True)
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
-    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='item_group', related_query_name='item_group')
+    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='item_group',
+                            related_query_name='item_group')
     owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True)
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
@@ -150,14 +154,17 @@ class RevisionRecord(Model):
     ]
     verdict = CharField(max_length=64, choices=VERDICT_CHOICES, blank=True)
     notes = TextField(blank=True)
-    created_by = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='created_revision_records')
+    created_by = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True,
+                            related_name='created_revision_records')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
 
     def __str__(self):
-        manufacturer_name = self.revision_data.manufacturer.name if self.revision_data.manufacturer else "Neznámý výrobce"
-        group_type = self.revision_data.group_type_ppe.group_type_ppe if self.revision_data.group_type_ppe else "Neznámý typ"
+        manufacturer_name = self.revision_data.lifetime_of_ppe.manufacturer.name if (
+            self.revision_data.lifetime_of_ppe.manufacturer) else "Neznámý výrobce"
+        group_type = self.revision_data.group_type_ppe.group_type_ppe if self.revision_data.group_type_ppe \
+            else "Neznámý typ"
         name_ppe = self.revision_data.name_ppe if self.revision_data.name_ppe else "Neznámé PPE"
 
         return (f"{manufacturer_name} | {group_type} | {name_ppe} | "
@@ -166,70 +173,71 @@ class RevisionRecord(Model):
 
     def __repr__(self):
         return (f"RevisionRecord(id={self.id}, serial_number='{self.serial_number}', "
-                f"owner='{self.owner.username if self.owner else None}','created_by={self.created_by.username if self.created_by else None}', "
+                f"owner='{self.owner.username if self.owner else None}','created_by={self.created_by.username if 
+                self.created_by else None}', "
                 f"verdict='{self.verdict}')")
 
-    # def clean(self):
-    #     if not self.revision_data_id:
-    #         raise ValidationError("Data revize nemohou být prázdná.")
-    #
-    #     # Zkontrolujeme, zda date_of_first_use >= date_manufacture
-    #     if self.date_of_first_use is not None and self.date_of_first_use < self.date_manufacture:
-    #         raise ValidationError("Datum prvního použití nemůže být dříve než datum výroby.")
-    #
-    #     # Získání hodnot životnosti od výrobce
-    #     manufacturer = self.revision_data.manufacturer
-    #     lifetime_use_years = manufacturer.lifetime_use_years
-    #     lifetime_manufacture_years = manufacturer.lifetime_manufacture_years
-    #
-    #     current_date = timezone.now().date()
-    #
-    #     # Zjistit max. použití a výrobu datum
-    #     max_use_date = (self.date_of_first_use or self.date_manufacture) + timedelta(days=365 * lifetime_use_years)
-    #     max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
-    #
-    #     # Kontrola přesažení životnosti
-    #     if current_date > max_use_date:
-    #         self.verdict = self.VERDICT_RETIRE
-    #         raise ValidationError(
-    #             "The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
-    #
-    #     if current_date > max_manufacture_date:
-    #         self.verdict = self.VERDICT_RETIRE
-    #         raise ValidationError(
-    #             "The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
-    #
-    #     # Zbývající dny do konce životnosti
-    #     days_until_use_expiry = (max_use_date - current_date).days
-    #     days_until_manufacture_expiry = (max_manufacture_date - current_date).days
-    #
-    #     # Nejkratší čas (nejsilnější omezující faktor životnosti)
-    #     days_until_expiry = min(days_until_use_expiry, days_until_manufacture_expiry)
-    #
-    #     # Aktualizace verdiktu a kontrola blížícího se konce životnosti
-    #     if days_until_expiry <= 365:
-    #         if self.verdict != self.VERDICT_RETIRE:
-    #             # Nastavit 'Fit Until' a pole next revision nastavit jako None
-    #             self.verdict = self.VERDICT_FIT_UNTIL
-    #             self.date_of_revision = current_date
-    #             self.date_of_next_revision = None
-    #             raise ValidationError(f"The lifetime of this item will end in {days_until_expiry} days.")
-    #     elif self.verdict != self.VERDICT_RETIRE:
-    #         self.verdict = self.VERDICT_FIT
-    #
-    # def save(self, *args, **kwargs):
-    #     # Nastavení date_of_first_use na date_manufacture, pokud není zadáno
-    #     if not self.date_of_first_use:
-    #         self.date_of_first_use = self.date_manufacture
-    #
-    #     self.full_clean()  # Spustí metodu clean()
-    #
-    #     if not self.date_of_revision:
-    #         self.date_of_revision = timezone.now().date()
-    #
-    #     # Automatické nastavení data následující revize pouze pokud není nastavena v clean()
-    #     if self.date_of_next_revision is None:
-    #         self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
-    #
-    #     super().save(*args, **kwargs)
+    def clean(self):
+        if not self.revision_data_id:
+            raise ValidationError("Data revize nemohou být prázdná.")
+
+        # Zkontrolujeme, zda date_of_first_use >= date_manufacture
+        if self.date_of_first_use is not None and self.date_of_first_use < self.date_manufacture:
+            raise ValidationError("Datum prvního použití nemůže být dříve než datum výroby.")
+
+        # Získání hodnot životnosti z LifetimeOfPpe
+        lifetime_info = self.revision_data.lifetime_of_ppe
+        lifetime_use_years = lifetime_info.lifetime_use_years
+        lifetime_manufacture_years = lifetime_info.lifetime_manufacture_years
+
+        current_date = timezone.now().date()
+
+        # Zjistit max. použití a výrobu datum
+        max_use_date = (self.date_of_first_use or self.date_manufacture) + timedelta(days=365 * lifetime_use_years)
+        max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
+
+        # Kontrola přesažení životnosti
+        if current_date > max_use_date:
+            self.verdict = self.VERDICT_RETIRE
+            raise ValidationError(
+                "The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
+
+        if current_date > max_manufacture_date:
+            self.verdict = self.VERDICT_RETIRE
+            raise ValidationError(
+                "The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
+
+        # Zbývající dny do konce životnosti
+        days_until_use_expiry = (max_use_date - current_date).days
+        days_until_manufacture_expiry = (max_manufacture_date - current_date).days
+
+        # Nejkratší čas (nejsilnější omezující faktor životnosti)
+        days_until_expiry = min(days_until_use_expiry, days_until_manufacture_expiry)
+
+        # Aktualizace verdiktu a kontrola blížícího se konce životnosti
+        if days_until_expiry <= 365:
+            if self.verdict != self.VERDICT_RETIRE:
+                # Nastavit 'Fit Until' a pole next revision nastavit jako None
+                self.verdict = self.VERDICT_FIT_UNTIL
+                self.date_of_revision = current_date
+                self.date_of_next_revision = None
+                raise ValidationError(f"The lifetime of this item will end in {days_until_expiry} days.")
+        elif self.verdict != self.VERDICT_RETIRE:
+            self.verdict = self.VERDICT_FIT
+
+    def save(self, *args, **kwargs):
+        # Nastavení date_of_first_use na date_manufacture, pokud není zadáno
+        if not self.date_of_first_use:
+            self.date_of_first_use = self.date_manufacture
+
+        self.full_clean()  # Spustí metodu clean()
+
+        if not self.date_of_revision:
+            self.date_of_revision = timezone.now().date()
+
+        # Automatické nastavení data následující revize pouze pokud není nastavena v clean()
+        if self.date_of_next_revision is None:
+            self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
+
+        super().save(*args, **kwargs)
 

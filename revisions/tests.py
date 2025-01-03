@@ -44,15 +44,16 @@ class MaterialTypeTestCase(TestCase):
 class ManufacturerTestCase(TestCase):
     def setUp(self):
         self.material_type = MaterialType.objects.create(name="helmet")
-
+        self.manufacturer = Manufacturer.objects.create(name="Petzl")
     def test_create_manufacturer(self):
-        manufacturer = Manufacturer.objects.create(
-            name="Petzl",
+        lifetime_of_ppe = LifetimeOfPpe.objects.create(
+            manufacturer=self.manufacturer,
             material_type=self.material_type,
             lifetime_use_years=5,
             lifetime_manufacture_years=10
         )
-        self.assertEqual(str(manufacturer), "Petzl - helmet")
+        self.assertEqual(str(self.manufacturer), "Petzl")
+        self.assertEqual(str(lifetime_of_ppe), "Petzl - helmet")
 
 """TypeOfPpe"""
 class TypeOfPpeTestCase(TestCase):
@@ -67,18 +68,20 @@ class TypeOfPpeTestCase(TestCase):
 class RevisionDataTestCase(TestCase):
     def setUp(self):
         self.material_type = MaterialType.objects.create(name="Textile PPE")
-        self.manufacturer = Manufacturer.objects.create(
-            name="Singing Rock",
+        self.manufacturer = Manufacturer.objects.create(name="Singing Rock")
+        self.lifetime_of_ppe = LifetimeOfPpe.objects.create(
+            manufacturer=self.manufacturer,
             material_type=self.material_type,
             lifetime_use_years=3,
             lifetime_manufacture_years=5
         )
+
         self.type_of_ppe = TypeOfPpe.objects.create(group_type_ppe="slings", price=50.00)
         self.standard_ppe = StandardPpe.objects.create(code="EN 354", description="Fasteners, Spojovací prostředky")
 
     def test_create_revision_data(self):
         revision_data = RevisionData.objects.create(
-            manufacturer=self.manufacturer,
+            lifetime_of_ppe=self.lifetime_of_ppe,  # Odkazuje na lifetime_of_ppe místo manufacturer
             group_type_ppe=self.type_of_ppe,
             name_ppe="OPEN SLING 20 mm 80cm modrá",
             notes="špatně čitelný štítek"
@@ -96,24 +99,31 @@ class RevisionRecordTestCase(TestCase):
 
     def setUp(self):
         self.material_type = MaterialType.objects.create(name="Harness")
-        self.manufacturer = Manufacturer.objects.create(
-            name="Singing Rock",
+        self.manufacturer = Manufacturer.objects.create(name="Singing Rock")
+        self.lifetime_of_ppe = LifetimeOfPpe.objects.create(
+            manufacturer=self.manufacturer,
             material_type=self.material_type,
             lifetime_use_years=10,
             lifetime_manufacture_years=15
         )
+
         self.type_of_ppe = TypeOfPpe.objects.create(
             group_type_ppe="height work harness",
             price=180.00
         )
+
+        # Vytvoření objektu RevisionData s lifetime_of_ppe
         self.revision_data = RevisionData.objects.create(
-            manufacturer=self.manufacturer,
+            lifetime_of_ppe=self.lifetime_of_ppe,
             group_type_ppe=self.type_of_ppe,
             name_ppe="expert 3D speed",
             notes="serial under speed"
         )
+
         self.revision_data.standard_ppe.add(
-            StandardPpe.objects.create(code="EN 358, EN 361, EN 813, EN 1497", description="bla, bla, bla, bla"))
+            StandardPpe.objects.create(code="EN 358, EN 361, EN 813, EN 1497", description="bla, bla, bla, bla")
+        )
+
         self.user = CustomUser.objects.create_user(username='tester', email='tester@example.com', password='password')
         self.item_group = ItemGroup.objects.create(name="Test Group")
 
@@ -149,12 +159,18 @@ class RevisionRecordTestCase(TestCase):
             date(2013, 2, 1),
             date(2015, 4, 9)
         )
-        max_use_expiry = revision_record.date_of_first_use + timedelta(days=365 * self.manufacturer.lifetime_use_years)
-        max_manufacture_expiry = revision_record.date_manufacture + timedelta(days=365 * self.manufacturer.lifetime_manufacture_years)
+        # Získání lifetime_of_ppe z revision_data
+        lifetime_of_ppe = revision_record.revision_data.lifetime_of_ppe
+
+        max_use_expiry = revision_record.date_of_first_use + timedelta(days=365 * lifetime_of_ppe.lifetime_use_years)
+        max_manufacture_expiry = revision_record.date_manufacture + timedelta(
+            days=365 * lifetime_of_ppe.lifetime_manufacture_years)
         days_until_expiry = (min(max_use_expiry, max_manufacture_expiry) - timezone.now().date()).days
+
         expected_full_message = f"The lifetime of this item will end in {days_until_expiry} days."
         with self.assertRaises(ValidationError) as e:
             revision_record.full_clean()
+
         print(str(revision_record))
         self.assertIn(expected_full_message, str(e.exception))
 
@@ -164,8 +180,11 @@ class RevisionRecordTestCase(TestCase):
             date(2010, 2, 1),
             date(2016, 4, 9)
         )
-        max_use_expiry = revision_record.date_of_first_use + timedelta(days=365 * self.manufacturer.lifetime_use_years)
-        max_manufacture_expiry = revision_record.date_manufacture + timedelta(days=365 * self.manufacturer.lifetime_manufacture_years)
+        # Získání lifetime_of_ppe z revision_data
+        lifetime_of_ppe = revision_record.revision_data.lifetime_of_ppe
+
+        max_use_expiry = revision_record.date_of_first_use + timedelta(days=365 * lifetime_of_ppe.lifetime_use_years)
+        max_manufacture_expiry = revision_record.date_manufacture + timedelta(days=365 * lifetime_of_ppe.lifetime_manufacture_years)
         days_until_expiry = (min(max_use_expiry, max_manufacture_expiry) - timezone.now().date()).days
         expected_full_message = f"The lifetime of this item will end in {days_until_expiry} days."
         with self.assertRaises(ValidationError) as e:
@@ -187,10 +206,12 @@ class RevisionRecordTestCase(TestCase):
 
     def test_auto_set_dates_on_creation(self):
         revision_record2 = self.create_revision_record(
-            "SNadd_first",
+            "SNadd_creation",
             date(2020, 10, 9),
             date(2020, 11, 1)
         )
+
+
         revision_record2.save()
         print(str(revision_record2))
         self.assertIsNotNone(revision_record2.date_of_revision)

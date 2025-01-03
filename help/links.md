@@ -45,6 +45,7 @@ python manage.py showmigrations
 ## Zálohování databáze Export (DUMP):
 ```bash
 python manage.py dumpdata --natural-primary --natural-foreign --indent 4 > backup.json
+python manage.py dumpdatautf8 viewer --output ./files/fixtures.json
 ```
 ## Zálohování databáze určité aplikace a modelu 
 ```bash
