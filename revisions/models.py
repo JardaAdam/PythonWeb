@@ -43,24 +43,35 @@ class StandardPpe(Model):
         return f"StandardPpe(id={self.id}, code='{self.code}', description='{self.description[:20]}...')"
 
 class Manufacturer(Model):
-    """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
+    """Uchovává základní informace o výrobci."""
     name = CharField(max_length=32, blank=False, null=False)
+    abbreviation = CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} {self.abbreviation}"
+
+    def __repr__(self):
+        return f"Manufacturer(id={self.id}, name='{self.name}')"
+
+class LifetimeOfPpe(Model):
+    """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
+    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='lifetime')
     material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='material_type')
     lifetime_use_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od 1.použití v letech")
     lifetime_manufacture_years = IntegerField(blank=False, null=False, help_text="Maximální doba používání od data výroby v letech")
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['name', 'material_type'], name='unique_constraint_material_type')
+            UniqueConstraint(fields=['manufacturer', 'material_type'], name='unique_constraint_material_type')
         ]
-        verbose_name_plural = "Manufacturers"
-        ordering = ['name']
+        verbose_name_plural = "Lifetime of PPE"
+        ordering = ['manufacturer', 'material_type']
 
     def __str__(self):
-        return f"{self.name} - {self.material_type.name}"
+        return f"{self.manufacturer.name} - {self.material_type.name}"
 
     def __repr__(self):
-        return (f"Manufacturer(id={self.id}, name='{self.name}', "
+        return (f"LifetimeOfPpe(id={self.id}, Manufacturer='{self.manufacturer.name}', "
                 f"material_type='{self.material_type.name}')")
 
 
