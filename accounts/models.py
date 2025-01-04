@@ -71,8 +71,10 @@ class Company(Model):
                 tax_id_validator(self.tax_id)
 
             if self.country.phone_number_prefix:
-                if self.phone_number and not self.phone_number.startswith(self.country.phone_number_prefix):
-                    self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
+                if self.phone_number:
+                    # Pokud telefonní číslo neobsahuje prefix na začátku, přidejte ho
+                    if not self.phone_number.startswith(self.country.phone_number_prefix):
+                        self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
 
             if self.country.postcode_format:
                 postcode_validator = RegexValidator(
@@ -123,8 +125,10 @@ class CustomUser(AbstractUser):
                 tax_id_validator(self.tax_id)
 
             if self.country.phone_number_prefix:
-                if self.phone_number is not None and not self.phone_number.startswith(self.country.phone_number_prefix):
-                    self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
+                if self.phone_number is not None:
+                    # Přidat prefix, pouze pokud číslo není None a nezačíná již prefixem
+                    if not self.phone_number.startswith(self.country.phone_number_prefix):
+                        self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
 
             if self.country.postcode_format:
                 postcode_validator = RegexValidator(
