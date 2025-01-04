@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import MaterialType, StandardPpe, Manufacturer, TypeOfPpe, RevisionData, RevisionRecord
+from .models import MaterialType, StandardPpe, Manufacturer,LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
 
 
 class MaterialTypeForm(ModelForm):
@@ -19,6 +19,10 @@ class ManufacturerForm(ModelForm):
         model = Manufacturer
         fields = '__all__'
 
+class LifetimeOfPpeForm(ModelForm):
+    class Meta:
+        model = LifetimeOfPpe
+        fields = '__all__'
 
 class TypeOfPpeForm(ModelForm):
     class Meta:

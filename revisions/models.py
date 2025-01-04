@@ -11,7 +11,7 @@ from config import settings
 
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.
-
+# TODO doresit spravny upload to pro obrazky ktere budou statickymi soubory aplikace
 class MaterialType(Model):
     """rozdeluje polozky do jednotlivich skupin podle materialu"""
     symbol = ImageField(upload_to='static/material/', null=True, blank=True)

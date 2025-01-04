@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .forms import MaterialTypeForm, StandardPpeForm, ManufacturerForm, TypeOfPpeForm, RevisionDataForm, \
-    RevisionRecordForm
-from .models import MaterialType, StandardPpe, Manufacturer, TypeOfPpe, RevisionData, RevisionRecord
+    RevisionRecordForm, LifetimeOfPpeForm
+from .models import MaterialType, StandardPpe, Manufacturer,LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
 
 
 def home(request):
@@ -33,6 +33,9 @@ def view_data(request):
     elif model_type == 'Manufacturer':
         data = Manufacturer.objects.all()
         form = ManufacturerForm()
+    elif model_type == 'LifetimeOfPpe':
+        data = LifetimeOfPpe.objects.all()
+        form = LifetimeOfPpeForm()
     elif model_type == 'TypeOfPpe':
         data = TypeOfPpe.objects.all()
         form = TypeOfPpeForm()
@@ -60,17 +63,19 @@ def add_data(request):
 
         # Ověření, zda model_type existuje a je platný
         if model_type == 'MaterialType':
-            form = MaterialTypeForm(request.POST)
+            form = MaterialTypeForm(request.POST, request.FILES)
         elif model_type == 'StandardPpe':
             form = StandardPpeForm(request.POST, request.FILES)
         elif model_type == 'Manufacturer':
-            form = ManufacturerForm(request.POST)
+            form = ManufacturerForm(request.POST, request.FILES)
+        elif model_type == 'LifetimeOfPpe':
+            form = LifetimeOfPpeForm(request.POST)
         elif model_type == 'TypeOfPpe':
             form = TypeOfPpeForm(request.POST, request.FILES)
         elif model_type == 'RevisionData':
             form = RevisionDataForm(request.POST, request.FILES)
         elif model_type == 'RevisionRecord':
-            form = RevisionRecordForm(request.POST)
+            form = RevisionRecordForm(request.POST, request.FILES)
 
         if form is not None and form.is_valid():
             if model_type == 'RevisionRecord':
@@ -91,6 +96,8 @@ def add_data(request):
             form = StandardPpeForm()
         elif model_type == 'Manufacturer':
             form = ManufacturerForm()
+        elif model_type == 'LifetimeOfPpe':
+            form = LifetimeOfPpeForm()
         elif model_type == 'TypeOfPpe':
             form = TypeOfPpeForm()
         elif model_type == 'RevisionData':
@@ -114,6 +121,8 @@ def get_form(request):
         form = StandardPpeForm()
     elif model_type == 'Manufacturer':
         form = ManufacturerForm()
+    elif model_type == 'LifetimeOfPpe':
+        form = LifetimeOfPpeForm()
     elif model_type == 'TypeOfPpe':
         form = TypeOfPpeForm()
     elif model_type == 'RevisionData':
