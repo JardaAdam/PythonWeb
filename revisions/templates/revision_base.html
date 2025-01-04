@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-
+{% block title %}Revision base{%endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -14,10 +14,16 @@
     <div class="collapse navbar-collapse" id="revisionNavbar">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'add_data' %}">Add new data</a>
+          <a class="nav-link" href="{% url 'revision_list' %}">Revision records</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'revision_list' %}">Revision records</a>
+          <a class="nav-link" href="{% url 'revision_data' %}">Revision Data</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_data' %}">Revision create</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add_data' %}">Add new data</a>
         </li>
         <!-- Přidejte další odkazy podle potřeby -->
       </ul>

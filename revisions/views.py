@@ -20,13 +20,31 @@ def some_view(request):
     return render(request, 'revision_home.html')
 # TODO predelat zobrazovani a definovat kazdy model zvlast!!
 # TODO ukladani dat je vporadku. zobrazovani se musi upravit tak aby se dal v kazdem modelu pridavat a mazat
-# TODO pohrat si s navbarem a revision_base.html
+
+"""Lifetime Of Ppe"""
+
+"""Type Of Ppe"""
+
 """ Revision data"""
 
 class RevisionDataListView(ListView):
     model = RevisionData
     template_name = 'revision_data_list.html'
+    context_object_name = 'revision_data'
     success_url = reverse_lazy('revision_home')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(name_ppe__icontains=query) |
+                Q(lifetime_of_ppe__manufacturer__name__icontains=query) |
+                Q(group_type_ppe__group_type_ppe__icontains=query)
+                # Přidat další pole nebo logiku filtrování podle potřeby
+            )
+        return queryset
+
 
 class RevisionDataDetailView(DetailView):
     model = RevisionData
@@ -45,6 +63,10 @@ class RevisionDataCreateView(CreateView):
         next_url = self.request.GET.get('next', '')
         # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
         return redirect(next_url or self.success_url)
+class RevisionDataUpdateView(UpdateView):
+    model = RevisionData
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('revision_home')
 
 """ Revision records"""
 class RevisionRecordListView(ListView):
@@ -70,7 +92,7 @@ class RevisionRecordDetailView(DetailView):
     template_name = 'revision_detail.html'
     context_object_name = 'revision_record'
 
-
+# TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
 class RevisionRecordCreateView(CreateView):
     model = RevisionRecord
     form_class = RevisionRecordForm

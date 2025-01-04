@@ -31,11 +31,14 @@ class TypeOfPpeForm(ModelForm):
 
 
 class RevisionDataForm(ModelForm):
-    # FIXME upravit formularove data v oblasti Standart ppe aby se nemuselo listovat v okne
     class Meta:
         model = RevisionData
         fields = '__all__'
-
+        widgets = {
+            'lifetime_of_ppe': Select(attrs={'class': 'form-control select2'}),
+            'group_type_ppe': Select(attrs={'class': 'form-control select2'}),
+            'standard_ppe': Select(attrs={'class': 'form-control select2'}),
+        }
 
 class RevisionRecordForm(ModelForm):
     class Meta:

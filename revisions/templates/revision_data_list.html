@@ -1,10 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'revision_base.html' %}
 
-</body>
-</html>
+{% block title %}Revision Data{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <a href="{% url 'add_revision_data' %}" class="btn btn-primary mb-3">Add Revision Data</a>
+        </div>
+        <div class="col-12 col-md-6 text-center">
+            <h2>List of Revision Data</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <form method="get" class="d-flex align-items-center">
+                <label for="revision-data-search" class="me-2">Search records:</label>
+                <input type="text" id="revision-data-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Image</th>
+                <th scope="col">Lifetime of PPE</th>
+                <th scope="col">Group Type</th>
+                <th scope="col">Name PPE</th>
+                <th scope="col">Standards</th>
+                <th scope="col">Manual</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in revision_data %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    {% if data.image_items %}
+                    <img src="{{ data.image_items.url }}" alt="Image" style="width:100px;height:auto;">
+                    {% endif %}
+                </td>
+                <td>{{ data.lifetime_of_ppe }}</td>
+                <td>{{ data.group_type_ppe }}</td>
+                <td>{{ data.name_ppe }}</td>
+                <td>{% for standard in data.standard_ppe.all %}{{ standard }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                <td>
+                    {% if data.manual_for_revision %}
+                    <a href="{{ data.manual_for_revision.url }}" target="_blank">View Manual</a>
+                    {% endif %}
+                </td>
+                <td>{{ data.notes }}</td>
+                <td>
+                    <a href="{% url 'revision_data_detail' data.pk %}" class="btn btn-info btn-sm">View</a>
+                    <a href="{% url 'edit_revision_data' data.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_revision_data' data.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" class="text-center">No revision data found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
