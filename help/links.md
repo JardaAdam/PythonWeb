@@ -44,16 +44,16 @@ python manage.py showmigrations
 
 ## Zálohování databáze Export (DUMP):
 ```bash
-python manage.py dumpdata --natural-primary --natural-foreign --indent 4 > backup.json
-python manage.py dumpdatautf8 viewer --output ./files/fixtures.json
+python manage.py dumpdatautf8 --indent 4 --output backup.json
+
 ```
 ## Zálohování databáze určité aplikace a modelu 
 ```bash
-python manage.py dumpdata app_name.ModelName --indent 4 --output ./files/fixtures1.json
+python manage.py dumpdatautf8 revisions --indent 4 --output ./backup/revisions.json
 ```
 ## Načítání ze zalohy Import (LOAD):
 ```bash
-python manage.py loaddatautf8 ./files/fixtures.json
+python manage.py loaddatautf8 ./backup/revisions.json
 ```
 ## Spuštění testů
 ```bash

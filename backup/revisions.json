@@ -1,0 +1,396 @@
+[
+{
+    "model": "revisions.materialtype",
+    "pk": 1,
+    "fields": {
+        "symbol": "",
+        "name": "Harnesses"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 2,
+    "fields": {
+        "symbol": "",
+        "name": "Textile PPE"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 3,
+    "fields": {
+        "symbol": "",
+        "name": "Ropes"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 5,
+    "fields": {
+        "symbol": "",
+        "name": "Metal PPE"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 6,
+    "fields": {
+        "symbol": "",
+        "name": "Helmets"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 1,
+    "fields": {
+        "image": "images/en-341.jpg",
+        "code": "EN 341",
+        "description": "Descenders, Slaňovací brzdy"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 2,
+    "fields": {
+        "image": "images/en-353.jpg",
+        "code": "EN 353-1, 2",
+        "description": "Fall arresters, Pohyblivé zachycovače pádu"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 3,
+    "fields": {
+        "image": "images/en-354.jpg",
+        "code": "EN 354",
+        "description": "Fasteners, Spojovací prostředky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 4,
+    "fields": {
+        "image": "images/en-355.jpg",
+        "code": "EN 355",
+        "description": "Fall absorbers, Tlumiče pádu"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 5,
+    "fields": {
+        "image": "images/en-360.jpg",
+        "code": "EN 360",
+        "description": "Retractable fall arrester, Zatahovací zachycovače pádu"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 6,
+    "fields": {
+        "image": "images/en-361.jpg",
+        "code": "EN 361",
+        "description": "Full body harnesses, Zachycovací postroje"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 10,
+    "fields": {
+        "image": "images/en-362.jpg",
+        "code": "EN 362",
+        "description": "Conectors, Spojky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 11,
+    "fields": {
+        "image": "images/en-813.jpg",
+        "code": "EN 813",
+        "description": "Sit harnesses, Sedací postroje"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 12,
+    "fields": {
+        "image": "images/en-397.jpg",
+        "code": "EN 397",
+        "description": "Industrial safety helmets, Průmyslové ochranné přilby"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 13,
+    "fields": {
+        "image": "images/en-358.jpg",
+        "code": "EN 358",
+        "description": "Work positioning systems, Pracovní polohovací systémy"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 14,
+    "fields": {
+        "image": "images/en-795.jpg",
+        "code": "EN 795, EN 795/A1",
+        "description": "Anchor devices, Kotvící zařízení"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 15,
+    "fields": {
+        "image": "images/en-1496.jpg",
+        "code": "EN 1496",
+        "description": "Rescue lifting devices, záchranné zdvihací zařízení"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 16,
+    "fields": {
+        "image": "images/en-388.jpg",
+        "code": "EN 388",
+        "description": "Protection gloves against mechanical risks, Ochranné rukavice proti mechanickým rizikům"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 17,
+    "fields": {
+        "image": "images/en-564.jpg",
+        "code": "EN 564",
+        "description": "Accessory cords, Pomocné šňůry"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 18,
+    "fields": {
+        "image": "images/en-566.jpg",
+        "code": "EN 566",
+        "description": "Mountaineering equipment Slings, Horolezecká výzbroj Smyčky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 19,
+    "fields": {
+        "image": "images/en-567.jpg",
+        "code": "EN 567",
+        "description": "Mountaineering equipment\r\nRope clamps, Horolezecká výzbroj\r\nLanové svěrky, blokanty"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 20,
+    "fields": {
+        "image": "images/en-892.jpg",
+        "code": "EN 892",
+        "description": "Mountaineering equipment\r\nDynamic (strech) ropes, Horolezecká výzbroj Dynamická (průtažná) horolezecká lana"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 21,
+    "fields": {
+        "image": "images/en-959.jpg",
+        "code": "EN 959",
+        "description": "Mountaineering equipment\r\nRock anchors, Horolezecká výzbroj Zavrtávané skoby (borháky, nýty)"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 22,
+    "fields": {
+        "image": "images/en-1497.jpg",
+        "code": "EN 1497",
+        "description": "Rescue harnesses, Záchranné postroje"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 23,
+    "fields": {
+        "image": "images/en-1498.jpg",
+        "code": "EN 1498",
+        "description": "Rescue loops, Záchranné smyčky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 24,
+    "fields": {
+        "image": "images/en-1808.jpg",
+        "code": "EN 1808",
+        "description": "Safety requirements for suspended access equipment, Bezpečnostní požadavky na závěsné plošiny"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 25,
+    "fields": {
+        "image": "images/en-1891.jpg",
+        "code": "EN 1891",
+        "description": "Low stretch kernmantel ropes, Nízko průtažná lana s opleteným jádrem"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 26,
+    "fields": {
+        "image": "images/en-12275.jpg",
+        "code": "EN 12275",
+        "description": "Mountaineering equipment Connectors, Horolezecká výzbroj Karabiny"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 27,
+    "fields": {
+        "image": "images/en-12277.jpg",
+        "code": "EN 12277",
+        "description": "Mountaineering equipment Harnesses, Horolezecká výzbroj Navazovací úvazky (sedáky)"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 28,
+    "fields": {
+        "image": "images/en-12278.jpg",
+        "code": "EN 12278",
+        "description": "Mountaineering equipment Pulleys, Horolezecká výzbroj Kladky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 29,
+    "fields": {
+        "image": "images/en-12492.jpg",
+        "code": "EN 12492",
+        "description": "Mountaineering equipment Helmets for mountaineers, Horolezecká výstroj Přilby pro horolezce"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 30,
+    "fields": {
+        "image": "images/en-12841.jpg",
+        "code": "EN 12841",
+        "description": "Descender device for rope access system and rope adjustment devices, Systémy lanového přístupu, nastavovací zařízení lana"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 31,
+    "fields": {
+        "image": "images/en-15151.jpg",
+        "code": "EN 15151-2",
+        "description": "Mountaineering equipment Braking devices, Horolezecká výzbroj Brzdicí (jisticí) prostředky s manuálním ovládáním brzdění"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 32,
+    "fields": {
+        "image": "images/z3591.jpg",
+        "code": "ANSI Z359.1",
+        "description": "Safety Requirements for Personal Fall Arrest Systems, Subsystems and Components, Bezpečnostní požadavky pro osobní ochranné prostředky pro zachycení pádu, jejich části a komponenty."
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 33,
+    "fields": {
+        "image": "images/ts-16415.jpg",
+        "code": "CEN/TS 16415",
+        "description": "Recommendations for anchor devices for use by more than one person simultaneously, Prostředky ochrany osob proti pádu – Kotvicí zařízení – Doporučení pro kotvicí zařízení v případě použití více než jednou osobou současně."
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 34,
+    "fields": {
+        "image": "images/npfa-2.jpg",
+        "code": "NFPA Class II",
+        "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and may be utilized for  a maximum of a two-person load, Podle NFPA 1983 je Class II definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen nebo pod hýždě, a mohl být využit pro maximální zatížení pro dvě osoby."
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 35,
+    "fields": {
+        "image": "images/npfa-3.jpg",
+        "code": "NFPA Class III",
+        "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and over both shoulders, rated for as maximum of a two-person load and is designed to prevent inverting, Podle NFPA 1983 je Class III definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen, nebo pod hýždě, a přes obě ramena, s maximálním zatížením dvou osob a je navržen tak, aby zabránil převrácení."
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 5,
+    "fields": {
+        "logo": "static/manufacturer_logo/Singing_Rock_RGB-03.jpg",
+        "name": "Singing Rock"
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 6,
+    "fields": {
+        "logo": "",
+        "name": "Petzl"
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 1,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 1,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 2,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 2,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 3,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 3,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 4,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 5,
+        "lifetime_use_years": 99,
+        "lifetime_manufacture_years": 99
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 5,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 6,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 10
+    }
+}
+]

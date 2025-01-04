@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 # TODO udělat reset hesel
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_dump_load_utf8',
 
     'accounts',
     'calculator',
@@ -121,9 +124,13 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
+LANGUAGES = [
+       ('en', 'English'),
+       ('cs', 'Čeština'),
+   ]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

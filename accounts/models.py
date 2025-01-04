@@ -80,7 +80,7 @@ class Company(Model):
                     message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
                 )
                 postcode_validator(self.postcode)
-
+# TODO zmenit delku phone_number na vice znaku
 class CustomUser(AbstractUser):
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL,related_name='country_users')

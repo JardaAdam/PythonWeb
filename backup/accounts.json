@@ -1,0 +1,101 @@
+[
+{
+    "model": "accounts.country",
+    "pk": 1,
+    "fields": {
+        "name": "Česká republika",
+        "language_code": "CZ",
+        "postcode_format": "^\\d{3}",
+        "phone_number_prefix": "+420",
+        "business_id_format": "^\\d{8}$",
+        "tax_id_format": "^CZ\\d{10}$",
+        "tax_id_prefix": "CZ"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 1,
+    "fields": {
+        "name": null,
+        "country": null,
+        "address": null,
+        "city": null,
+        "postcode": null,
+        "phone_number": null,
+        "business_id": null,
+        "tax_id": null,
+        "date_joined": "2024-12-13T21:27:12.817Z",
+        "last_updated": "2024-12-13T21:27:12.817Z"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 2,
+    "fields": {
+        "name": "Revize CZ",
+        "country": 1,
+        "address": "Poděbradova 712",
+        "city": "Úvaly",
+        "postcode": "250 82",
+        "phone_number": "+420605728384",
+        "business_id": "03368351",
+        "tax_id": "CZ9303030708",
+        "date_joined": "2024-12-14T01:15:32.390Z",
+        "last_updated": "2025-01-04T01:41:21.604Z"
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
+        "last_login": "2025-01-03T22:46:47Z",
+        "is_superuser": true,
+        "username": "Admin-oopp",
+        "first_name": "Jaroslav",
+        "last_name": "Adam",
+        "email": "jardadam@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-12-13T19:52:41Z",
+        "company": null,
+        "country": 1,
+        "address": "Poděbradova 712",
+        "city": "Úvaly",
+        "postcode": "250 82",
+        "phone_number": "+420420605728384",
+        "business_id": "03368351",
+        "tax_id": "CZ9303070832",
+        "last_updated": "2025-01-04T01:47:33.772Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$74Xkb7xr6nhT4pwsZnwlCz$Oav7GF93CHodyejrLZiJYS4/1bg4yw7EU8zbLyD91e0=",
+        "last_login": "2024-12-14T01:15:33Z",
+        "is_superuser": false,
+        "username": "user_revision",
+        "first_name": "Revizni",
+        "last_name": "Technik",
+        "email": "revizni@technik.cz",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-12-14T01:15:32Z",
+        "company": 2,
+        "country": 1,
+        "address": "Poděbradova 712",
+        "city": "Úvaly",
+        "postcode": "250 82",
+        "phone_number": "+420420605728384",
+        "business_id": "03368351",
+        "tax_id": "CZ9303030708",
+        "last_updated": "2025-01-04T01:48:10.069Z",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]
