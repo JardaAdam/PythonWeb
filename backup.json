@@ -1,0 +1,2294 @@
+[
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2024-12-13T20:07:26.708Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2024-12-13T20:24:37.455Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Business id format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2024-12-13T20:26:49.262Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Business id format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2024-12-13T20:27:53.740Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Tax id format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2024-12-13T20:28:41.964Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2024-12-13T20:28:49.008Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Country\", \"Address\", \"City\", \"Postcode\", \"Phone number\", \"Business ID\", \"Tax ID\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2024-12-13T20:29:39.911Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2024-12-13T21:37:59.965Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "2",
+        "object_repr": "user_add",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2024-12-14T17:01:19.776Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "4",
+        "object_repr": "hovno",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2024-12-14T20:20:11.745Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "1",
+        "object_repr": "EN 341",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2024-12-14T20:21:33.274Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "2",
+        "object_repr": "EN 353-1, 2",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2024-12-14T20:21:46.332Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "3",
+        "object_repr": "EN 354",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2024-12-14T20:21:54.903Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "4",
+        "object_repr": "EN 355",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2024-12-14T20:22:10.745Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "5",
+        "object_repr": "EN 360",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2024-12-14T20:25:52.090Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "6",
+        "object_repr": "EN 361",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2024-12-14T20:35:27.091Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "7",
+        "object_repr": "EN 362",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2024-12-14T20:36:46.643Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "8",
+        "object_repr": "EN 362",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2024-12-14T20:50:07.027Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "9",
+        "object_repr": "EN 362",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2024-12-14T23:19:33.072Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "36",
+        "object_repr": "EN test",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2025-01-04T00:03:52.410Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "1",
+        "object_repr": "Singing Rock",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2025-01-04T00:05:08.374Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "1",
+        "object_repr": "Singing Rock",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2025-01-04T00:12:07.110Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "36",
+        "object_repr": "EN test",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2025-01-04T00:14:50.125Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "2",
+        "object_repr": "Singing Rock",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+        "action_time": "2025-01-04T00:15:15.915Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "3",
+        "object_repr": "Petzl",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+        "action_time": "2025-01-04T00:18:01.277Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "4",
+        "object_repr": "Petzl",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+        "action_time": "2025-01-04T00:18:08.172Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "2",
+        "object_repr": "Singing Rock",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+        "action_time": "2025-01-04T01:09:18.572Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "5",
+        "object_repr": "Singing Rock",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+        "action_time": "2025-01-04T01:09:50.695Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "5",
+        "object_repr": "Singing Rock",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Logo\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+        "action_time": "2025-01-04T01:41:21.608Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "2",
+        "object_repr": "Revize CZ",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Address\", \"City\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+        "action_time": "2025-01-04T01:41:54.517Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+        "action_time": "2025-01-04T01:42:44.273Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Address\", \"City\", \"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+        "action_time": "2025-01-04T01:43:23.854Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "2",
+        "object_repr": "user_revision",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+        "action_time": "2025-01-04T01:47:33.778Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 34,
+    "fields": {
+        "action_time": "2025-01-04T01:48:10.076Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "2",
+        "object_repr": "user_revision",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Address\", \"City\", \"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 35,
+    "fields": {
+        "action_time": "2025-01-04T01:49:59.907Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "32",
+        "object_repr": "ANSI Z359.1",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 36,
+    "fields": {
+        "action_time": "2025-01-04T01:50:21.857Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "33",
+        "object_repr": "CEN/TS 16415",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 37,
+    "fields": {
+        "action_time": "2025-01-04T01:50:42.913Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "26",
+        "object_repr": "EN 12275",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 38,
+    "fields": {
+        "action_time": "2025-01-04T01:51:57.118Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "27",
+        "object_repr": "EN 12277",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 39,
+    "fields": {
+        "action_time": "2025-01-04T01:52:11.532Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "28",
+        "object_repr": "EN 12278",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 40,
+    "fields": {
+        "action_time": "2025-01-04T01:52:16.198Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "28",
+        "object_repr": "EN 12278",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 41,
+    "fields": {
+        "action_time": "2025-01-04T01:52:19.322Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "28",
+        "object_repr": "EN 12278",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 42,
+    "fields": {
+        "action_time": "2025-01-04T01:52:40.866Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "29",
+        "object_repr": "EN 12492",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 43,
+    "fields": {
+        "action_time": "2025-01-04T01:53:14.230Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "30",
+        "object_repr": "EN 12841",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 44,
+    "fields": {
+        "action_time": "2025-01-04T01:53:57.932Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "15",
+        "object_repr": "EN 1496",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 45,
+    "fields": {
+        "action_time": "2025-01-04T01:54:12.759Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "22",
+        "object_repr": "EN 1497",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 46,
+    "fields": {
+        "action_time": "2025-01-04T01:54:16.741Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "22",
+        "object_repr": "EN 1497",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 47,
+    "fields": {
+        "action_time": "2025-01-04T01:54:38.082Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "23",
+        "object_repr": "EN 1498",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 48,
+    "fields": {
+        "action_time": "2025-01-04T01:54:41.682Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "23",
+        "object_repr": "EN 1498",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 49,
+    "fields": {
+        "action_time": "2025-01-04T01:54:45.700Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "23",
+        "object_repr": "EN 1498",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 50,
+    "fields": {
+        "action_time": "2025-01-04T01:55:05.914Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "31",
+        "object_repr": "EN 15151-2",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 51,
+    "fields": {
+        "action_time": "2025-01-04T01:55:21.438Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "3",
+        "object_repr": "EN 354",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 52,
+    "fields": {
+        "action_time": "2025-01-04T01:55:43.430Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "24",
+        "object_repr": "EN 1808",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 53,
+    "fields": {
+        "action_time": "2025-01-04T01:56:16.485Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "25",
+        "object_repr": "EN 1891",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 54,
+    "fields": {
+        "action_time": "2025-01-04T01:56:39.165Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "1",
+        "object_repr": "EN 341",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 55,
+    "fields": {
+        "action_time": "2025-01-04T01:57:02.591Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "2",
+        "object_repr": "EN 353-1, 2",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 56,
+    "fields": {
+        "action_time": "2025-01-04T01:57:16.645Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "4",
+        "object_repr": "EN 355",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 57,
+    "fields": {
+        "action_time": "2025-01-04T01:57:48.706Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "13",
+        "object_repr": "EN 358",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 58,
+    "fields": {
+        "action_time": "2025-01-04T01:58:04.743Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "5",
+        "object_repr": "EN 360",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 59,
+    "fields": {
+        "action_time": "2025-01-04T01:58:12.450Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "6",
+        "object_repr": "EN 361",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 60,
+    "fields": {
+        "action_time": "2025-01-04T01:58:15.994Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "6",
+        "object_repr": "EN 361",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 61,
+    "fields": {
+        "action_time": "2025-01-04T01:58:20.006Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "10",
+        "object_repr": "EN 362",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 62,
+    "fields": {
+        "action_time": "2025-01-04T01:58:50.044Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "16",
+        "object_repr": "EN 388",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 63,
+    "fields": {
+        "action_time": "2025-01-04T01:59:15.181Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "12",
+        "object_repr": "EN 397",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 64,
+    "fields": {
+        "action_time": "2025-01-04T01:59:40.257Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "17",
+        "object_repr": "EN 564",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 65,
+    "fields": {
+        "action_time": "2025-01-04T01:59:59.929Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "18",
+        "object_repr": "EN 566",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 66,
+    "fields": {
+        "action_time": "2025-01-04T02:00:03.855Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "18",
+        "object_repr": "EN 566",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 67,
+    "fields": {
+        "action_time": "2025-01-04T02:00:50.015Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "19",
+        "object_repr": "EN 567",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 68,
+    "fields": {
+        "action_time": "2025-01-04T02:01:15.818Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "14",
+        "object_repr": "EN 795, EN 795/A1",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 69,
+    "fields": {
+        "action_time": "2025-01-04T02:01:23.662Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "11",
+        "object_repr": "EN 813",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 70,
+    "fields": {
+        "action_time": "2025-01-04T02:01:51.760Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "20",
+        "object_repr": "EN 892",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 71,
+    "fields": {
+        "action_time": "2025-01-04T02:01:56.477Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "20",
+        "object_repr": "EN 892",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 72,
+    "fields": {
+        "action_time": "2025-01-04T02:02:28.581Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "21",
+        "object_repr": "EN 959",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 73,
+    "fields": {
+        "action_time": "2025-01-04T02:03:41.592Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "34",
+        "object_repr": "NFPA Class II",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 74,
+    "fields": {
+        "action_time": "2025-01-04T02:04:19.289Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "35",
+        "object_repr": "NFPA Class III",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 75,
+    "fields": {
+        "action_time": "2025-01-04T02:10:13.769Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 2,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 2,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 2,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 2,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 3,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 3,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 3,
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 4,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 4,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 4,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 4,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 5,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 5,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 5,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 5,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add country",
+        "content_type": 6,
+        "codename": "add_country"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change country",
+        "content_type": 6,
+        "codename": "change_country"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete country",
+        "content_type": 6,
+        "codename": "delete_country"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view country",
+        "content_type": 6,
+        "codename": "view_country"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add company",
+        "content_type": 7,
+        "codename": "add_company"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change company",
+        "content_type": 7,
+        "codename": "change_company"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete company",
+        "content_type": 7,
+        "codename": "delete_company"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view company",
+        "content_type": 7,
+        "codename": "view_company"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add custom user",
+        "content_type": 8,
+        "codename": "add_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change custom user",
+        "content_type": 8,
+        "codename": "change_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete custom user",
+        "content_type": 8,
+        "codename": "delete_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view custom user",
+        "content_type": 8,
+        "codename": "view_customuser"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add item group",
+        "content_type": 9,
+        "codename": "add_itemgroup"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change item group",
+        "content_type": 9,
+        "codename": "change_itemgroup"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete item group",
+        "content_type": 9,
+        "codename": "delete_itemgroup"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view item group",
+        "content_type": 9,
+        "codename": "view_itemgroup"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add calculator order",
+        "content_type": 10,
+        "codename": "add_calculatororder"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change calculator order",
+        "content_type": 10,
+        "codename": "change_calculatororder"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete calculator order",
+        "content_type": 10,
+        "codename": "delete_calculatororder"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+        "name": "Can view calculator order",
+        "content_type": 10,
+        "codename": "view_calculatororder"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+        "name": "Can add calculator item",
+        "content_type": 11,
+        "codename": "add_calculatoritem"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+        "name": "Can change calculator item",
+        "content_type": 11,
+        "codename": "change_calculatoritem"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+        "name": "Can delete calculator item",
+        "content_type": 11,
+        "codename": "delete_calculatoritem"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+        "name": "Can view calculator item",
+        "content_type": 11,
+        "codename": "view_calculatoritem"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+        "name": "Can add type of ppe",
+        "content_type": 12,
+        "codename": "add_typeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+        "name": "Can change type of ppe",
+        "content_type": 12,
+        "codename": "change_typeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+        "name": "Can delete type of ppe",
+        "content_type": 12,
+        "codename": "delete_typeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+        "name": "Can view type of ppe",
+        "content_type": 12,
+        "codename": "view_typeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add Material Type",
+        "content_type": 13,
+        "codename": "add_materialtype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change Material Type",
+        "content_type": 13,
+        "codename": "change_materialtype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete Material Type",
+        "content_type": 13,
+        "codename": "delete_materialtype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view Material Type",
+        "content_type": 13,
+        "codename": "view_materialtype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add standard ppe",
+        "content_type": 14,
+        "codename": "add_standardppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change standard ppe",
+        "content_type": 14,
+        "codename": "change_standardppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete standard ppe",
+        "content_type": 14,
+        "codename": "delete_standardppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view standard ppe",
+        "content_type": 14,
+        "codename": "view_standardppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+        "name": "Can add manufacturer",
+        "content_type": 15,
+        "codename": "add_manufacturer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+        "name": "Can change manufacturer",
+        "content_type": 15,
+        "codename": "change_manufacturer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+        "name": "Can delete manufacturer",
+        "content_type": 15,
+        "codename": "delete_manufacturer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+        "name": "Can view manufacturer",
+        "content_type": 15,
+        "codename": "view_manufacturer"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+        "name": "Can add Revision Data",
+        "content_type": 16,
+        "codename": "add_revisiondata"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+        "name": "Can change Revision Data",
+        "content_type": 16,
+        "codename": "change_revisiondata"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+        "name": "Can delete Revision Data",
+        "content_type": 16,
+        "codename": "delete_revisiondata"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+        "name": "Can view Revision Data",
+        "content_type": 16,
+        "codename": "view_revisiondata"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+        "name": "Can add revision record",
+        "content_type": 17,
+        "codename": "add_revisionrecord"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+        "name": "Can change revision record",
+        "content_type": 17,
+        "codename": "change_revisionrecord"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+        "name": "Can delete revision record",
+        "content_type": 17,
+        "codename": "delete_revisionrecord"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+        "name": "Can view revision record",
+        "content_type": 17,
+        "codename": "view_revisionrecord"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+        "name": "Can add lifetime of ppe",
+        "content_type": 18,
+        "codename": "add_lifetimeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+        "name": "Can change lifetime of ppe",
+        "content_type": 18,
+        "codename": "change_lifetimeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+        "name": "Can delete lifetime of ppe",
+        "content_type": 18,
+        "codename": "delete_lifetimeofppe"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+        "name": "Can view lifetime of ppe",
+        "content_type": 18,
+        "codename": "view_lifetimeofppe"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "accounts",
+        "model": "country"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "accounts",
+        "model": "company"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "accounts",
+        "model": "customuser"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "accounts",
+        "model": "itemgroup"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "calculator",
+        "model": "calculatororder"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "calculator",
+        "model": "calculatoritem"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "revisions",
+        "model": "typeofppe"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "revisions",
+        "model": "materialtype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+        "app_label": "revisions",
+        "model": "standardppe"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+        "app_label": "revisions",
+        "model": "manufacturer"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+        "app_label": "revisions",
+        "model": "revisiondata"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+        "app_label": "revisions",
+        "model": "revisionrecord"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+        "app_label": "revisions",
+        "model": "lifetimeofppe"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ggw5llab72r8ehjo62slb9xjfgv4050q",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tMBiY:Dn37LQDrbadyZJ4yudSkwxRUWvQuUHXdQoBQ-0uxV9s",
+        "expire_date": "2024-12-27T19:52:54.964Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "m5wj69qsp6onfyupqk4zb3ywxf03yhc0",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tMTRU:yX1fJOAXIbRFniLHiQAcu7NW-cH0yMJRhtqMQeav6og",
+        "expire_date": "2024-12-28T14:48:28.834Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "p2azccrty1dfsgldf9cze9xcqy2dwv0p",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tU6t2:mDCNCHlgLueG7Ynm-nB21cAZzg-SfK_-tJqsJlCRlRY",
+        "expire_date": "2025-01-18T16:20:28.858Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "vazz75u6mwiezdoixj2se4nowsmrp80h",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tTqQR:bZqnsQwVXicg5LmiTDted0XV0dHbUYLE1tbkHe7mmVM",
+        "expire_date": "2025-01-17T22:45:51.593Z"
+    }
+},
+{
+    "model": "accounts.country",
+    "pk": 1,
+    "fields": {
+        "name": "Česká republika",
+        "language_code": "CZ",
+        "postcode_format": "^\\d{3}",
+        "phone_number_prefix": "+420",
+        "business_id_format": "^\\d{8}$",
+        "tax_id_format": "^CZ\\d{10}$",
+        "tax_id_prefix": "CZ"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 1,
+    "fields": {
+        "name": null,
+        "country": null,
+        "address": null,
+        "city": null,
+        "postcode": null,
+        "phone_number": null,
+        "business_id": null,
+        "tax_id": null,
+        "date_joined": "2024-12-13T21:27:12.817Z",
+        "last_updated": "2024-12-13T21:27:12.817Z"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 2,
+    "fields": {
+        "name": "Revize CZ",
+        "country": 1,
+        "address": "Poděbradova 712",
+        "city": "Úvaly",
+        "postcode": "250 82",
+        "phone_number": "+420605728384",
+        "business_id": "03368351",
+        "tax_id": "CZ9303030708",
+        "date_joined": "2024-12-14T01:15:32.390Z",
+        "last_updated": "2025-01-04T01:41:21.604Z"
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
+        "last_login": "2025-01-04T16:20:28.852Z",
+        "is_superuser": true,
+        "username": "Admin-oopp",
+        "first_name": "Jaroslav",
+        "last_name": "Adam",
+        "email": "jardadam@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-12-13T19:52:41Z",
+        "company": null,
+        "country": 1,
+        "address": "Poděbradova 712",
+        "city": "Úvaly",
+        "postcode": "250 82",
+        "phone_number": "+420420605728384",
+        "business_id": "03368351",
+        "tax_id": "CZ9303070832",
+        "last_updated": "2025-01-04T01:47:33.772Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$74Xkb7xr6nhT4pwsZnwlCz$Oav7GF93CHodyejrLZiJYS4/1bg4yw7EU8zbLyD91e0=",
+        "last_login": "2024-12-14T01:15:33Z",
+        "is_superuser": false,
+        "username": "user_revision",
+        "first_name": "Revizni",
+        "last_name": "Technik",
+        "email": "revizni@technik.cz",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-12-14T01:15:32Z",
+        "company": 2,
+        "country": 1,
+        "address": "Poděbradova 712",
+        "city": "Úvaly",
+        "postcode": "250 82",
+        "phone_number": "+420420605728384",
+        "business_id": "03368351",
+        "tax_id": "CZ9303030708",
+        "last_updated": "2025-01-04T01:48:10.069Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 1,
+    "fields": {
+        "symbol": "",
+        "name": "Harnesses"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 2,
+    "fields": {
+        "symbol": "",
+        "name": "Textile PPE"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 3,
+    "fields": {
+        "symbol": "",
+        "name": "Ropes"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 5,
+    "fields": {
+        "symbol": "",
+        "name": "Metal PPE"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 6,
+    "fields": {
+        "symbol": "",
+        "name": "Helmets"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 1,
+    "fields": {
+        "image": "images/en-341.jpg",
+        "code": "EN 341",
+        "description": "Descenders, Slaňovací brzdy"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 2,
+    "fields": {
+        "image": "images/en-353.jpg",
+        "code": "EN 353-1, 2",
+        "description": "Fall arresters, Pohyblivé zachycovače pádu"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 3,
+    "fields": {
+        "image": "images/en-354.jpg",
+        "code": "EN 354",
+        "description": "Fasteners, Spojovací prostředky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 4,
+    "fields": {
+        "image": "images/en-355.jpg",
+        "code": "EN 355",
+        "description": "Fall absorbers, Tlumiče pádu"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 5,
+    "fields": {
+        "image": "images/en-360.jpg",
+        "code": "EN 360",
+        "description": "Retractable fall arrester, Zatahovací zachycovače pádu"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 6,
+    "fields": {
+        "image": "images/en-361.jpg",
+        "code": "EN 361",
+        "description": "Full body harnesses, Zachycovací postroje"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 10,
+    "fields": {
+        "image": "images/en-362.jpg",
+        "code": "EN 362",
+        "description": "Conectors, Spojky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 11,
+    "fields": {
+        "image": "images/en-813.jpg",
+        "code": "EN 813",
+        "description": "Sit harnesses, Sedací postroje"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 12,
+    "fields": {
+        "image": "images/en-397.jpg",
+        "code": "EN 397",
+        "description": "Industrial safety helmets, Průmyslové ochranné přilby"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 13,
+    "fields": {
+        "image": "images/en-358.jpg",
+        "code": "EN 358",
+        "description": "Work positioning systems, Pracovní polohovací systémy"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 14,
+    "fields": {
+        "image": "images/en-795.jpg",
+        "code": "EN 795, EN 795/A1",
+        "description": "Anchor devices, Kotvící zařízení"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 15,
+    "fields": {
+        "image": "images/en-1496.jpg",
+        "code": "EN 1496",
+        "description": "Rescue lifting devices, záchranné zdvihací zařízení"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 16,
+    "fields": {
+        "image": "images/en-388.jpg",
+        "code": "EN 388",
+        "description": "Protection gloves against mechanical risks, Ochranné rukavice proti mechanickým rizikům"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 17,
+    "fields": {
+        "image": "images/en-564.jpg",
+        "code": "EN 564",
+        "description": "Accessory cords, Pomocné šňůry"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 18,
+    "fields": {
+        "image": "images/en-566.jpg",
+        "code": "EN 566",
+        "description": "Mountaineering equipment Slings, Horolezecká výzbroj Smyčky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 19,
+    "fields": {
+        "image": "images/en-567.jpg",
+        "code": "EN 567",
+        "description": "Mountaineering equipment\r\nRope clamps, Horolezecká výzbroj\r\nLanové svěrky, blokanty"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 20,
+    "fields": {
+        "image": "images/en-892.jpg",
+        "code": "EN 892",
+        "description": "Mountaineering equipment\r\nDynamic (strech) ropes, Horolezecká výzbroj Dynamická (průtažná) horolezecká lana"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 21,
+    "fields": {
+        "image": "images/en-959.jpg",
+        "code": "EN 959",
+        "description": "Mountaineering equipment\r\nRock anchors, Horolezecká výzbroj Zavrtávané skoby (borháky, nýty)"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 22,
+    "fields": {
+        "image": "images/en-1497.jpg",
+        "code": "EN 1497",
+        "description": "Rescue harnesses, Záchranné postroje"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 23,
+    "fields": {
+        "image": "images/en-1498.jpg",
+        "code": "EN 1498",
+        "description": "Rescue loops, Záchranné smyčky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 24,
+    "fields": {
+        "image": "images/en-1808.jpg",
+        "code": "EN 1808",
+        "description": "Safety requirements for suspended access equipment, Bezpečnostní požadavky na závěsné plošiny"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 25,
+    "fields": {
+        "image": "images/en-1891.jpg",
+        "code": "EN 1891",
+        "description": "Low stretch kernmantel ropes, Nízko průtažná lana s opleteným jádrem"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 26,
+    "fields": {
+        "image": "images/en-12275.jpg",
+        "code": "EN 12275",
+        "description": "Mountaineering equipment Connectors, Horolezecká výzbroj Karabiny"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 27,
+    "fields": {
+        "image": "images/en-12277.jpg",
+        "code": "EN 12277",
+        "description": "Mountaineering equipment Harnesses, Horolezecká výzbroj Navazovací úvazky (sedáky)"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 28,
+    "fields": {
+        "image": "images/en-12278.jpg",
+        "code": "EN 12278",
+        "description": "Mountaineering equipment Pulleys, Horolezecká výzbroj Kladky"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 29,
+    "fields": {
+        "image": "images/en-12492.jpg",
+        "code": "EN 12492",
+        "description": "Mountaineering equipment Helmets for mountaineers, Horolezecká výstroj Přilby pro horolezce"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 30,
+    "fields": {
+        "image": "images/en-12841.jpg",
+        "code": "EN 12841",
+        "description": "Descender device for rope access system and rope adjustment devices, Systémy lanového přístupu, nastavovací zařízení lana"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 31,
+    "fields": {
+        "image": "images/en-15151.jpg",
+        "code": "EN 15151-2",
+        "description": "Mountaineering equipment Braking devices, Horolezecká výzbroj Brzdicí (jisticí) prostředky s manuálním ovládáním brzdění"
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 32,
+    "fields": {
+        "image": "images/z3591.jpg",
+        "code": "ANSI Z359.1",
+        "description": "Safety Requirements for Personal Fall Arrest Systems, Subsystems and Components, Bezpečnostní požadavky pro osobní ochranné prostředky pro zachycení pádu, jejich části a komponenty."
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 33,
+    "fields": {
+        "image": "images/ts-16415.jpg",
+        "code": "CEN/TS 16415",
+        "description": "Recommendations for anchor devices for use by more than one person simultaneously, Prostředky ochrany osob proti pádu – Kotvicí zařízení – Doporučení pro kotvicí zařízení v případě použití více než jednou osobou současně."
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 34,
+    "fields": {
+        "image": "images/npfa-2.jpg",
+        "code": "NFPA Class II",
+        "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and may be utilized for  a maximum of a two-person load, Podle NFPA 1983 je Class II definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen nebo pod hýždě, a mohl být využit pro maximální zatížení pro dvě osoby."
+    }
+},
+{
+    "model": "revisions.standardppe",
+    "pk": 35,
+    "fields": {
+        "image": "images/npfa-3.jpg",
+        "code": "NFPA Class III",
+        "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and over both shoulders, rated for as maximum of a two-person load and is designed to prevent inverting, Podle NFPA 1983 je Class III definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen, nebo pod hýždě, a přes obě ramena, s maximálním zatížením dvou osob a je navržen tak, aby zabránil převrácení."
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 5,
+    "fields": {
+        "logo": "static/manufacturer_logo/Singing_Rock_RGB-03.jpg",
+        "name": "Singing Rock"
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 6,
+    "fields": {
+        "logo": "",
+        "name": "Petzl"
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 1,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 1,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 2,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 2,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 3,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 3,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 4,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 5,
+        "lifetime_use_years": 99,
+        "lifetime_manufacture_years": 99
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 5,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 6,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 10
+    }
+}
+]

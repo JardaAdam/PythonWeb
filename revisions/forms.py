@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Select
 from .models import MaterialType, StandardPpe, Manufacturer,LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
 
 
@@ -42,3 +42,6 @@ class RevisionRecordForm(ModelForm):
         model = RevisionRecord
         fields = '__all__'
         exclude = ['created_by']
+        widgets = {
+            'revision_data': Select(attrs={'class': 'form-control select2'}),
+        }

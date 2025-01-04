@@ -1,0 +1,76 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}
+    Revision Records
+{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <a href="{% url 'add_revision' %}" class="btn btn-primary mb-3">Add Revision record</a>
+            </div>
+
+            <div class="col-12 col-md-6 text-center">
+                <h2>List of Revision records</h2>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <form method="get" class="d-flex align-items-center">
+                    <label for="revision-record-search" class="me-2">Search records:</label>
+                    <input type="text" id="revision-record-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-outline-success">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Manufacturer</th>
+                <th scope="col">Group Type</th>
+                <th scope="col">Name PPE</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Date of Manufacture</th>
+                <th scope="col">Date of First Use</th>
+                <th scope="col">Date of Revision</th>
+                <th scope="col">Date of Next Revision</th>
+                <th scope="col">Verdict</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in revision_records %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ record.revision_data.lifetime_of_ppe.manufacturer.name }}</td>
+                    <td>{{ record.revision_data.group_type_ppe.group_type_ppe }}</td>
+                    <td>{{ record.revision_data.name_ppe }}</td>
+                    <td>{{ record.serial_number }}</td>
+                    <td>{{ record.date_manufacture }}</td>
+                    <td>{{ record.date_of_first_use }}</td>
+                    <td>{{ record.date_of_revision }}</td>
+                    <td>{{ record.date_of_next_revision }}</td>
+                    <td>{{ record.get_verdict_display }}</td>
+                    <td>{{ record.notes }}</td>
+                    <td>
+                        <a href="{% url 'revision_detail' record.pk %}" class="btn btn-info btn-sm">View</a>
+                        <a href="{% url 'edit_revision' record.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_revision' record.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No revision records found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

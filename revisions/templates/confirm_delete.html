@@ -1,0 +1,13 @@
+{% extends "revision_base.html" %}
+
+{% block revision_content %}
+<form method="post">
+    {% csrf_token %}
+<!-- {% csrf_token %} nesmi chybet je to bezpecnosti opatreni pro ukladani do databaze pomoci tokenu
+ tento koken ma omezenou delku platnosti takze pri delsim formulari osetrit data proti strate meziukladanit-->
+   <p>Opravdu chcete "{{ object }}" smazat? </p>
+    <input type="submit"value="Vymazat" class="btn btn-danger">
+    <input type="button" value="Zpět" class="btn-primary" onclick="history.back()">
+<!--                                 funkce java scriptu vraci se o krok spet na strance         -->
+</form>
+{% endblock %}
