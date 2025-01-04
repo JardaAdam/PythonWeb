@@ -80,14 +80,14 @@ class Company(Model):
                     message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
                 )
                 postcode_validator(self.postcode)
-# TODO zmenit delku phone_number na vice znaku
+
 class CustomUser(AbstractUser):
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL,related_name='country_users')
     address = CharField(max_length=128, null=True, blank=True)
     city = CharField(max_length=32, null=True, blank=True)
     postcode = CharField(max_length=6, null=True, blank=True)
-    phone_number = CharField(max_length=12, blank=True, null=True)
+    phone_number = CharField(max_length=20, blank=True, null=True)
     business_id = CharField(max_length=10, null=True, blank=True, verbose_name="Business ID")
     tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
     last_updated = DateTimeField(auto_now=True)
@@ -137,7 +137,7 @@ class CustomUser(AbstractUser):
 
 
 
-
+# TODO Zeptat se na spravné umístění možná bz mělo být spíš v revision
 class ItemGroup(Model):
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden

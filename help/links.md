@@ -31,6 +31,10 @@ python manage.py createsuperuser
 ```bash 
 python manage.py makemigrations
 ```
+- Pro jednu aplikaci 
+```bash
+python manage.py makemigrations app_name
+```
 - Inicializace tabulek v databázi: Aplikuje tyto změny na databázi (např. vytvoření tabulek, přidání sloupců)
 ```bash
 python manage.py migrate
