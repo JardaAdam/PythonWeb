@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import IntegrityError
 from django.test import TestCase, Client
 
 from django.urls import reverse
@@ -66,6 +67,15 @@ class TypeOfPpeTestCase(TestCase):
         )
         self.assertEqual(type_of_ppe.price, 100.00)
         self.assertEqual(str(type_of_ppe), "Helma cena: 100.00 kč")
+
+
+    def test_duplicate_group_type_ppe(self):
+        # Původní záznam
+        TypeOfPpe.objects.create(group_type_ppe='Test Type', price=100.00)
+
+        # Pokus o vložení duplicitního záznamu
+        with self.assertRaises(IntegrityError):
+            TypeOfPpe.objects.create(group_type_ppe='Test Type', price=100.00)
 """RevisionData"""
 class RevisionDataTestCase(TestCase):
     def setUp(self):
@@ -395,7 +405,7 @@ class RevisionDataTest(TestCase):
             price=100.00,
         )
         self.standard_ppe_obj = StandardPpe.objects.create(
-            code='MAT123',
+            code='EN123',
             description='Test StandardPpe',
         )
 
@@ -431,10 +441,16 @@ class RevisionDataTest(TestCase):
         if response.context and response.context.get('form'):
             # Tisk chyby formuláře
             print(response.context['form'].errors)
-        self.assertEqual(response.status_code, 200)
 
-        # Ověření, že byl záznam úspěšně vytvořen v databázi
-        self.assertTrue(RevisionData.objects.filter(name_ppe='New PPE').exists())
+        try:
+            self.assertEqual(response.status_code, 200)
+            # Ověření, že záznam byl úspěšně vytvořen
+            self.assertTrue(RevisionData.objects.filter(name_ppe='New PPE').exists())
+        except AssertionError as e:
+            print("Test selhal:")
+            print(f"Response status kód: {response.status_code}")
+            print(f"Obsah odpovědi: {response.content}")
+            raise e
 
     def test_redirect_after_creation(self):
         # Testování přesměrování na 'next' po úspěšném uložení

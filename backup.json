@@ -975,6 +975,97 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 76,
+    "fields": {
+        "action_time": "2025-01-04T21:59:30.542Z",
+        "user": 1,
+        "content_type": 9,
+        "object_id": "1",
+        "object_repr": "Revize Výškové práce Company: Žádná společnost User: Jaroslav Adam",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 77,
+    "fields": {
+        "action_time": "2025-01-04T22:06:41.651Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "7",
+        "object_repr": "Climbing technology",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 78,
+    "fields": {
+        "action_time": "2025-01-04T22:06:50.724Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "7",
+        "object_repr": "climbing technology",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 79,
+    "fields": {
+        "action_time": "2025-01-04T22:53:39.278Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 80,
+    "fields": {
+        "action_time": "2025-01-04T22:53:57.779Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 81,
+    "fields": {
+        "action_time": "2025-01-04T22:57:50.150Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 82,
+    "fields": {
+        "action_time": "2025-01-04T22:57:57.289Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -1848,7 +1939,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
-        "last_login": "2025-01-04T16:20:28.852Z",
+        "last_login": "2025-01-04T16:20:28Z",
         "is_superuser": true,
         "username": "Admin-oopp",
         "first_name": "Jaroslav",
@@ -1862,10 +1953,10 @@
         "address": "Poděbradova 712",
         "city": "Úvaly",
         "postcode": "250 82",
-        "phone_number": "+420420605728384",
+        "phone_number": "+420605728384",
         "business_id": "03368351",
         "tax_id": "CZ9303070832",
-        "last_updated": "2025-01-04T01:47:33.772Z",
+        "last_updated": "2025-01-04T22:57:57.280Z",
         "groups": [],
         "user_permissions": []
     }
@@ -1895,6 +1986,17 @@
         "last_updated": "2025-01-04T01:48:10.069Z",
         "groups": [],
         "user_permissions": []
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 1,
+    "fields": {
+        "name": "Výškové práce",
+        "user": 1,
+        "company": null,
+        "created": "2025-01-04T21:59:30.539Z",
+        "updated": "2025-01-04T21:59:30.539Z"
     }
 },
 {
@@ -2242,6 +2344,22 @@
     }
 },
 {
+    "model": "revisions.manufacturer",
+    "pk": 7,
+    "fields": {
+        "logo": "",
+        "name": "climbing technology"
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 8,
+    "fields": {
+        "logo": "",
+        "name": "SKYLOTEC"
+    }
+},
+{
     "model": "revisions.lifetimeofppe",
     "pk": 1,
     "fields": {
@@ -2289,6 +2407,275 @@
         "material_type": 6,
         "lifetime_use_years": 10,
         "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 6,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 1,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 7,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 2,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 8,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 3,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 9,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 5,
+        "lifetime_use_years": 99,
+        "lifetime_manufacture_years": 99
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 10,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 6,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 11,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 6,
+        "lifetime_use_years": 5,
+        "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 12,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 3,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 13,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 1,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 1,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "helmet",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 2,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "arborist_helmet",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 3,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_arrest_harness",
+        "price": "150.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 4,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "height_work_harness",
+        "price": "180.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 5,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "arborist_harness",
+        "price": "200.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 6,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "chest_harness",
+        "price": "110.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 7,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "seat_harness",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 8,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "descenders",
+        "price": "90.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 9,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "arborist_descender",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 10,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "asap",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 11,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_arrests",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 12,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "ascender",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 13,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "pulley",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 14,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "block_pulley",
+        "price": "95.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 15,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "special_pulley",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 16,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "carbine",
+        "price": "35.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 17,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "sling",
+        "price": "60.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 18,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "steel_lanyard",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 19,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "positioning_lanyard",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 20,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_absorber",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 21,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_absorber_with_conector",
+        "price": "120.00"
     }
 }
 ]

@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.template.loader import render_to_string
@@ -57,12 +57,13 @@ class RevisionDataCreateView(CreateView):
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('add_revision_data')
+
     def form_valid(self, form):
         response = super().form_valid(form)
         # Získání URL z parametru 'next'
-        next_url = self.request.GET.get('next', '')
+        next_url = self.request.GET.get('next', self.success_url)
         # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
-        return redirect(next_url or self.success_url)
+        return redirect(next_url)
 class RevisionDataUpdateView(UpdateView):
     model = RevisionData
     template_name = 'revision_form.html'
