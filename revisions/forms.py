@@ -37,7 +37,8 @@ class RevisionDataForm(ModelForm):
         widgets = {
             'lifetime_of_ppe': Select(attrs={'class': 'form-control select2'}),
             'group_type_ppe': Select(attrs={'class': 'form-control select2'}),
-            'standard_ppe': Select(attrs={'class': 'form-control select2'}),
+            # FIXME zajistit aby to fungovalo s manytomany field
+            # 'standard_ppe': Select(attrs={'class': 'form-control select2'}),
         }
 
 class RevisionRecordForm(ModelForm):
