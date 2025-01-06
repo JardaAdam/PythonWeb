@@ -3,11 +3,10 @@
 {% block revision_content %}
 <form method="post">
     {% csrf_token %}
-<!-- {% csrf_token %} nesmi chybet je to bezpecnosti opatreni pro ukladani do databaze pomoci tokenu
- tento koken ma omezenou delku platnosti takze pri delsim formulari osetrit data proti strate meziukladanit-->
-   <p>Opravdu chcete "{{ object }}" smazat? </p>
-    <input type="submit"value="Vymazat" class="btn btn-danger">
-    <input type="button" value="Zpět" class="btn-primary" onclick="history.back()">
-<!--                                 funkce java scriptu vraci se o krok spet na strance         -->
+    <!-- {% csrf_token %} nesmí chybět, je to bezpečnostní opatření pro ukládání do databáze pomocí tokenu
+         tento token má omezenou délku platnosti, takže při delším formuláři ošetřit data proti ztrátě meziukládáním -->
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <button type="button" class="btn btn-secondary" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+    <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
 </form>
 {% endblock %}

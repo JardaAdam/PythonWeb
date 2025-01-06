@@ -1,0 +1,57 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}Manufacturers{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <a href="{% url 'add_manufacturer' %}" class="btn btn-primary mb-3">Add Manufacturer</a>
+        </div>
+        <div class="col-12 col-md-6 text-center">
+            <h2>List of Manufacturers</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <form method="get" class="d-flex align-items-center">
+                <label for="manufacturer-search" class="me-2">Search manufacturers:</label>
+                <input type="text" id="manufacturer-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </div>
+    </div>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Logo</th>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for manufacturer in manufacturers %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    {% if manufacturer.logo %}
+                        <img src="{{ manufacturer.logo.url }}" alt="Logo" style="width:100px;height:auto;">
+                    {% endif %}
+                </td>
+                <td>{{ manufacturer.name }}</td>
+                <td>
+                    <a href="{% url 'manufacturer_detail' manufacturer.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'edit_manufacturer' manufacturer.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_manufacturer' manufacturer.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No manufacturers found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

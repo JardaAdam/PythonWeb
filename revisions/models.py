@@ -3,8 +3,8 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField,  \
-    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
+from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, \
+    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint, CASCADE
 
 from accounts.models import CustomUser, ItemGroup
 from config import settings
@@ -12,9 +12,10 @@ from config import settings
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.
 # TODO doresit spravny upload to pro obrazky ktere budou statickymi soubory aplikace
+# TODO vyřešit mazani obrazku společně se zaznamem
 class MaterialType(Model):
     """rozdeluje polozky do jednotlivich skupin podle materialu"""
-    symbol = ImageField(upload_to='static/material/', null=True, blank=True)
+    symbol = ImageField(upload_to='static/image/material/', null=True, blank=True)
     name = CharField(max_length=32, unique=True, blank=False, null=False)
 
     def __str__(self):
@@ -30,7 +31,7 @@ class MaterialType(Model):
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
     #FIXME upravit cestu kde budou ulozeny obrazky ( chci je do Static )
-    image = ImageField(upload_to='images/', blank=True, null=True)
+    image = ImageField(upload_to='static/image/standard_ppe/logo/', blank=True, null=True)
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
     class Meta:
@@ -46,7 +47,7 @@ class StandardPpe(Model):
 
 class Manufacturer(Model):
     """Uchovává základní informace o výrobci."""
-    logo = ImageField(upload_to='static/manufacturer_logo/', blank=True, null=True)  # logo vyrobce
+    logo = ImageField(upload_to='static/image/manufacturer/logo/', blank=True, null=True)  # logo vyrobce
     name = CharField(max_length=32, blank=False, null=False)
 
 
@@ -82,7 +83,7 @@ class LifetimeOfPpe(Model):
 
 class TypeOfPpe(Model):
     """definuje cenu jednotlivich skupin polozek pro vypocet finalni ceny za revizi"""
-    image = ImageField(upload_to="static/type_of_ppe/",blank=True, null=True, default=None)
+    image = ImageField(upload_to="static/image/type_of_ppe/",blank=True, null=True, default=None)
     group_type_ppe = CharField(max_length=32, unique=True, blank=False, null=False)
     price = DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
 
@@ -100,13 +101,13 @@ class TypeOfPpe(Model):
 
 class RevisionData(Model):
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
-    image_items = ImageField(upload_to="revision_data/", default=None)
+    image_items = ImageField(upload_to="static/image/revision_data/", default=None)
     lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_data',
                                  related_query_name='revision_data')
     group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
     name_ppe = CharField(max_length=32, null=False, blank=False)
     standard_ppe = ManyToManyField(StandardPpe, related_name='standard_ppe')  # Množství norem
-    manual_for_revision = FileField(upload_to='manuals/')
+    manual_for_revision = FileField(upload_to='static/revision_data/manuals/')
     notes = TextField(blank=True, null=True)
 
     class Meta:
@@ -131,7 +132,7 @@ class RevisionRecord(Model):
         - konec platnosti revize
         - konec zivotnosti
         - upozorneni od vyrobce podle serial_number"""
-    photo_of_item = ImageField(upload_to='revision_record/', blank=True, null=True)
+    photo_of_item = ImageField(upload_to='media/image/revision_record/', blank=True, null=True)
     revision_data = ForeignKey(RevisionData, on_delete=PROTECT)
     serial_number = CharField(max_length=64,null=False, blank=False, unique=True)
     date_manufacture = DateField(null=True, blank=True)

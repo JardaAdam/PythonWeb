@@ -4,11 +4,11 @@ from django.core.exceptions import ValidationError
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField
 from .models import CustomUser, Company
 
-# Fixme Expected
+
 class RegistrationForm(ModelForm):
     password = CharField(widget=PasswordInput, label='Password')
     confirm_password = CharField(widget=PasswordInput, label='Confirm Password')
-    company = ModelChoiceField(queryset=Company.objects.all(), required=False, empty_label="-- None --",
+    company = ModelChoiceField(queryset=Company.objects, required=False, empty_label="-- None --",
                                label='Existing Company')
 
     class Meta:

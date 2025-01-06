@@ -1,8 +1,10 @@
 from django.forms import ModelForm, Select
 from django.forms.widgets import SelectMultiple
 
-from .models import MaterialType, StandardPpe, Manufacturer,LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
-
+from .models import MaterialType, StandardPpe, Manufacturer, LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
+# TODO doplnit vyhledavaci widgets
+# TODO doplnit napovedu pro spravny format poli
+# TODO clean metody pro zadavani dat
 
 class MaterialTypeForm(ModelForm):
     class Meta:
@@ -41,7 +43,7 @@ class RevisionDataForm(ModelForm):
             'group_type_ppe': Select(attrs={'class': 'form-control select2'}),
             'standard_ppe': SelectMultiple(attrs={'class': 'form-control select2'}),
         }
-
+# TODO doplnit napovedu pro spravny format poli
 class RevisionRecordForm(ModelForm):
     class Meta:
         model = RevisionRecord
