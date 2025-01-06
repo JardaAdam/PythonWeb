@@ -1,4 +1,6 @@
 from django.forms import ModelForm, Select
+from django.forms.widgets import SelectMultiple
+
 from .models import MaterialType, StandardPpe, Manufacturer,LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
 
 
@@ -37,8 +39,7 @@ class RevisionDataForm(ModelForm):
         widgets = {
             'lifetime_of_ppe': Select(attrs={'class': 'form-control select2'}),
             'group_type_ppe': Select(attrs={'class': 'form-control select2'}),
-            # FIXME zajistit aby to fungovalo s manytomany field
-            # 'standard_ppe': Select(attrs={'class': 'form-control select2'}),
+            'standard_ppe': SelectMultiple(attrs={'class': 'form-control select2'}),
         }
 
 class RevisionRecordForm(ModelForm):

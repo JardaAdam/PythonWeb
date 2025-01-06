@@ -12,6 +12,4 @@ urlpatterns = [
     path('revision_data/', RevisionDataListView.as_view(), name='revision_data'),
     path('revision_data/add/', RevisionDataCreateView.as_view(), name='add_revision_data'),
 
-    path('add/', add_data, name='add_data'),
-    path('get_form/', get_form, name='get_form'),
 ]
