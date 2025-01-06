@@ -1,0 +1,66 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}Revision Data Detail{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Revision Data Detail</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ object.name_ppe }}</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        {% if object.image_items %}
+                        <dt class="col-sm-4">Item Image</dt>
+                        <dd class="col-sm-8">
+                            <img src="{{ object.image_items.url }}" alt="Item Image" class="img-fluid mb-3" style="max-width: 200px;">
+                        </dd>
+                        {% endif %}
+                        <dt class="col-sm-4">Lifetime of PPE</dt>
+                        <dd class="col-sm-8">{{ object.lifetime_of_ppe }}</dd>
+
+                        <dt class="col-sm-4">PPE Group Type</dt>
+                        <dd class="col-sm-8">{{ object.group_type_ppe.group_type_ppe }}</dd>
+
+                        <dt class="col-sm-4">Name PPE</dt>
+                        <dd class="col-sm-8">{{ object.name_ppe }}</dd>
+
+                        <dt class="col-sm-4">PPE Standards</dt>
+                        <dd class="col-sm-8">
+                            {% for standard in object.standard_ppe.all %}
+                                {{ standard.code }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </dd>
+
+                        <dt class="col-sm-4">Revision Manual</dt>
+                        <dd class="col-sm-8">
+                            {% if object.manual_for_revision %}
+                                <a href="{{ object.manual_for_revision.url }}" target="_blank">View Manual</a>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-sm-4">Notes</dt>
+                        <dd class="col-sm-8">{{ object.notes }}</dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i> <!-- Ikona šipky zpět -->
+                    </button>
+                    <a href="{% url 'edit_revision_data' object.pk %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_revision_data' object.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

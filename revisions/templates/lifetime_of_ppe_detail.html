@@ -1,0 +1,48 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}Lifetime of PPE{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Lifetime of PPE Detail</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ object.manufacturer.name }} - {{ object.material_type.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Manufacturer</dt>
+                        <dd class="col-sm-8">{{ object.manufacturer.name }}</dd>
+
+                        <dt class="col-sm-4">Material Type</dt>
+                        <dd class="col-sm-8">{{ object.material_type.name }}</dd>
+
+                        <dt class="col-sm-4">Use Lifetime (Years)</dt>
+                        <dd class="col-sm-8">{{ object.lifetime_use_years }}</dd>
+
+                        <dt class="col-sm-4">Manufacture Lifetime (Years)</dt>
+                        <dd class="col-sm-8">{{ object.lifetime_manufacture_years }}</dd>
+
+                        <!-- Add additional fields if the model is extended with new attributes -->
+                    </dl>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i> <!-- Ikona šipky zpět -->
+                    </button>
+                    <a href="{% url 'edit_lifetime_of_ppe' object.pk %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_lifetime_of_ppe' object.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

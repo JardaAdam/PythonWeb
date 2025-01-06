@@ -1,0 +1,45 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}Manufacturer Detail{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Manufacturer Detail</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ object.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        {% if object.logo %}
+                        <dt class="col-sm-4">Logo</dt>
+                        <dd class="col-sm-8">
+                            <img src="{{ object.logo.url }}" alt="{{ object.name }} Logo"
+                                 class="img-fluid mb-3" style="max-width: 200px;">
+                        </dd>
+                        {% endif %}
+                        <dt class="col-sm-4">Name</dt>
+                        <dd class="col-sm-8">{{ object.name }}</dd>
+                        <!-- You can add additional model attributes if they exist -->
+                    </dl>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i> <!-- Ikona šipky zpět -->
+                    </button>
+                    <a href="{% url 'edit_manufacturer' object.pk %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_manufacturer' object.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
-from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q, ProtectedError
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.template.loader import render_to_string
@@ -18,10 +18,104 @@ def home(request):
 
 def some_view(request):
     return render(request, 'revision_home.html')
-# TODO predelat zobrazovani a definovat kazdy model zvlast!!
-# TODO ukladani dat je vporadku. zobrazovani se musi upravit tak aby se dal v kazdem modelu pridavat a mazat
+# TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
+# TODO osetrit vypisi v situacich kdy nemuze uzivatel udelat nejaky ukon. ProtectedError atd.
+"""Manufacturer"""
+class ManufacturerListView(ListView):
+    model = Manufacturer
+    template_name = 'manufacturer_list.html'
+    context_object_name = 'manufacturers'
+    success_url = reverse_lazy('manufacturer_list')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(name__icontains=query)
+            )
+        return queryset
+
+class ManufacturerDetailView(DetailView):
+    model = Manufacturer
+    template_name = 'manufacturer_detail.html'
+    context_object_name = 'manufacturer'
+
+class ManufacturerCreateView(CreateView):
+    model = Manufacturer
+    form_class = ManufacturerForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('manufacturer_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Získání URL z parametru 'next'
+        next_url = self.request.GET.get('next', self.success_url)
+        # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
+
+        return redirect(next_url)
+
+class ManufacturerUpdateView(UpdateView):
+    model = Manufacturer
+    form_class = ManufacturerForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('manufacturer_list')
+
+
+class ManufacturerDeleteView(DeleteView):
+    model = Manufacturer
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy('confirm_delete')
 
 """Lifetime Of Ppe"""
+
+class LifetimeOfPpeListView(ListView):
+    model = LifetimeOfPpe
+    template_name = 'lifetime_of_ppe_list.html'
+    context_object_name = 'lifetimes_of_ppe'
+    success_url = reverse_lazy('lifetime_of_ppe_list')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(manufacturer__name__icontains=query) |
+                Q(material_type__name__icontains=query) |
+                Q(lifetime_use_years__icontains=query) |
+                Q(lifetime_manufacture_years__icontains=query)
+            )
+        return queryset
+
+class LifetimeOfPpeDetailView(DetailView):
+    model = LifetimeOfPpe
+    template_name = 'lifetime_of_ppe_detail.html'
+    context_object_name = 'lifetime_of_ppe'
+
+class LifetimeOfPpeCreateView(CreateView):
+    model = LifetimeOfPpe
+    form_class = LifetimeOfPpeForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('lifetime_of_ppe_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Získání URL z parametru 'next'
+        next_url = self.request.GET.get('next', self.success_url)
+        # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
+
+        return redirect(next_url)
+
+class LifetimeOfPpeUpdateView(UpdateView):
+    model = LifetimeOfPpe
+    form_class = LifetimeOfPpeForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('lifetimes_of_ppe_list')
+
+class LifetimeOfPpeDeleteView(DeleteView):
+    model = LifetimeOfPpe
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy('lifetimes_of_ppe_list')
 
 """Type Of Ppe"""
 
@@ -48,7 +142,7 @@ class RevisionDataListView(ListView):
 
 class RevisionDataDetailView(DetailView):
     model = RevisionData
-    template_name = 'revision_detail.html'
+    template_name = 'revision_data_detail.html'
     context_object_name = 'revision_data'
 
 
@@ -57,16 +151,26 @@ class RevisionDataCreateView(CreateView):
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('add_revision_data')
+
     def form_valid(self, form):
         response = super().form_valid(form)
         # Získání URL z parametru 'next'
-        next_url = self.request.GET.get('next', '')
+        next_url = self.request.GET.get('next', self.success_url)
         # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
-        return redirect(next_url or self.success_url)
+
+        return redirect(next_url)
+
 class RevisionDataUpdateView(UpdateView):
     model = RevisionData
+    form_class = RevisionDataForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('revision_home')
+    success_url = reverse_lazy('revision_data_list')
+
+class RevisionDataDeleteView(DeleteView):
+    model = RevisionData
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy('revision_data_list')
+
 
 """ Revision records"""
 class RevisionRecordListView(ListView):
@@ -89,7 +193,7 @@ class RevisionRecordListView(ListView):
 
 class RevisionRecordDetailView(DetailView):
     model = RevisionRecord
-    template_name = 'revision_detail.html'
+    template_name = 'revision_record_detail.html'
     context_object_name = 'revision_record'
 
 # TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
@@ -115,98 +219,15 @@ class RevisionRecordUpdateView(UpdateView):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('revision_home')
+    success_url = reverse_lazy('revision_records_list')
 
 
 class RevisionRecordDeleteView(DeleteView):
     model = RevisionRecord
     template_name = 'confirm_delete.html'
-    success_url = reverse_lazy('revision_home')
+    success_url = reverse_lazy('revision_records_list')
 
 
-
-@login_required
-def add_data(request):
-    form = None
-    model_type = request.GET.get('model_type', 'RevisionRecord')
-
-    if request.method == 'POST':
-        model_type = request.POST.get('model_type')
-
-        # Ověření, zda model_type existuje a je platný
-        if model_type == 'MaterialType':
-            form = MaterialTypeForm(request.POST, request.FILES)
-        elif model_type == 'StandardPpe':
-            form = StandardPpeForm(request.POST, request.FILES)
-        elif model_type == 'Manufacturer':
-            form = ManufacturerForm(request.POST, request.FILES)
-        elif model_type == 'LifetimeOfPpe':
-            form = LifetimeOfPpeForm(request.POST)
-        elif model_type == 'TypeOfPpe':
-            form = TypeOfPpeForm(request.POST, request.FILES)
-        elif model_type == 'RevisionData':
-            form = RevisionDataForm(request.POST, request.FILES)
-        elif model_type == 'RevisionRecord':
-            form = RevisionRecordForm(request.POST, request.FILES)
-
-        if form is not None and form.is_valid():
-            if model_type == 'RevisionRecord':
-                revision_record = form.save(commit=False)
-                revision_record.created_by = request.user
-                revision_record.save()
-            else:
-                form.save()
-
-            messages.success(request, 'The item was successfully saved.')
-            return redirect(f"{reverse('add_data')}?model_type={model_type}")
-
-    # Inicializace formuláře při GET požadavku nebo při nevalidním POST
-    if form is None:
-        if model_type == 'MaterialType':
-            form = MaterialTypeForm()
-        elif model_type == 'StandardPpe':
-            form = StandardPpeForm()
-        elif model_type == 'Manufacturer':
-            form = ManufacturerForm()
-        elif model_type == 'LifetimeOfPpe':
-            form = LifetimeOfPpeForm()
-        elif model_type == 'TypeOfPpe':
-            form = TypeOfPpeForm()
-        elif model_type == 'RevisionData':
-            form = RevisionDataForm()
-        elif model_type == 'RevisionRecord':
-            form = RevisionRecordForm()
-
-    context = {
-        'form': form,
-        'model_type': model_type,
-    }
-    return render(request, 'add_data.html', context)
-
-
-def get_form(request):
-    model_type = request.GET.get('model_type')
-
-    if model_type == 'MaterialType':
-        form = MaterialTypeForm()
-    elif model_type == 'StandardPpe':
-        form = StandardPpeForm()
-    elif model_type == 'Manufacturer':
-        form = ManufacturerForm()
-    elif model_type == 'LifetimeOfPpe':
-        form = LifetimeOfPpeForm()
-    elif model_type == 'TypeOfPpe':
-        form = TypeOfPpeForm()
-    elif model_type == 'RevisionData':
-        form = RevisionDataForm()
-    elif model_type == 'RevisionRecord':
-        form = RevisionRecordForm()
-    else:
-        form = None
-
-    context = {'form': form}
-    html = render_to_string('form_partial.html', context, request=request)
-    return HttpResponse(html)
 
 # def create_revision_record(request):
 #     if request.method == 'POST':

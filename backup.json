@@ -975,6 +975,214 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 76,
+    "fields": {
+        "action_time": "2025-01-04T21:59:30.542Z",
+        "user": 1,
+        "content_type": 9,
+        "object_id": "1",
+        "object_repr": "Revize Výškové práce Company: Žádná společnost User: Jaroslav Adam",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 77,
+    "fields": {
+        "action_time": "2025-01-04T22:06:41.651Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "7",
+        "object_repr": "Climbing technology",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 78,
+    "fields": {
+        "action_time": "2025-01-04T22:06:50.724Z",
+        "user": 1,
+        "content_type": 15,
+        "object_id": "7",
+        "object_repr": "climbing technology",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 79,
+    "fields": {
+        "action_time": "2025-01-04T22:53:39.278Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 80,
+    "fields": {
+        "action_time": "2025-01-04T22:53:57.779Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 81,
+    "fields": {
+        "action_time": "2025-01-04T22:57:50.150Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 82,
+    "fields": {
+        "action_time": "2025-01-04T22:57:57.289Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Admin-oopp",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 83,
+    "fields": {
+        "action_time": "2025-01-05T02:47:56.346Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "6",
+        "object_repr": "Helmet",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 84,
+    "fields": {
+        "action_time": "2025-01-05T02:48:03.571Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "3",
+        "object_repr": "Rope",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 85,
+    "fields": {
+        "action_time": "2025-01-05T02:48:15.149Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "1",
+        "object_repr": "Harness",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 86,
+    "fields": {
+        "action_time": "2025-01-05T02:50:44.162Z",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "1",
+        "object_repr": "Flash industry (helmet cena: 100.00 kč) by Singing Rock",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 87,
+    "fields": {
+        "action_time": "2025-01-05T02:51:12.124Z",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "1",
+        "object_repr": "Flash industry (helmet cena: 100.00 kč) by Singing Rock",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 88,
+    "fields": {
+        "action_time": "2025-01-05T02:56:05.889Z",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "2",
+        "object_repr": "Flash industry (helmet cena: 100.00 kč) by Singing Rock",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 89,
+    "fields": {
+        "action_time": "2025-01-06T18:17:48.128Z",
+        "user": 1,
+        "content_type": 17,
+        "object_id": "1",
+        "object_repr": "Singing Rock | helmet | Flash industry | 0314W9601 | 2019-03-23 | 2021-04-21 | 2025-01-06 | 2026-01-06 | fit | ",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 90,
+    "fields": {
+        "action_time": "2025-01-06T20:10:34.745Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "37",
+        "object_repr": "testovaci EN",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 91,
+    "fields": {
+        "action_time": "2025-01-06T20:25:46.251Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "37",
+        "object_repr": "testovaci EN",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -1768,6 +1976,22 @@
 },
 {
     "model": "sessions.session",
+    "pk": "6rbuuufg0blp5ms73aact7kw6f0al584",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tUt2m:0FKHs6M1IwOrWr4yyVEkuFAVzXZdn1YYCch3U12FqNY",
+        "expire_date": "2025-01-20T19:45:44.128Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "g9iox2xkehotnmsqjb7pje0qawv26rdl",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tUrSS:691ZOb3Mn_JbYnJY2rhXQu58qCiAT-2qytuxB6Xuujw",
+        "expire_date": "2025-01-20T18:04:08.165Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "ggw5llab72r8ehjo62slb9xjfgv4050q",
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tMBiY:Dn37LQDrbadyZJ4yudSkwxRUWvQuUHXdQoBQ-0uxV9s",
@@ -1784,18 +2008,18 @@
 },
 {
     "model": "sessions.session",
-    "pk": "p2azccrty1dfsgldf9cze9xcqy2dwv0p",
-    "fields": {
-        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tU6t2:mDCNCHlgLueG7Ynm-nB21cAZzg-SfK_-tJqsJlCRlRY",
-        "expire_date": "2025-01-18T16:20:28.858Z"
-    }
-},
-{
-    "model": "sessions.session",
     "pk": "vazz75u6mwiezdoixj2se4nowsmrp80h",
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tTqQR:bZqnsQwVXicg5LmiTDted0XV0dHbUYLE1tbkHe7mmVM",
         "expire_date": "2025-01-17T22:45:51.593Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "wwpgnjd3r3yec4vumfsd1vcek11whnr8",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tUtUU:cDTnD-GD68Wh3T5nJm9_qu_GPhB-nLtawSKuzIXPa7g",
+        "expire_date": "2025-01-20T20:14:22.668Z"
     }
 },
 {
@@ -1848,7 +2072,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
-        "last_login": "2025-01-04T16:20:28.852Z",
+        "last_login": "2025-01-06T20:14:22.663Z",
         "is_superuser": true,
         "username": "Admin-oopp",
         "first_name": "Jaroslav",
@@ -1862,10 +2086,10 @@
         "address": "Poděbradova 712",
         "city": "Úvaly",
         "postcode": "250 82",
-        "phone_number": "+420420605728384",
+        "phone_number": "+420605728384",
         "business_id": "03368351",
         "tax_id": "CZ9303070832",
-        "last_updated": "2025-01-04T01:47:33.772Z",
+        "last_updated": "2025-01-04T22:57:57.280Z",
         "groups": [],
         "user_permissions": []
     }
@@ -1898,11 +2122,22 @@
     }
 },
 {
+    "model": "accounts.itemgroup",
+    "pk": 1,
+    "fields": {
+        "name": "Výškové práce",
+        "user": 1,
+        "company": null,
+        "created": "2025-01-04T21:59:30.539Z",
+        "updated": "2025-01-04T21:59:30.539Z"
+    }
+},
+{
     "model": "revisions.materialtype",
     "pk": 1,
     "fields": {
         "symbol": "",
-        "name": "Harnesses"
+        "name": "Harness"
     }
 },
 {
@@ -1918,7 +2153,7 @@
     "pk": 3,
     "fields": {
         "symbol": "",
-        "name": "Ropes"
+        "name": "Rope"
     }
 },
 {
@@ -1934,14 +2169,14 @@
     "pk": 6,
     "fields": {
         "symbol": "",
-        "name": "Helmets"
+        "name": "Helmet"
     }
 },
 {
     "model": "revisions.standardppe",
     "pk": 1,
     "fields": {
-        "image": "images/en-341.jpg",
+        "image": "static/standard_ppe/logo/en-341.jpg",
         "code": "EN 341",
         "description": "Descenders, Slaňovací brzdy"
     }
@@ -1950,7 +2185,7 @@
     "model": "revisions.standardppe",
     "pk": 2,
     "fields": {
-        "image": "images/en-353.jpg",
+        "image": "static/standard_ppe/logo/en-353.jpg",
         "code": "EN 353-1, 2",
         "description": "Fall arresters, Pohyblivé zachycovače pádu"
     }
@@ -1959,7 +2194,7 @@
     "model": "revisions.standardppe",
     "pk": 3,
     "fields": {
-        "image": "images/en-354.jpg",
+        "image": "static/standard_ppe/logo/en-354.jpg",
         "code": "EN 354",
         "description": "Fasteners, Spojovací prostředky"
     }
@@ -1968,7 +2203,7 @@
     "model": "revisions.standardppe",
     "pk": 4,
     "fields": {
-        "image": "images/en-355.jpg",
+        "image": "static/standard_ppe/logo/en-355.jpg",
         "code": "EN 355",
         "description": "Fall absorbers, Tlumiče pádu"
     }
@@ -1977,7 +2212,7 @@
     "model": "revisions.standardppe",
     "pk": 5,
     "fields": {
-        "image": "images/en-360.jpg",
+        "image": "static/standard_ppe/logo/en-360.jpg",
         "code": "EN 360",
         "description": "Retractable fall arrester, Zatahovací zachycovače pádu"
     }
@@ -1986,7 +2221,7 @@
     "model": "revisions.standardppe",
     "pk": 6,
     "fields": {
-        "image": "images/en-361.jpg",
+        "image": "static/standard_ppe/logo/en-361.jpg",
         "code": "EN 361",
         "description": "Full body harnesses, Zachycovací postroje"
     }
@@ -1995,7 +2230,7 @@
     "model": "revisions.standardppe",
     "pk": 10,
     "fields": {
-        "image": "images/en-362.jpg",
+        "image": "static/standard_ppe/logo/en-362.jpg",
         "code": "EN 362",
         "description": "Conectors, Spojky"
     }
@@ -2004,7 +2239,7 @@
     "model": "revisions.standardppe",
     "pk": 11,
     "fields": {
-        "image": "images/en-813.jpg",
+        "image": "static/standard_ppe/logo/en-813.jpg",
         "code": "EN 813",
         "description": "Sit harnesses, Sedací postroje"
     }
@@ -2013,7 +2248,7 @@
     "model": "revisions.standardppe",
     "pk": 12,
     "fields": {
-        "image": "images/en-397.jpg",
+        "image": "static/standard_ppe/logo/en-397.jpg",
         "code": "EN 397",
         "description": "Industrial safety helmets, Průmyslové ochranné přilby"
     }
@@ -2022,7 +2257,7 @@
     "model": "revisions.standardppe",
     "pk": 13,
     "fields": {
-        "image": "images/en-358.jpg",
+        "image": "static/standard_ppe/logo/en-358.jpg",
         "code": "EN 358",
         "description": "Work positioning systems, Pracovní polohovací systémy"
     }
@@ -2031,7 +2266,7 @@
     "model": "revisions.standardppe",
     "pk": 14,
     "fields": {
-        "image": "images/en-795.jpg",
+        "image": "static/standard_ppe/logo/en-795.jpg",
         "code": "EN 795, EN 795/A1",
         "description": "Anchor devices, Kotvící zařízení"
     }
@@ -2040,7 +2275,7 @@
     "model": "revisions.standardppe",
     "pk": 15,
     "fields": {
-        "image": "images/en-1496.jpg",
+        "image": "static/standard_ppe/logo/en-1496.jpg",
         "code": "EN 1496",
         "description": "Rescue lifting devices, záchranné zdvihací zařízení"
     }
@@ -2049,7 +2284,7 @@
     "model": "revisions.standardppe",
     "pk": 16,
     "fields": {
-        "image": "images/en-388.jpg",
+        "image": "static/standard_ppe/logo/en-388.jpg",
         "code": "EN 388",
         "description": "Protection gloves against mechanical risks, Ochranné rukavice proti mechanickým rizikům"
     }
@@ -2058,7 +2293,7 @@
     "model": "revisions.standardppe",
     "pk": 17,
     "fields": {
-        "image": "images/en-564.jpg",
+        "image": "static/standard_ppe/logo/en-564.jpg",
         "code": "EN 564",
         "description": "Accessory cords, Pomocné šňůry"
     }
@@ -2067,7 +2302,7 @@
     "model": "revisions.standardppe",
     "pk": 18,
     "fields": {
-        "image": "images/en-566.jpg",
+        "image": "static/standard_ppe/logo/en-566.jpg",
         "code": "EN 566",
         "description": "Mountaineering equipment Slings, Horolezecká výzbroj Smyčky"
     }
@@ -2076,7 +2311,7 @@
     "model": "revisions.standardppe",
     "pk": 19,
     "fields": {
-        "image": "images/en-567.jpg",
+        "image": "static/standard_ppe/logo/en-567.jpg",
         "code": "EN 567",
         "description": "Mountaineering equipment\r\nRope clamps, Horolezecká výzbroj\r\nLanové svěrky, blokanty"
     }
@@ -2085,7 +2320,7 @@
     "model": "revisions.standardppe",
     "pk": 20,
     "fields": {
-        "image": "images/en-892.jpg",
+        "image": "static/standard_ppe/logo/en-892.jpg",
         "code": "EN 892",
         "description": "Mountaineering equipment\r\nDynamic (strech) ropes, Horolezecká výzbroj Dynamická (průtažná) horolezecká lana"
     }
@@ -2094,7 +2329,7 @@
     "model": "revisions.standardppe",
     "pk": 21,
     "fields": {
-        "image": "images/en-959.jpg",
+        "image": "static/standard_ppe/logo/en-959.jpg",
         "code": "EN 959",
         "description": "Mountaineering equipment\r\nRock anchors, Horolezecká výzbroj Zavrtávané skoby (borháky, nýty)"
     }
@@ -2103,7 +2338,7 @@
     "model": "revisions.standardppe",
     "pk": 22,
     "fields": {
-        "image": "images/en-1497.jpg",
+        "image": "static/standard_ppe/logo/en-1497.jpg",
         "code": "EN 1497",
         "description": "Rescue harnesses, Záchranné postroje"
     }
@@ -2112,7 +2347,7 @@
     "model": "revisions.standardppe",
     "pk": 23,
     "fields": {
-        "image": "images/en-1498.jpg",
+        "image": "static/standard_ppe/logo/en-1498.jpg",
         "code": "EN 1498",
         "description": "Rescue loops, Záchranné smyčky"
     }
@@ -2121,7 +2356,7 @@
     "model": "revisions.standardppe",
     "pk": 24,
     "fields": {
-        "image": "images/en-1808.jpg",
+        "image": "static/standard_ppe/logo/en-1808.jpg",
         "code": "EN 1808",
         "description": "Safety requirements for suspended access equipment, Bezpečnostní požadavky na závěsné plošiny"
     }
@@ -2130,7 +2365,7 @@
     "model": "revisions.standardppe",
     "pk": 25,
     "fields": {
-        "image": "images/en-1891.jpg",
+        "image": "static/standard_ppe/logo/en-1891.jpg",
         "code": "EN 1891",
         "description": "Low stretch kernmantel ropes, Nízko průtažná lana s opleteným jádrem"
     }
@@ -2139,7 +2374,7 @@
     "model": "revisions.standardppe",
     "pk": 26,
     "fields": {
-        "image": "images/en-12275.jpg",
+        "image": "static/standard_ppe/logo/en-12275.jpg",
         "code": "EN 12275",
         "description": "Mountaineering equipment Connectors, Horolezecká výzbroj Karabiny"
     }
@@ -2148,7 +2383,7 @@
     "model": "revisions.standardppe",
     "pk": 27,
     "fields": {
-        "image": "images/en-12277.jpg",
+        "image": "static/standard_ppe/logo/en-12277.jpg",
         "code": "EN 12277",
         "description": "Mountaineering equipment Harnesses, Horolezecká výzbroj Navazovací úvazky (sedáky)"
     }
@@ -2157,7 +2392,7 @@
     "model": "revisions.standardppe",
     "pk": 28,
     "fields": {
-        "image": "images/en-12278.jpg",
+        "image": "static/standard_ppe/logo/en-12278.jpg",
         "code": "EN 12278",
         "description": "Mountaineering equipment Pulleys, Horolezecká výzbroj Kladky"
     }
@@ -2166,7 +2401,7 @@
     "model": "revisions.standardppe",
     "pk": 29,
     "fields": {
-        "image": "images/en-12492.jpg",
+        "image": "static/standard_ppe/logo/en-12492.jpg",
         "code": "EN 12492",
         "description": "Mountaineering equipment Helmets for mountaineers, Horolezecká výstroj Přilby pro horolezce"
     }
@@ -2175,7 +2410,7 @@
     "model": "revisions.standardppe",
     "pk": 30,
     "fields": {
-        "image": "images/en-12841.jpg",
+        "image": "static/standard_ppe/logo/en-12841.jpg",
         "code": "EN 12841",
         "description": "Descender device for rope access system and rope adjustment devices, Systémy lanového přístupu, nastavovací zařízení lana"
     }
@@ -2184,7 +2419,7 @@
     "model": "revisions.standardppe",
     "pk": 31,
     "fields": {
-        "image": "images/en-15151.jpg",
+        "image": "static/standard_ppe/logo/en-15151.jpg",
         "code": "EN 15151-2",
         "description": "Mountaineering equipment Braking devices, Horolezecká výzbroj Brzdicí (jisticí) prostředky s manuálním ovládáním brzdění"
     }
@@ -2193,7 +2428,7 @@
     "model": "revisions.standardppe",
     "pk": 32,
     "fields": {
-        "image": "images/z3591.jpg",
+        "image": "static/standard_ppe/logo/z3591.jpg",
         "code": "ANSI Z359.1",
         "description": "Safety Requirements for Personal Fall Arrest Systems, Subsystems and Components, Bezpečnostní požadavky pro osobní ochranné prostředky pro zachycení pádu, jejich části a komponenty."
     }
@@ -2202,7 +2437,7 @@
     "model": "revisions.standardppe",
     "pk": 33,
     "fields": {
-        "image": "images/ts-16415.jpg",
+        "image": "static/standard_ppe/logo/ts-16415.jpg",
         "code": "CEN/TS 16415",
         "description": "Recommendations for anchor devices for use by more than one person simultaneously, Prostředky ochrany osob proti pádu – Kotvicí zařízení – Doporučení pro kotvicí zařízení v případě použití více než jednou osobou současně."
     }
@@ -2211,7 +2446,7 @@
     "model": "revisions.standardppe",
     "pk": 34,
     "fields": {
-        "image": "images/npfa-2.jpg",
+        "image": "static/standard_ppe/logo/npfa-2.jpg",
         "code": "NFPA Class II",
         "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and may be utilized for  a maximum of a two-person load, Podle NFPA 1983 je Class II definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen nebo pod hýždě, a mohl být využit pro maximální zatížení pro dvě osoby."
     }
@@ -2220,7 +2455,7 @@
     "model": "revisions.standardppe",
     "pk": 35,
     "fields": {
-        "image": "images/npfa-3.jpg",
+        "image": "static/standard_ppe/logo/npfa-3.jpg",
         "code": "NFPA Class III",
         "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and over both shoulders, rated for as maximum of a two-person load and is designed to prevent inverting, Podle NFPA 1983 je Class III definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen, nebo pod hýždě, a přes obě ramena, s maximálním zatížením dvou osob a je navržen tak, aby zabránil převrácení."
     }
@@ -2239,6 +2474,22 @@
     "fields": {
         "logo": "",
         "name": "Petzl"
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 7,
+    "fields": {
+        "logo": "",
+        "name": "climbing technology"
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 8,
+    "fields": {
+        "logo": "",
+        "name": "SKYLOTEC"
     }
 },
 {
@@ -2289,6 +2540,300 @@
         "material_type": 6,
         "lifetime_use_years": 10,
         "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 6,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 1,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 7,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 2,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 8,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 3,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 9,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 5,
+        "lifetime_use_years": 99,
+        "lifetime_manufacture_years": 99
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 10,
+    "fields": {
+        "manufacturer": 7,
+        "material_type": 6,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 12
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 12,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 3,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 13,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 1,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 1,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "helmet",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 2,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "arborist_helmet",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 3,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_arrest_harness",
+        "price": "150.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 4,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "height_work_harness",
+        "price": "180.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 5,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "arborist_harness",
+        "price": "200.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 6,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "chest_harness",
+        "price": "110.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 7,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "seat_harness",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 8,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "descenders",
+        "price": "90.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 9,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "arborist_descender",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 10,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "asap",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 11,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_arrests",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 12,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "ascender",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 13,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "pulley",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 14,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "block_pulley",
+        "price": "95.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 15,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "special_pulley",
+        "price": "100.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 16,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "carbine",
+        "price": "35.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 17,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "sling",
+        "price": "60.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 18,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "steel_lanyard",
+        "price": "80.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 19,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "positioning_lanyard",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 20,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_absorber",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 21,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "fall_absorber_with_conector",
+        "price": "120.00"
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 3,
+    "fields": {
+        "image_items": "static/image/revision_data/Flash_industry.jpg",
+        "lifetime_of_ppe": 5,
+        "group_type_ppe": 1,
+        "name_ppe": "Flash industry",
+        "manual_for_revision": "static/revision_data/manuals/Flash_industry_manual.pdf",
+        "notes": "",
+        "standard_ppe": [
+            12
+        ]
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 2,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 3,
+        "serial_number": "0314W9601",
+        "date_manufacture": "2019-03-23",
+        "date_of_first_use": "2021-04-21",
+        "date_of_revision": "2025-01-06",
+        "date_of_next_revision": "2026-01-06",
+        "item_group": null,
+        "owner": 1,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-06T18:17:50.792Z",
+        "updated": "2025-01-06T18:17:50.792Z"
     }
 }
 ]

@@ -15,7 +15,7 @@ pip install Pillow
     - settings.py nastavim MEDIA_ROOT
 ```Python
 MEDIA_ROOT = BASE_DIR
-MEDIA_URL = 'images/'
+MEDIA_URL = 'logo/'
 ```
 do urls.py 
 ```python

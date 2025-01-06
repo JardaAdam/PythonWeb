@@ -7,7 +7,7 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-12 col-md-6">
-                <a href="{% url 'add_revision' %}" class="btn btn-primary mb-3">Add Revision record</a>
+                <a href="{% url 'add_revision_record' %}" class="btn btn-primary mb-3">Add Revision record</a>
             </div>
 
             <div class="col-12 col-md-6 text-center">
@@ -58,9 +58,9 @@
                     <td>{{ record.get_verdict_display }}</td>
                     <td>{{ record.notes }}</td>
                     <td>
-                        <a href="{% url 'revision_detail' record.pk %}" class="btn btn-info btn-sm">View</a>
-                        <a href="{% url 'edit_revision' record.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="{% url 'delete_revision' record.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="{% url 'revision_record_detail' record.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                        <a href="{% url 'edit_revision_record' record.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'delete_revision_record' record.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
             {% empty %}

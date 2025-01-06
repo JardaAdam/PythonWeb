@@ -47,35 +47,35 @@ položek a fotmulař mu spočítá cenu.
 **atributy kalkulačky**
 - Příklad dat pro tabulku kalkulator:
 
-| **id** | **TypeOfPpe**                      | **price** | **ks** |
-|--------|------------------------------------|-----------|--------|
-| 1      | helmets                            | 100 CZK   | 0      |
-| 2      | arborist_helmets                   | 120 CZK   |        |
-| 3      | fall_arrest_harness                | 150 CZK   | 15     |
-| 4      | height_work_harness                | 180 CZK   | 7      |
-| 5      | arborist_harness                   | 200 CZK   | 5      |
-| 6      | chest_harness                      | 110 CZK   | 12     |
-| 7      | seat_harness                       | 500 CZK   | 3      |
-| 8      | descenders                         | 90 CZK    | 20     |
-| 9      | arborist_descenders                | 120 CZK   | 6      |
-| 10     | asaps                              | 250 CZK   | 5      |
-| 11     | fall_arrests                       | 300 CZK   | 4      |
-| 12     | ascenders                          | 110 CZK   | 10     |
-| 13     | pulleys                            | 80 CZK    | 25     |
-| 14     | block_pulleys                      | 95 CZK    | 20     |
-| 15     | special_pulleys                    | 150 CZK   | 8      |
-| 16     | carbines                           | 35 CZK    | 50     |
-| 17     | slings                             | 60 CZK    | 30     |
-| 18     | steel_lanyard                      | 80 CZK    | 10     |
-| 19     | positioning_lanyards               | 140 CZK   | 12     |
-| 20     | fall_absorbers                     | 120 CZK   | 8      |
-| 21     | fall_absorbers_with_conectors      | 150 CZK   | 5      |
-| 22     | cambium_savers                     | 120 CZK   | 7      |
-| 23     | cambium_savers_special             | 140 CZK   | 4      |
-| 24     | rigging plate                      | 100 CZK   | 15     |
-| 25     | rope                               | 3 CZK/m   | 20     |
-| 26     | rope_spliced_eye                   | 35 CZK    | 3      |
-| 27     | rescue_equipments ???              | 130 CZK   | 10     |
+| **id** | **TypeOfPpe**          | **price** | **ks** |
+|--------|------------------------|-----------|--------|
+| 1      | helmets                | 100 CZK   | 0      |
+| 2      | arborist_helmets       | 120 CZK   |        |
+| 3      | fall_arrest_harness    | 150 CZK   | 15     |
+| 4      | height_work_harness    | 180 CZK   | 7      |
+| 5      | arborist_harness       | 200 CZK   | 5      |
+| 6      | chest_harness          | 110 CZK   | 12     |
+| 7      | seat_harness           | 100 CZK   | 3      |
+| 8      | descenders             | 90 CZK    | 20     |
+| 9      | arborist_descender     | 120 CZK   | 6      |
+| 10     | asap                   | 100 CZK   | 5      |
+| 11     | fall_arrests           | 80 CZK    | 4      |
+| 12     | ascender               | 80 CZK    | 10     |
+| 13     | pulley                 | 80 CZK    | 25     |
+| 14     | block_pulley           | 95 CZK    | 20     |
+| 15     | special_pulley         | 100 CZK   | 8      |
+| 16     | carbine                | 35 CZK    | 50     |
+| 17     | sling                  | 60 CZK    | 30     |
+| 18     | steel_lanyard          | 80 CZK    | 10     |
+| 19     | positioning_lanyard    | 120 CZK   | 12     |
+| 20     | fall_absorber          | 120 CZK   | 8      |
+| 21     | fall_absorber_with_conector | 150 CZK   | 5      |
+| 22     | cambium_saver          | 120 CZK   | 7      |
+| 23     | cambium_savers_special | 140 CZK   | 4      |
+| 24     | rigging plate          | 100 CZK   | 15     |
+| 25     | rope                   | 3 CZK/m   | 20     |
+| 26     | rope_spliced_eye       | 35 CZK    | 3      |
+| 27     | rescue_equipment ???   | 130 CZK   | 10     |
 
 
 | id | Další volitelné položky  | Cena                    | ks |

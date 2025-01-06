@@ -1,0 +1,70 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}Revision Record Detail{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Revision Record Detail</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ object.revision_data.name_ppe }}</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        {% if object.photo_of_item %}
+                        <dt class="col-sm-4">Photo of Item</dt>
+                        <dd class="col-sm-8">
+                            <img src="{{ object.photo_of_item.url }}" alt="Photo of item" class="img-fluid mb-3" style="max-width: 200px;">
+                        </dd>
+                        {% endif %}
+                        <dt class="col-sm-4">Revision Data</dt>
+                        <dd class="col-sm-8">{{ object.revision_data }}</dd>
+
+                        <dt class="col-sm-4">Serial Number</dt>
+                        <dd class="col-sm-8">{{ object.serial_number }}</dd>
+
+                        <dt class="col-sm-4">Manufacture Date</dt>
+                        <dd class="col-sm-8">{{ object.date_manufacture }}</dd>
+
+                        <dt class="col-sm-4">First Use Date</dt>
+                        <dd class="col-sm-8">{{ object.date_of_first_use }}</dd>
+
+                        <dt class="col-sm-4">Revision Date</dt>
+                        <dd class="col-sm-8">{{ object.date_of_revision }}</dd>
+
+                        <dt class="col-sm-4">Next Revision Date</dt>
+                        <dd class="col-sm-8">{{ object.date_of_next_revision }}</dd>
+
+                        <dt class="col-sm-4">Verdict</dt>
+                        <dd class="col-sm-8">{{ object.get_verdict_display }}</dd>
+
+                        <dt class="col-sm-4">Notes</dt>
+                        <dd class="col-sm-8">{{ object.notes }}</dd>
+
+                        <dt class="col-sm-4">Created by User</dt>
+                        <dd class="col-sm-8">{{ object.created_by.username }}</dd>
+
+                        <dt class="col-sm-4">Updated On</dt>
+                        <dd class="col-sm-8">{{ object.updated }}</dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i> <!-- Ikona šipky zpět -->
+                    </button>
+                    <a href="{% url 'edit_revision_record' object.pk %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_revision_record' object.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

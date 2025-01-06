@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 # TODO udělat reset hesel
+# TODO da se provest regex nad databazi v Django?
 import os
 import sys
 from pathlib import Path
@@ -151,5 +152,5 @@ LOGIN_REDIRECT_URL = 'login_success'
 LOGOUT_REDIRECT_URL = 'home'
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR # os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
