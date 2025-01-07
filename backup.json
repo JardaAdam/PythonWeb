@@ -2176,7 +2176,7 @@
     "model": "revisions.standardppe",
     "pk": 1,
     "fields": {
-        "image": "static/standard_ppe/logo/en-341.jpg",
+        "image": "static/image/standard_ppe/logo/en-341.jpg",
         "code": "EN 341",
         "description": "Descenders, Slaňovací brzdy"
     }
@@ -2185,7 +2185,7 @@
     "model": "revisions.standardppe",
     "pk": 2,
     "fields": {
-        "image": "static/standard_ppe/logo/en-353.jpg",
+        "image": "static/image/standard_ppe/logo/en-353.jpg",
         "code": "EN 353-1, 2",
         "description": "Fall arresters, Pohyblivé zachycovače pádu"
     }
@@ -2194,7 +2194,7 @@
     "model": "revisions.standardppe",
     "pk": 3,
     "fields": {
-        "image": "static/standard_ppe/logo/en-354.jpg",
+        "image": "static/image/standard_ppe/logo/en-354.jpg",
         "code": "EN 354",
         "description": "Fasteners, Spojovací prostředky"
     }
@@ -2203,7 +2203,7 @@
     "model": "revisions.standardppe",
     "pk": 4,
     "fields": {
-        "image": "static/standard_ppe/logo/en-355.jpg",
+        "image": "static/image/standard_ppe/logo/en-355.jpg",
         "code": "EN 355",
         "description": "Fall absorbers, Tlumiče pádu"
     }
@@ -2212,7 +2212,7 @@
     "model": "revisions.standardppe",
     "pk": 5,
     "fields": {
-        "image": "static/standard_ppe/logo/en-360.jpg",
+        "image": "static/image/standard_ppe/logo/en-360.jpg",
         "code": "EN 360",
         "description": "Retractable fall arrester, Zatahovací zachycovače pádu"
     }
@@ -2221,7 +2221,7 @@
     "model": "revisions.standardppe",
     "pk": 6,
     "fields": {
-        "image": "static/standard_ppe/logo/en-361.jpg",
+        "image": "static/image/standard_ppe/logo/en-361.jpg",
         "code": "EN 361",
         "description": "Full body harnesses, Zachycovací postroje"
     }
@@ -2230,7 +2230,7 @@
     "model": "revisions.standardppe",
     "pk": 10,
     "fields": {
-        "image": "static/standard_ppe/logo/en-362.jpg",
+        "image": "static/image/standard_ppe/logo/en-362.jpg",
         "code": "EN 362",
         "description": "Conectors, Spojky"
     }
@@ -2239,7 +2239,7 @@
     "model": "revisions.standardppe",
     "pk": 11,
     "fields": {
-        "image": "static/standard_ppe/logo/en-813.jpg",
+        "image": "static/image/standard_ppe/logo/en-813.jpg",
         "code": "EN 813",
         "description": "Sit harnesses, Sedací postroje"
     }
@@ -2248,7 +2248,7 @@
     "model": "revisions.standardppe",
     "pk": 12,
     "fields": {
-        "image": "static/standard_ppe/logo/en-397.jpg",
+        "image": "static/image/standard_ppe/logo/en-397.jpg",
         "code": "EN 397",
         "description": "Industrial safety helmets, Průmyslové ochranné přilby"
     }
@@ -2257,7 +2257,7 @@
     "model": "revisions.standardppe",
     "pk": 13,
     "fields": {
-        "image": "static/standard_ppe/logo/en-358.jpg",
+        "image": "static/image/standard_ppe/logo/en-358.jpg",
         "code": "EN 358",
         "description": "Work positioning systems, Pracovní polohovací systémy"
     }
@@ -2266,7 +2266,7 @@
     "model": "revisions.standardppe",
     "pk": 14,
     "fields": {
-        "image": "static/standard_ppe/logo/en-795.jpg",
+        "image": "static/image/standard_ppe/logo/en-795.jpg",
         "code": "EN 795, EN 795/A1",
         "description": "Anchor devices, Kotvící zařízení"
     }
@@ -2275,7 +2275,7 @@
     "model": "revisions.standardppe",
     "pk": 15,
     "fields": {
-        "image": "static/standard_ppe/logo/en-1496.jpg",
+        "image": "static/image/standard_ppe/logo/en-1496.jpg",
         "code": "EN 1496",
         "description": "Rescue lifting devices, záchranné zdvihací zařízení"
     }
@@ -2284,7 +2284,7 @@
     "model": "revisions.standardppe",
     "pk": 16,
     "fields": {
-        "image": "static/standard_ppe/logo/en-388.jpg",
+        "image": "static/image/standard_ppe/logo/en-388.jpg",
         "code": "EN 388",
         "description": "Protection gloves against mechanical risks, Ochranné rukavice proti mechanickým rizikům"
     }
@@ -2293,7 +2293,7 @@
     "model": "revisions.standardppe",
     "pk": 17,
     "fields": {
-        "image": "static/standard_ppe/logo/en-564.jpg",
+        "image": "static/image/standard_ppe/logo/en-564.jpg",
         "code": "EN 564",
         "description": "Accessory cords, Pomocné šňůry"
     }
@@ -2302,7 +2302,7 @@
     "model": "revisions.standardppe",
     "pk": 18,
     "fields": {
-        "image": "static/standard_ppe/logo/en-566.jpg",
+        "image": "static/image/standard_ppe/logo/en-566.jpg",
         "code": "EN 566",
         "description": "Mountaineering equipment Slings, Horolezecká výzbroj Smyčky"
     }
@@ -2311,7 +2311,7 @@
     "model": "revisions.standardppe",
     "pk": 19,
     "fields": {
-        "image": "static/standard_ppe/logo/en-567.jpg",
+        "image": "static/image/standard_ppe/logo/en-567.jpg",
         "code": "EN 567",
         "description": "Mountaineering equipment\r\nRope clamps, Horolezecká výzbroj\r\nLanové svěrky, blokanty"
     }
@@ -2320,7 +2320,7 @@
     "model": "revisions.standardppe",
     "pk": 20,
     "fields": {
-        "image": "static/standard_ppe/logo/en-892.jpg",
+        "image": "static/image/standard_ppe/logo/en-892.jpg",
         "code": "EN 892",
         "description": "Mountaineering equipment\r\nDynamic (strech) ropes, Horolezecká výzbroj Dynamická (průtažná) horolezecká lana"
     }
@@ -2329,7 +2329,7 @@
     "model": "revisions.standardppe",
     "pk": 21,
     "fields": {
-        "image": "static/standard_ppe/logo/en-959.jpg",
+        "image": "static/image/standard_ppe/logo/en-959.jpg",
         "code": "EN 959",
         "description": "Mountaineering equipment\r\nRock anchors, Horolezecká výzbroj Zavrtávané skoby (borháky, nýty)"
     }
@@ -2338,7 +2338,7 @@
     "model": "revisions.standardppe",
     "pk": 22,
     "fields": {
-        "image": "static/standard_ppe/logo/en-1497.jpg",
+        "image": "static/image/standard_ppe/logo/en-1497.jpg",
         "code": "EN 1497",
         "description": "Rescue harnesses, Záchranné postroje"
     }
@@ -2347,7 +2347,7 @@
     "model": "revisions.standardppe",
     "pk": 23,
     "fields": {
-        "image": "static/standard_ppe/logo/en-1498.jpg",
+        "image": "static/image/standard_ppe/logo/en-1498.jpg",
         "code": "EN 1498",
         "description": "Rescue loops, Záchranné smyčky"
     }
@@ -2356,7 +2356,7 @@
     "model": "revisions.standardppe",
     "pk": 24,
     "fields": {
-        "image": "static/standard_ppe/logo/en-1808.jpg",
+        "image": "static/image/standard_ppe/logo/en-1808.jpg",
         "code": "EN 1808",
         "description": "Safety requirements for suspended access equipment, Bezpečnostní požadavky na závěsné plošiny"
     }
@@ -2365,7 +2365,7 @@
     "model": "revisions.standardppe",
     "pk": 25,
     "fields": {
-        "image": "static/standard_ppe/logo/en-1891.jpg",
+        "image": "static/image/standard_ppe/logo/en-1891.jpg",
         "code": "EN 1891",
         "description": "Low stretch kernmantel ropes, Nízko průtažná lana s opleteným jádrem"
     }
@@ -2374,7 +2374,7 @@
     "model": "revisions.standardppe",
     "pk": 26,
     "fields": {
-        "image": "static/standard_ppe/logo/en-12275.jpg",
+        "image": "static/image/standard_ppe/logo/en-12275.jpg",
         "code": "EN 12275",
         "description": "Mountaineering equipment Connectors, Horolezecká výzbroj Karabiny"
     }
@@ -2383,7 +2383,7 @@
     "model": "revisions.standardppe",
     "pk": 27,
     "fields": {
-        "image": "static/standard_ppe/logo/en-12277.jpg",
+        "image": "static/image/standard_ppe/logo/en-12277.jpg",
         "code": "EN 12277",
         "description": "Mountaineering equipment Harnesses, Horolezecká výzbroj Navazovací úvazky (sedáky)"
     }
@@ -2392,7 +2392,7 @@
     "model": "revisions.standardppe",
     "pk": 28,
     "fields": {
-        "image": "static/standard_ppe/logo/en-12278.jpg",
+        "image": "static/image/standard_ppe/logo/en-12278.jpg",
         "code": "EN 12278",
         "description": "Mountaineering equipment Pulleys, Horolezecká výzbroj Kladky"
     }
@@ -2401,7 +2401,7 @@
     "model": "revisions.standardppe",
     "pk": 29,
     "fields": {
-        "image": "static/standard_ppe/logo/en-12492.jpg",
+        "image": "static/image/standard_ppe/logo/en-12492.jpg",
         "code": "EN 12492",
         "description": "Mountaineering equipment Helmets for mountaineers, Horolezecká výstroj Přilby pro horolezce"
     }
@@ -2410,7 +2410,7 @@
     "model": "revisions.standardppe",
     "pk": 30,
     "fields": {
-        "image": "static/standard_ppe/logo/en-12841.jpg",
+        "image": "static/image/standard_ppe/logo/en-12841.jpg",
         "code": "EN 12841",
         "description": "Descender device for rope access system and rope adjustment devices, Systémy lanového přístupu, nastavovací zařízení lana"
     }
@@ -2419,7 +2419,7 @@
     "model": "revisions.standardppe",
     "pk": 31,
     "fields": {
-        "image": "static/standard_ppe/logo/en-15151.jpg",
+        "image": "static/image/standard_ppe/logo/en-15151.jpg",
         "code": "EN 15151-2",
         "description": "Mountaineering equipment Braking devices, Horolezecká výzbroj Brzdicí (jisticí) prostředky s manuálním ovládáním brzdění"
     }
@@ -2428,7 +2428,7 @@
     "model": "revisions.standardppe",
     "pk": 32,
     "fields": {
-        "image": "static/standard_ppe/logo/z3591.jpg",
+        "image": "static/image/standard_ppe/logo/z3591.jpg",
         "code": "ANSI Z359.1",
         "description": "Safety Requirements for Personal Fall Arrest Systems, Subsystems and Components, Bezpečnostní požadavky pro osobní ochranné prostředky pro zachycení pádu, jejich části a komponenty."
     }
@@ -2437,7 +2437,7 @@
     "model": "revisions.standardppe",
     "pk": 33,
     "fields": {
-        "image": "static/standard_ppe/logo/ts-16415.jpg",
+        "image": "static/image/standard_ppe/logo/ts-16415.jpg",
         "code": "CEN/TS 16415",
         "description": "Recommendations for anchor devices for use by more than one person simultaneously, Prostředky ochrany osob proti pádu – Kotvicí zařízení – Doporučení pro kotvicí zařízení v případě použití více než jednou osobou současně."
     }
@@ -2446,7 +2446,7 @@
     "model": "revisions.standardppe",
     "pk": 34,
     "fields": {
-        "image": "static/standard_ppe/logo/npfa-2.jpg",
+        "image": "static/image/standard_ppe/logo/npfa-2.jpg",
         "code": "NFPA Class II",
         "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and may be utilized for  a maximum of a two-person load, Podle NFPA 1983 je Class II definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen nebo pod hýždě, a mohl být využit pro maximální zatížení pro dvě osoby."
     }
@@ -2455,7 +2455,7 @@
     "model": "revisions.standardppe",
     "pk": 35,
     "fields": {
-        "image": "static/standard_ppe/logo/npfa-3.jpg",
+        "image": "static/image/standard_ppe/logo/npfa-3.jpg",
         "code": "NFPA Class III",
         "description": "Defined by NFPA 1983 as being designed to fit around the waist and thighs or under the buttocks and over both shoulders, rated for as maximum of a two-person load and is designed to prevent inverting, Podle NFPA 1983 je Class III definována jako takové konstrukční navržení, aby se výrobek vešel kolem pasu a stehen, nebo pod hýždě, a přes obě ramena, s maximálním zatížením dvou osob a je navržen tak, aby zabránil převrácení."
     }

@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, \
-    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint, CASCADE
+    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
 from accounts.models import CustomUser, ItemGroup
 from config import settings
