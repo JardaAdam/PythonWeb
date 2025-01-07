@@ -7,7 +7,7 @@ from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT
     TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
 from accounts.models import CustomUser, ItemGroup
-from config import settings
+from django.conf import settings
 
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.

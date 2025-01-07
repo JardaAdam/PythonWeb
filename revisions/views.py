@@ -295,7 +295,7 @@ class RevisionRecordUpdateView(UpdateView):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('revision_records_list')
+    success_url = reverse_lazy('revision_record_list')
 
 
 class RevisionRecordDeleteView(DeleteView):

@@ -4,7 +4,7 @@ from django.db.models import CASCADE, IntegerField, DateTimeField, BooleanField,
 from django.db.models import Model, ForeignKey, DecimalField
 
 from accounts.models import CustomUser
-from config import settings
+from django.conf import settings
 from revisions.models import TypeOfPpe
 
 """PPE = PersonalProtectiveEquipment"""
