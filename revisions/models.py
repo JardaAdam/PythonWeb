@@ -203,8 +203,9 @@ class RevisionRecord(Model):
         current_date = timezone.now().date()
 
         # Zjistit max. použití a výrobu datum
-        max_use_date = (self.date_of_first_use or self.date_manufacture) + timedelta(days=365 * lifetime_use_years)
         max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
+        max_use_date = (self.date_of_first_use or self.date_manufacture) + timedelta(days=365 * lifetime_use_years)
+
 
         # Kontrola přesažení životnosti
         if current_date > max_manufacture_date:

@@ -317,7 +317,7 @@ class RevisionsModelsTest(TestCase):
 
     def test_lifetime_restriction_exceeded(self):
         """Ensure validation error is raised when lifetime from manufacture is exceeded."""
-        date_manufacture = datetime.date.today() - timedelta(
+        date_manufacture = timezone.now().date() - timedelta(
             days=(self.lifetime_of_ppe.lifetime_manufacture_years * 365 + 1))
 
         # Set date_of_first_use to be the same as manufacture date to test manufacture constraint alone
@@ -344,8 +344,8 @@ class RevisionsModelsTest(TestCase):
         # lifetime_manufacture_years = self.lifetime_of_ppe.lifetime_manufacture_years  # e.g., 15 years
 
         # Setting up dates
-        date_manufacture = datetime.date.today() - timedelta(days=(13 * 365))  # Manufactured 13 years ago
-        date_of_first_use = datetime.date.today() - timedelta(days=(11 * 365))  # First used 11 years ago
+        date_manufacture = timezone.now().date() - timedelta(days=(13 * 365))  # Manufactured 13 years ago
+        date_of_first_use = timezone.now().date() - timedelta(days=(11 * 365))  # First used 11 years ago
 
         revision_record = RevisionRecord(
             revision_data=self.revision_data,
@@ -369,7 +369,7 @@ class RevisionsModelsTest(TestCase):
         between the current and the next revision."""
 
         # Set manufacturing and use dates to trigger expiration warning
-        current_date = datetime.date.today()
+        current_date = timezone.now().date()
         date_manufacture = current_date - timedelta(days=11 * 365)  # Manufacturing 11 years ago
         date_of_first_use = current_date - timedelta(days=9 * 365 + 185)  # First used 9 years and 180 days ago
 
@@ -403,7 +403,7 @@ class RevisionsModelsTest(TestCase):
         production date falls between the current and the next revision."""
 
         # Set manufacturing and use dates to trigger expiration warning
-        current_date = datetime.date.today()
+        current_date = timezone.now().date()
         date_manufacture = current_date - timedelta(days=14 * 365 + 180)  # Manufacturing 14 years and 180 days ago
         date_of_first_use = current_date - timedelta(days=8 * 365)  # First used 8 years ago
 
