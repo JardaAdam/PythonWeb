@@ -1,0 +1,59 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}Standards PPE List{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <a href="{% url 'add_standard_ppe' %}" class="btn btn-primary mb-3">Add Standard PPE</a>
+        </div>
+        <div class="col-12 col-md-6 text-center">
+            <h2>List of Standards PPE</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <form method="get" class="d-flex align-items-center">
+                <label for="standard-search" class="me-2">Search:</label>
+                <input type="text" id="standard-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </div>
+    </div>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Code</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for standard in standards_ppe %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ standard.code }}</td>
+                <td>{{ standard.description|truncatewords:10 }}</td>
+                <td>
+                    {% if standard.image %}
+                        <img src="{{ standard.image.url }}" alt="Standard Image" style="width:100px;height:auto;">
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'standard_ppe_detail' standard.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'edit_standard_ppe' standard.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_standard_ppe' standard.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No standard PPE found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

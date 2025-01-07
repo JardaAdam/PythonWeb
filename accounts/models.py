@@ -4,7 +4,7 @@ from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeFie
 
 from django.core.validators import RegexValidator
 
-from config import settings
+from django.conf import settings
 
 # TODO hodilo by se sem jeste dodat nejake image do modelu
 class Country(Model):

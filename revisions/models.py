@@ -1,18 +1,20 @@
+import os
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, \
-    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint, CASCADE
+    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
 from accounts.models import CustomUser, ItemGroup
-from config import settings
+from django.conf import settings
 
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.
 # TODO doresit spravny upload to pro obrazky ktere budou statickymi soubory aplikace
 # TODO vyřešit mazani obrazku společně se zaznamem
+# TODO ukladani created by u vsech polozek na urovni databaze s udaji o tom kdy
 class MaterialType(Model):
     """rozdeluje polozky do jednotlivich skupin podle materialu"""
     symbol = ImageField(upload_to='static/image/material/', null=True, blank=True)
@@ -30,7 +32,6 @@ class MaterialType(Model):
 
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
-    #FIXME upravit cestu kde budou ulozeny obrazky ( chci je do Static )
     image = ImageField(upload_to='static/image/standard_ppe/logo/', blank=True, null=True)
     code = CharField(max_length=32, unique=True, blank=False, null=False)  # Kód normy (např. EN 362)
     description = TextField(blank=False, null=False)  # Popis normy
@@ -48,6 +49,7 @@ class StandardPpe(Model):
 class Manufacturer(Model):
     """Uchovává základní informace o výrobci."""
     logo = ImageField(upload_to='static/image/manufacturer/logo/', blank=True, null=True)  # logo vyrobce
+    # TODO name musi byt unigue unique=True
     name = CharField(max_length=32, blank=False, null=False)
 
 
@@ -160,7 +162,7 @@ class RevisionRecord(Model):
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
-
+# TODO doresit duplicitu na zaklade serial_number, owner, item_group, revision_data
     def __str__(self):
         manufacturer_name = self.revision_data.lifetime_of_ppe.manufacturer.name if (
             self.revision_data.lifetime_of_ppe.manufacturer) else "Neznámý výrobce"
@@ -180,11 +182,11 @@ class RevisionRecord(Model):
 
     def clean(self):
         if not self.revision_data_id:
-            raise ValidationError("Data revize nemohou být prázdná.")
+            raise ValidationError("The revision data cannot be empty")
 
         # Zkontrolujeme, zda date_of_first_use >= date_manufacture
         if self.date_of_first_use is not None and self.date_of_first_use < self.date_manufacture:
-            raise ValidationError("Datum prvního použití nemůže být dříve než datum výroby.")
+            raise ValidationError("The date of first use cannot be earlier than the date of manufacture")
 
         # Získání hodnot životnosti z LifetimeOfPpe
         lifetime_info = self.revision_data.lifetime_of_ppe
@@ -198,15 +200,16 @@ class RevisionRecord(Model):
         max_manufacture_date = self.date_manufacture + timedelta(days=365 * lifetime_manufacture_years)
 
         # Kontrola přesažení životnosti
+        if current_date > max_manufacture_date:
+            self.verdict = self.VERDICT_RETIRE
+            raise ValidationError(
+                "The item has exceeded its lifetime from manufacture")
+
         if current_date > max_use_date:
             self.verdict = self.VERDICT_RETIRE
             raise ValidationError(
                 "The item has exceeded its lifetime from the first use according to manufacturer guidelines.")
 
-        if current_date > max_manufacture_date:
-            self.verdict = self.VERDICT_RETIRE
-            raise ValidationError(
-                "The item has exceeded its lifetime from manufacture according to manufacturer guidelines.")
 
         # Zbývající dny do konce životnosti
         days_until_use_expiry = (max_use_date - current_date).days

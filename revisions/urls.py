@@ -3,6 +3,13 @@ from .views import *
 
 urlpatterns = [
     path('', some_view, name='revision_home'),
+
+    path('standards_ppe/', StandardPpeListView.as_view(), name='standard_ppe_list'),
+    path('standard_ppe/<int:pk>/', StandardPpeDetailView.as_view(), name='standard_ppe_detail'),
+    path('standard_ppe/add/', StandardPpeCreateView.as_view(), name='add_standard_ppe'),
+    path('standard_ppe/edit/<int:pk>/', StandardPpeUpdateView.as_view(), name='edit_standard_ppe'),
+    path('standard_ppe/delete/<int:pk>', StandardPpeDeleteView.as_view(), name='delete_standard_ppe'),
+
     path('manufacturers/', ManufacturerListView.as_view(), name='manufacturer_list'),
     path('manufacturer/<int:pk>/', ManufacturerDetailView.as_view(), name='manufacturer_detail'),
     path('manufacturer/add/', ManufacturerCreateView.as_view(), name='add_manufacturer'),
