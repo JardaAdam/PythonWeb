@@ -49,8 +49,7 @@ class StandardPpe(Model):
 class Manufacturer(Model):
     """Uchovává základní informace o výrobci."""
     logo = ImageField(upload_to='static/image/manufacturer/logo/', blank=True, null=True)  # logo vyrobce
-    # TODO name musi byt unigue unique=True
-    name = CharField(max_length=32, blank=False, null=False)
+    name = CharField(max_length=32,unique=True, blank=False, null=False)
 
 
     def __str__(self):
@@ -162,7 +161,15 @@ class RevisionRecord(Model):
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
 
-# TODO doresit duplicitu na zaklade serial_number, owner, item_group, revision_data
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['serial_number', 'owner', 'item_group', 'revision_data'],
+                name='unique_serial_owner_group_revision_record'
+            )
+        ]
+
     def __str__(self):
         manufacturer_name = self.revision_data.lifetime_of_ppe.manufacturer.name if (
             self.revision_data.lifetime_of_ppe.manufacturer) else "Neznámý výrobce"
