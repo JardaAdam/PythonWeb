@@ -1,12 +1,21 @@
 {% extends "revision_base.html" %}
 
-{% block revision_content %}
-<form method="post">
-    {% csrf_token %}
-    <!-- {% csrf_token %} nesmí chybět, je to bezpečnostní opatření pro ukládání do databáze pomocí tokenu
-         tento token má omezenou délku platnosti, takže při delším formuláři ošetřit data proti ztrátě meziukládáním -->
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <button type="button" class="btn btn-secondary" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
-    <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
-</form>
-{% endblock %}
+   {% block revision_content %}
+       <form method="post">
+           {% csrf_token %}
+           
+           <!-- Zobrazí chybovou zprávu, pokud existuje -->
+           {% if error %}
+               <div class="alert alert-danger" role="alert">
+                   {{ error }}
+               </div>
+           {% endif %}
+           
+           <p>Are you sure you want to delete "{{ object }}"?</p>
+           
+           <button type="button" class="btn btn-secondary" onclick="history.back()">
+               <i class="fas fa-arrow-left"></i> Back</button>
+           <button type="submit" class="btn btn-danger">
+               <i class="fas fa-trash-alt"></i> Delete</button>
+       </form>
+   {% endblock %}

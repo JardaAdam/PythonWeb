@@ -22,17 +22,19 @@ urlpatterns = [
     path('lifetime_of_ppe/edit/<int:pk>/', LifetimeOfPpeUpdateView.as_view(), name='edit_lifetime_of_ppe'),
     path('lifetime_of_ppe/delete/<int:pk>', LifetimeOfPpeDeleteView.as_view(), name='delete_lifetime_of_ppe'),
 
+    path('revision_data/', RevisionDataListView.as_view(), name='revision_data_list'),
+    path('revision/<int:pk>/', RevisionDataDetailView.as_view(), name='revision_data_detail'),
+    path('revision_data/add/', RevisionDataCreateView.as_view(), name='add_revision_data'),
+    path('revision_data/edit/<int:pk>/', RevisionDataUpdateView.as_view(), name='edit_revision_data'),
+    path('revision_data/delete/<int:pk>/', RevisionDataDeleteView.as_view(), name='delete_revision_data'),
+
     path('records/', RevisionRecordListView.as_view(), name='revision_record_list'),
     path('record/<int:pk>/', RevisionRecordDetailView.as_view(), name='revision_record_detail'),
     path('record/add/', RevisionRecordCreateView.as_view(), name='add_revision_record'),
     path('record/edit/<int:pk>/', RevisionRecordUpdateView.as_view(), name='edit_revision_record'),
     path('record/delete/<int:pk>/', RevisionRecordDeleteView.as_view(), name='delete_revision_record'),
 
-    path('revision_data/', RevisionDataListView.as_view(), name='revision_data_list'),
-    path('revision/<int:pk>/', RevisionDataDetailView.as_view(), name='revision_data_detail'),
-    path('revision_data/add/', RevisionDataCreateView.as_view(), name='add_revision_data'),
-    path('revision_data/edit/<int:pk>/', RevisionDataUpdateView.as_view(), name='edit_revision_data'),
-    path('revision_data/delete/<int:pk>/', RevisionDataDeleteView.as_view(), name='delete_revision_data'),
+
 
 
 

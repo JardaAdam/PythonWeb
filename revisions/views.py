@@ -1,4 +1,5 @@
-from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q, ProtectedError
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -47,7 +48,7 @@ class StandardPpeDetailView(DetailView):
     context_object_name = 'standard_ppe'
 
 
-class StandardPpeCreateView(CreateView):
+class StandardPpeCreateView(LoginRequiredMixin,CreateView):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
@@ -62,14 +63,14 @@ class StandardPpeCreateView(CreateView):
         return redirect(next_url)
 
 
-class StandardPpeUpdateView(UpdateView):
+class StandardPpeUpdateView(LoginRequiredMixin,UpdateView):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('standard_ppe_list')
 
 
-class StandardPpeDeleteView(DetailView):
+class StandardPpeDeleteView(LoginRequiredMixin,DetailView):
     model = StandardPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('standard_ppe_list')
@@ -100,7 +101,7 @@ class ManufacturerDetailView(DetailView):
     context_object_name = 'manufacturer'
 
 
-class ManufacturerCreateView(CreateView):
+class ManufacturerCreateView(LoginRequiredMixin,CreateView):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
@@ -115,18 +116,28 @@ class ManufacturerCreateView(CreateView):
         return redirect(next_url)
 
 
-class ManufacturerUpdateView(UpdateView):
+class ManufacturerUpdateView(LoginRequiredMixin,UpdateView):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('manufacturer_list')
 
 
-class ManufacturerDeleteView(DeleteView):
+class ManufacturerDeleteView(LoginRequiredMixin,DeleteView):
     model = Manufacturer
     template_name = 'confirm_delete.html'
-    success_url = reverse_lazy('manufacturer_list')
-
+    success_url = reverse_lazy('delete_manufacturer')
+    #FixME doresit hlaskovou template pro upozorneni ze se nade smazat
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        try:
+            self.object.delete()
+            return redirect(self.success_url)
+        except ProtectedError:
+            return render(request, self.template_name, {
+                'object': self.object,
+                'error': "Cannot delete manufacturer because it is referenced by lifetime records."
+            })
 
 """Lifetime Of Ppe"""
 
@@ -156,11 +167,11 @@ class LifetimeOfPpeDetailView(DetailView):
     context_object_name = 'lifetime_of_ppe'
 
 
-class LifetimeOfPpeCreateView(CreateView):
+class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateView):
     model = LifetimeOfPpe
     form_class = LifetimeOfPpeForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('lifetime_of_ppe_list')
+    success_url = reverse_lazy('lifetimes_of_ppe_list')
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -171,14 +182,14 @@ class LifetimeOfPpeCreateView(CreateView):
         return redirect(next_url)
 
 
-class LifetimeOfPpeUpdateView(UpdateView):
+class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateView):
     model = LifetimeOfPpe
     form_class = LifetimeOfPpeForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('lifetimes_of_ppe_list')
 
 
-class LifetimeOfPpeDeleteView(DeleteView):
+class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteView):
     model = LifetimeOfPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('lifetimes_of_ppe_list')
@@ -214,29 +225,26 @@ class RevisionDataDetailView(DetailView):
     context_object_name = 'revision_data'
 
 
-class RevisionDataCreateView(CreateView):
+class RevisionDataCreateView(LoginRequiredMixin,CreateView):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('add_revision_data')
+    success_url = reverse_lazy('revision_data_list')
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        # Získání URL z parametru 'next'
-        next_url = self.request.GET.get('next', self.success_url)
-        # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
-
-        return redirect(next_url)
+        messages.success(self.request, "Item successfully uploaded.")
+        return response
 
 
-class RevisionDataUpdateView(UpdateView):
+class RevisionDataUpdateView(LoginRequiredMixin,UpdateView):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('revision_data_list')
 
 
-class RevisionDataDeleteView(DeleteView):
+class RevisionDataDeleteView(LoginRequiredMixin,DeleteView):
     model = RevisionData
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_data_list')
@@ -245,7 +253,7 @@ class RevisionDataDeleteView(DeleteView):
 """ Revision records"""
 
 
-class RevisionRecordListView(ListView):
+class RevisionRecordListView(LoginRequiredMixin,ListView):
     model = RevisionRecord
     template_name = 'revision_record_list.html'
     context_object_name = 'revision_records'
@@ -265,14 +273,15 @@ class RevisionRecordListView(ListView):
         return queryset
 
 
-class RevisionRecordDetailView(DetailView):
+class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
     model = RevisionRecord
     template_name = 'revision_record_detail.html'
     context_object_name = 'revision_record'
 
 
 # TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
-class RevisionRecordCreateView(CreateView):
+
+class RevisionRecordCreateView(LoginRequiredMixin,CreateView):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
@@ -291,14 +300,14 @@ class RevisionRecordCreateView(CreateView):
         return context
 
 
-class RevisionRecordUpdateView(UpdateView):
+class RevisionRecordUpdateView(LoginRequiredMixin,UpdateView):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('revision_record_list')
 
 
-class RevisionRecordDeleteView(DeleteView):
+class RevisionRecordDeleteView(LoginRequiredMixin,DeleteView):
     model = RevisionRecord
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_records_list')

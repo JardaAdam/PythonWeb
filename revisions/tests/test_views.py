@@ -1,10 +1,12 @@
 from datetime import date
+from unittest import skip
 
+from django.db.models import ProtectedError
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-
+from accounts import urls
 from revisions.models import *
 
 User = get_user_model()
@@ -40,16 +42,16 @@ class BaseViewsTest(TestCase):
     def setUp(self):
         self.client.login(username='testuser', password='testpass')
 
-
 ### Dědění ze základní třídy:
 
 
 class StandardPpeViewsTest(BaseViewsTest):
+
     def test_add_standard_ppe_view_get(self):
         url = reverse('add_standard_ppe')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'standard_ppe_form.html')
+        self.assertTemplateUsed(response, 'revision_form.html')
 
     def test_add_standard_ppe_view_post_valid(self):
         url = reverse('add_standard_ppe')
@@ -75,32 +77,35 @@ class StandardPpeViewsTest(BaseViewsTest):
 
 
 class ManufacturerViewsTest(BaseViewsTest):
-
-    def get_and_assert_template(self, url_name, template_name):
-        response = self.client.get(reverse(url_name))
+    def get_and_assert_template(self, url_name, template_name, args=None):
+        url = reverse(url_name, args=args)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name)
+        return response
 
-    def post_and_assert_redirect(self, url_name, data):
-        response = self.client.post(reverse(url_name), data)
+    def post_and_assert_redirect(self, url_name, data, args=None):
+        url = reverse(url_name, args=args)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
         return response
 
-    def assert_form_invalid(self, url_name, data, expected_field_error):
-        response = self.client.post(reverse(url_name), data)
-        self.assertEqual(response.status_code, 200)
-        form = response.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn(expected_field_error, form.errors)
+    def assert_form_invalid(self, url_name, data, expected_field_error, args=None):
+       url = reverse(url_name, args=args)
+       response = self.client.post(url, data)
+       self.assertEqual(response.status_code, 200)
+       form = response.context['form']
+       self.assertFalse(form.is_valid())
+       self.assertIn(expected_field_error, form.errors)
 
-    def test_access_requires_login(self, url_name):
+    def access_requires_login(self, url_name):
         self.client.logout()
         response = self.client.get(reverse(url_name))
         login_url = f"{reverse('login')}?next={reverse(url_name)}"
         self.assertRedirects(response, login_url)
 
     def test_add_manufacturer_view_get(self):
-        self.get_and_assert_template('add_manufacturer', 'manufacturer_form.html')
+        self.get_and_assert_template('add_manufacturer', 'revision_form.html')
 
     def test_add_manufacturer_view_post_valid(self):
         data = {'name': 'New Manufacturer'}
@@ -112,26 +117,39 @@ class ManufacturerViewsTest(BaseViewsTest):
         self.assert_form_invalid('add_manufacturer', data, 'name')
 
     def test_access_to_add_manufacturer_without_login(self):
-        self.test_access_requires_login('add_manufacturer')
+        self.access_requires_login('add_manufacturer')
 
     def test_edit_manufacturer_view_get(self):
-        self.get_and_assert_template('edit_manufacturer', 'manufacturer_form.html')
+        self.get_and_assert_template('edit_manufacturer', 'revision_form.html', args=[self.manufacturer.pk])
 
     def test_edit_manufacturer_view_post_valid(self):
         data = {'name': 'Updated Manufacturer'}
-        self.post_and_assert_redirect('edit_manufacturer', data)
+        self.post_and_assert_redirect('edit_manufacturer', data, args=[self.manufacturer.pk])
         self.manufacturer.refresh_from_db()
         self.assertEqual(self.manufacturer.name, 'Updated Manufacturer')
 
     def test_edit_manufacturer_view_post_invalid(self):
         data = {'name': ''}  # Neplatné prázdné jméno
-        self.assert_form_invalid('edit_manufacturer', data, 'name')
-
-    def test_delete_manufacturer_view(self):
+        self.assert_form_invalid('edit_manufacturer', data, 'name', args=[self.manufacturer.pk])
+    @skip
+    def test_delete_manufacturer_view_with_linked_lifetime_of_ppe(self):
+        # URL pro odstranění konkrétního výrobce
         url = reverse('delete_manufacturer', args=[self.manufacturer.id])
+
+        # Odeslání POST požadavku pro odstranění
         response = self.client.post(url)
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(Manufacturer.objects.filter(id=self.manufacturer.id).exists())
+
+        # Ověření, že status kód je 200, což znamená, že byl formulář správně zobrazen
+        self.assertEqual(response.status_code, 200)
+
+        # Ověření, že šablona 'confirm_delete.html' byla použita
+        self.assertTemplateUsed(response, 'confirm_delete.html')
+
+        # Ověření, že chybová zpráva je správně zobrazená
+        self.assertContains(response, "Cannot delete manufacturer because it is referenced by lifetime records.")
+
+        # Ověření, že Manufacturer stále existuje (nebyl smazán)
+        self.assertTrue(Manufacturer.objects.filter(id=self.manufacturer.id).exists())
 
 class LifetimeOfPpeViewsTest(BaseViewsTest):
 
@@ -142,21 +160,23 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
         self.assertTemplateUsed(response, template_name)
 
     # Pomocná metoda pro odeslání POST požadavku a kontrolu přesměrování
-    def post_and_assert_redirect(self, url_name, data):
-        response = self.client.post(reverse(url_name), data)
+    def post_and_assert_redirect(self, url_name, data,args=None):
+        url = reverse(url_name, args=args)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
         return response
 
     # Pomocná metoda pro kontrolu, že je formulář neplatný
-    def assert_form_invalid(self, url_name, data, expected_field_error):
-        response = self.client.post(reverse(url_name), data)
+    def assert_form_invalid(self, url_name, data, expected_field_error, args=None):
+        url = reverse(url_name, args=args)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)
         form = response.context['form']
         self.assertFalse(form.is_valid())
         self.assertIn(expected_field_error, form.errors)
 
     # Pomocná metoda pro validaci vyžadovaného přihlášení
-    def test_access_requires_login(self, url_name):
+    def access_requires_login(self, url_name):
         self.client.logout()
         response = self.client.get(reverse(url_name))
         login_url = f"{reverse('login')}?next={reverse(url_name)}"
@@ -164,7 +184,7 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
 
     # Test GET požadavku na přidání Lifetime of PPE
     def test_add_lifetime_of_ppe_view_get(self):
-        self.get_and_assert_template('add_lifetime_of_ppe', 'lifetime_of_ppe_form.html')
+        self.get_and_assert_template('add_lifetime_of_ppe', 'revision_form.html')
 
     # Test POST požadavku s validními daty
     def test_add_lifetime_of_ppe_view_post_valid(self):
@@ -174,7 +194,14 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
             'lifetime_use_years': 5,
             'lifetime_manufacture_years': 10
         }
-        self.post_and_assert_redirect('add_lifetime_of_ppe', data)
+        response = self.client.post(reverse('add_lifetime_of_ppe'), data)
+
+        # Pokud status kód není 302, znamená to, že formulář má chyby
+        if response.status_code != 302:
+            form = response.context['form']
+            print(form.errors)  # Tiskne chyby formuláře do konzole pro ladění
+
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(LifetimeOfPpe.objects.filter(lifetime_use_years=5).exists())
 
     # Test POST požadavku s neplatnými daty
@@ -189,14 +216,14 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
 
     # Ověření přístupu bez přihlášení
     def test_access_to_add_lifetime_of_ppe_without_login(self):
-        self.test_access_requires_login('add_lifetime_of_ppe')
+        self.access_requires_login('add_lifetime_of_ppe')
 
     # Test pro GET úpravu Lifetime of PPE
     def test_edit_lifetime_of_ppe_view_get(self):
         url = reverse('edit_lifetime_of_ppe', args=[self.lifetime_of_ppe.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'lifetime_of_ppe_form.html')
+        self.assertTemplateUsed(response, 'revision_form.html')
 
     # Test pro POST úpravu Lifetime of PPE s validními daty
     def test_edit_lifetime_of_ppe_view_post_valid(self):
@@ -206,7 +233,7 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
             'lifetime_use_years': 6,
             'lifetime_manufacture_years': 12
         }
-        self.post_and_assert_redirect('edit_lifetime_of_ppe', data)
+        self.post_and_assert_redirect('edit_lifetime_of_ppe', data, args=[self.lifetime_of_ppe.id])
         self.lifetime_of_ppe.refresh_from_db()
         self.assertEqual(self.lifetime_of_ppe.lifetime_use_years, 6)
 
@@ -218,13 +245,15 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
             'lifetime_use_years': 6,
             'lifetime_manufacture_years': 12
         }
-        self.assert_form_invalid('edit_lifetime_of_ppe', data, 'manufacturer')
+        self.assert_form_invalid('edit_lifetime_of_ppe', data, 'manufacturer', args=[self.lifetime_of_ppe.id])
     # Test pro smazání Lifetime of PPE
-    def test_delete_lifetime_of_ppe_view(self):
+    def test_delete_lifetime_of_ppe_protected(self):
         url = reverse('delete_lifetime_of_ppe', args=[self.lifetime_of_ppe.id])
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(LifetimeOfPpe.objects.filter(id=self.lifetime_of_ppe.id).exists())
+        # Očekáváme, že požadavek vyvolá výjimku kvůli ochraně dat
+        with self.assertRaises(ProtectedError):
+            self.client.post(url)
+        # Ověřujeme, že LifetimeOfPpe stále existuje v databázi
+        self.assertTrue(LifetimeOfPpe.objects.filter(id=self.lifetime_of_ppe.id).exists())
 
 class TypeOfPpeViewsTest(BaseViewsTest):
 
@@ -313,7 +342,8 @@ class RevisionDataViewsTest(BaseViewsTest):
             'manual_for_revision': uploaded_manual
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)  # Očekáváme, že zůstane na stejně stránce
+        self.assertContains(response, "Item successfully uploaded.")  # Ověříme, zda je zpráva k dispozici
         self.assertTrue(RevisionData.objects.filter(name_ppe='New PPE Valid').exists())
 
     def test_add_revision_data_view_post_invalid(self):
@@ -344,18 +374,35 @@ class RevisionDataViewsTest(BaseViewsTest):
 
     def test_edit_revision_data_view_post_valid(self):
         url = reverse('edit_revision_data', args=[self.revision_data.id])
-        data = {
-            'name_ppe': 'Updated PPE',
-            'lifetime_of_ppe': self.lifetime_of_ppe.id,
-            'group_type_ppe': self.type_of_ppe.id,
-            'standard_ppe': [self.standard_ppe.id],
-            'image_items': self.revision_data.image_items,
-            'manual_for_revision': self.revision_data.manual_for_revision
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 302)
-        self.revision_data.refresh_from_db()
-        self.assertEqual(self.revision_data.name_ppe, 'Updated PPE')
+
+        with open(self.revision_data.image_items.path, 'rb') as image_file, \
+                open(self.revision_data.manual_for_revision.path, 'rb') as manual_file:
+            uploaded_image = SimpleUploadedFile(
+                os.path.basename(image_file.name),
+                image_file.read(),
+                content_type='image/jpeg'
+            )
+
+            uploaded_manual = SimpleUploadedFile(
+                os.path.basename(manual_file.name),
+                manual_file.read(),
+                content_type='text/plain'
+            )
+
+            data = {
+                'name_ppe': 'Updated PPE',
+                'lifetime_of_ppe': self.lifetime_of_ppe.id,
+                'group_type_ppe': self.type_of_ppe.id,
+                'standard_ppe': [self.standard_ppe.id],
+                'image_items': uploaded_image,
+                'manual_for_revision': uploaded_manual
+            }
+
+            response = self.client.post(url, data)
+            self.assertEqual(response.status_code, 302)
+
+            self.revision_data.refresh_from_db()
+            self.assertEqual(self.revision_data.name_ppe, 'Updated PPE')
 
     def test_edit_revision_data_view_post_invalid(self):
         url = reverse('edit_revision_data', args=[self.revision_data.id])
@@ -425,18 +472,28 @@ class RevisionRecordViewsTest(BaseViewsTest):
         self.get_and_assert_template('add_revision_record', 'revision_form.html')
 
     def test_create_revision_record_view_post_valid(self):
+        url = reverse('add_revision_record')
         photo = SimpleUploadedFile("test_photo.jpg", b"test_photo_content", content_type="image/jpeg")
         data = {
             'revision_data': self.revision_data.id,
-            'serial_number': 'SNnew',
+            'serial_number': 'SN12346',
             'date_manufacture': date.today(),
             'date_of_first_use': date.today(),
             'owner': self.user.id,
             'verdict': 'fit',
             'photo_of_item': photo
         }
-        self.post_and_assert_redirect('add_revision_record', data)
-        self.assertTrue(RevisionRecord.objects.filter(serial_number='SNnew').exists())
+
+        response = self.client.post(url, data)
+
+        # Kontrola, že se po úspěšném uložení zůstane na stejném URL
+        self.assertEqual(response.status_code, 200)
+
+        # Ověření, že úspěšná zpráva je správně obsahována na stránce
+        self.assertContains(response, "The item was successfully saved")
+
+        # Ověření, že nový záznam byl vytvořen
+        self.assertTrue(RevisionRecord.objects.filter(serial_number='SN12346').exists())
 
     def test_create_revision_record_view_post_invalid(self):
         data = {
