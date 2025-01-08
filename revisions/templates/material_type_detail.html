@@ -11,6 +11,7 @@ Material Type Detail
             <h2 class="text-center">Material Type Detail</h2>
         </div>
     </div>
+
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="card">
@@ -19,17 +20,14 @@ Material Type Detail
                 </div>
                 <div class="card-body">
                     <dl class="row">
-                        <!-- Zde přidej detailní informace o material_type -->
                         <dt class="col-sm-4">Name</dt>
                         <dd class="col-sm-8">{{ object.name }}</dd>
-
                         {% if object.symbol %}
                         <dt class="col-sm-4">Symbol</dt>
                         <dd class="col-sm-8">
                             <img src="{{ object.symbol.url }}" alt="{{ object.name }}" class="img-fluid mb-3" style="max-width: 200px;">
                         </dd>
                         {% endif %}
-
                         <!-- Přidej další atributy MaterialType podle potřeby -->
                     </dl>
                 </div>

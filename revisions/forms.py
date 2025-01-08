@@ -2,8 +2,8 @@ from django.forms import ModelForm, Select
 from django.forms.widgets import SelectMultiple
 
 from .models import MaterialType, StandardPpe, Manufacturer, LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
-# TODO doplnit vyhledavaci widgets
 # TODO doplnit napovedu pro spravny format poli
+# TODO upravit format zadavani datumu
 # TODO clean metody pro zadavani dat
 
 
@@ -25,10 +25,16 @@ class ManufacturerForm(ModelForm):
         model = Manufacturer
         fields = '__all__'
 
+# TODO osetrit zadavani delky zivornosti v letech
 class LifetimeOfPpeForm(ModelForm):
     class Meta:
         model = LifetimeOfPpe
         fields = '__all__'
+        widgets = {
+            'manufacturer': Select(attrs={'class': 'form-control select2'}),
+            'material_type': Select(attrs={'class': 'form-control select2'}),
+
+        }
 
 class TypeOfPpeForm(ModelForm):
     class Meta:
@@ -45,6 +51,7 @@ class RevisionDataForm(ModelForm):
             'group_type_ppe': Select(attrs={'class': 'form-control select2'}),
             'standard_ppe': SelectMultiple(attrs={'class': 'form-control select2'}),
         }
+# TODO upravit format zadavani datumu
 
 class RevisionRecordForm(ModelForm):
     class Meta:
@@ -53,4 +60,6 @@ class RevisionRecordForm(ModelForm):
         exclude = ['created_by']
         widgets = {
             'revision_data': Select(attrs={'class': 'form-control select2'}),
+            'item_group': Select(attrs={'class': 'form-control select2'}),
+            'owner': Select(attrs={'class': 'form-control select2'}),
         }
