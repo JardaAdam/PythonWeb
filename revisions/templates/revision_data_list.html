@@ -46,7 +46,7 @@
                     {% endif %}
                 </td>
                 <td>{{ data.lifetime_of_ppe }}</td>
-                <td>{{ data.group_type_ppe }}</td>
+                <td>{{ data.type_of_ppe }}</td>
                 <td>{{ data.name_ppe }}</td>
                 <td>{% for standard in data.standard_ppe.all %}{{ standard }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
                 <td>

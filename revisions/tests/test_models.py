@@ -81,7 +81,7 @@ class RevisionsModelsTest(TestCase):
         cls.revision_data = RevisionData.objects.create(
             image_items=cls.revision_data_image,
             lifetime_of_ppe=cls.lifetime_of_ppe,
-            group_type_ppe=cls.type_of_ppe,
+            type_of_ppe=cls.type_of_ppe,
             name_ppe='Flash industry',
             manual_for_revision='manual.pdf'
         )
@@ -222,7 +222,7 @@ class RevisionsModelsTest(TestCase):
         with self.assertRaises(IntegrityError):
             RevisionData.objects.create(
                 lifetime_of_ppe=self.revision_data.lifetime_of_ppe,
-                group_type_ppe=self.revision_data.group_type_ppe,
+                type_of_ppe=self.revision_data.type_of_ppe,
                 name_ppe='Flash industry',  # Duplicate name_ppe
                 manual_for_revision=self.revision_data.manual_for_revision
             )

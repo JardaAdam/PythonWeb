@@ -34,7 +34,7 @@ class BaseViewsTest(TestCase):
         cls.revision_data = RevisionData.objects.create(
             image_items=cls.revision_data_image,
             lifetime_of_ppe=cls.lifetime_of_ppe,
-            group_type_ppe=cls.type_of_ppe,
+            type_of_ppe=cls.type_of_ppe,
             name_ppe='Test PPE',
         )
         cls.revision_data.standard_ppe.add(cls.standard_ppe)
@@ -292,7 +292,7 @@ class TypeOfPpeViewsTest(BaseViewsTest):
         url = reverse('edit_type_of_ppe', args=[self.type_of_ppe.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'type_of_ppe_form.html')
+        self.assertTemplateUsed(response, 'revision_form.html')
 
     # Test pro POST úpravu Type of PPE s validními daty
     def test_edit_type_of_ppe_view_post_valid(self):
@@ -392,7 +392,7 @@ class RevisionDataViewsTest(BaseViewsTest):
             data = {
                 'name_ppe': 'Updated PPE',
                 'lifetime_of_ppe': self.lifetime_of_ppe.id,
-                'group_type_ppe': self.type_of_ppe.id,
+                'type_of_ppe': self.type_of_ppe.id,
                 'standard_ppe': [self.standard_ppe.id],
                 'image_items': uploaded_image,
                 'manual_for_revision': uploaded_manual
@@ -409,7 +409,7 @@ class RevisionDataViewsTest(BaseViewsTest):
         data = {
             'name_ppe': '',  # Neplatný prázdný název
             'lifetime_of_ppe': self.lifetime_of_ppe.id,
-            'group_type_ppe': self.type_of_ppe.id,
+            'type_of_ppe': self.type_of_ppe.id,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 200)

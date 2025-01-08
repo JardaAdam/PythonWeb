@@ -12,7 +12,7 @@ from django.conf import settings
 
 '''PPE = PersonalProtectiveEquipment'''
 # Create your models here.
-# TODO doresit spravny upload to pro obrazky ktere budou statickymi soubory aplikace
+
 # TODO vyřešit mazani obrazku společně se zaznamem
 # TODO ukladani created by u vsech polozek na urovni databaze s udaji o tom kdy
 class MaterialType(Model):
@@ -105,7 +105,7 @@ class RevisionData(Model):
     image_items = ImageField(upload_to="static/image/revision_data/", default=None)
     lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_data',
                                  related_query_name='revision_data')
-    group_type_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
+    type_of_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
     name_ppe = CharField(max_length=32, null=False, blank=False)
     standard_ppe = ManyToManyField(StandardPpe, related_name='standard_ppe')  # Množství norem
     manual_for_revision = FileField(upload_to='static/revision_data/manuals/')
@@ -119,7 +119,7 @@ class RevisionData(Model):
         ]
 
     def __str__(self):
-        return f"{self.name_ppe} ({self.group_type_ppe}) by {self.lifetime_of_ppe.manufacturer.name}"
+        return f"{self.name_ppe} ({self.type_of_ppe}) by {self.lifetime_of_ppe.manufacturer.name}"
 
     def __repr__(self):
         return (f"RevisionData(id={self.id}, name_ppe='{self.name_ppe}', "
@@ -173,7 +173,7 @@ class RevisionRecord(Model):
     def __str__(self):
         manufacturer_name = self.revision_data.lifetime_of_ppe.manufacturer.name if (
             self.revision_data.lifetime_of_ppe.manufacturer) else "Neznámý výrobce"
-        group_type = self.revision_data.group_type_ppe.group_type_ppe if self.revision_data.group_type_ppe \
+        group_type = self.revision_data.type_of_ppe.group_type_ppe if self.revision_data.type_of_ppe \
             else "Neznámý typ"
         name_ppe = self.revision_data.name_ppe if self.revision_data.name_ppe else "Neznámé PPE"
 
