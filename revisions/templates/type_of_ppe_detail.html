@@ -1,0 +1,49 @@
+{% extends 'revision_base.html' %}
+
+{% block title %}
+Type of PPE Detail
+{% endblock %}
+
+{% block revision_content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Type of PPE Detail</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ object.group_type_ppe }}</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        {% if object.image %}
+                        <dt class="col-sm-4">Image</dt>
+                        <dd class="col-sm-8">
+                            <img src="{{ object.image.url }}" alt="{{ object.group_type_ppe }}" class="img-fluid mb-3" style="max-width: 200px;">
+                        </dd>
+                        {% endif %}
+                        <dt class="col-sm-4">Group Type</dt>
+                        <dd class="col-sm-8">{{ object.group_type_ppe }}</dd>
+                        <dt class="col-sm-4">Price (Kč)</dt>
+                        <dd class="col-sm-8">{{ object.price }}</dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <a href="{% url 'edit_type_of_ppe' object.pk %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'delete_type_of_ppe' object.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -23,6 +23,44 @@ def some_view(request):
 # TODO sjednotit guery sety a form_valid pokud to pujde
 # TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
 # TODO osetrit vypisi v situacich kdy nemuze uzivatel udelat nejaky ukon. ProtectedError atd.
+""" MaterialType """
+
+class MaterialTypeListView(ListView):
+    model = MaterialType
+    template_name = 'materials_type_list.html'
+    context_object_name = 'materials_type'
+    success_url = reverse_lazy('revision_home')
+
+class MaterialTypeDetailView(DetailView):
+    model = MaterialType
+    template_name = 'material_type_detail.html'
+    context_object_name = 'material_type'
+    success_url = reverse_lazy('materials_type_list')
+
+class MaterialTypeCreateView(LoginRequiredMixin, CreateView):
+    model = MaterialType
+    form_class = MaterialTypeForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('materials_type_list')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        form.save()
+        messages.success(self.request, "The item was successfully saved")
+        # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
+        return redirect(self.request.path)
+
+class MaterialTypeUpdateView(LoginRequiredMixin, UpdateView):
+    model = MaterialType
+    form_class = MaterialTypeForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('materials_type_list')
+
+class MaterialTypeDeleteView(LoginRequiredMixin, DeleteView):
+    model = MaterialType
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy('materials_type_list')
+
 """ Standart PPE"""
 
 
@@ -30,6 +68,7 @@ class StandardPpeListView(ListView):
     model = StandardPpe
     template_name = 'standard_ppe_list.html'
     context_object_name = 'standards_ppe'
+    success_url = reverse_lazy('revision_home')
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -46,34 +85,33 @@ class StandardPpeDetailView(DetailView):
     model = StandardPpe
     template_name = 'standard_ppe_detail.html'
     context_object_name = 'standard_ppe'
-
+    success_url = reverse_lazy('standards_ppe_list')
 
 class StandardPpeCreateView(LoginRequiredMixin,CreateView):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('standard_ppe_list')
+    success_url = reverse_lazy('standards_ppe_list')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        # Získání URL z parametru 'next'
-        next_url = self.request.GET.get('next', self.success_url)
-        # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
-
-        return redirect(next_url)
+        form.instance.created_by = self.request.user
+        form.save()
+        messages.success(self.request, "The item was successfully saved")
+        # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
+        return redirect(self.request.path)
 
 
 class StandardPpeUpdateView(LoginRequiredMixin,UpdateView):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('standard_ppe_list')
+    success_url = reverse_lazy('standards_ppe_list')
 
 
-class StandardPpeDeleteView(LoginRequiredMixin,DetailView):
+class StandardPpeDeleteView(LoginRequiredMixin,DeleteView):
     model = StandardPpe
     template_name = 'confirm_delete.html'
-    success_url = reverse_lazy('standard_ppe_list')
+    success_url = reverse_lazy('standards_ppe_list')
 
 
 """Manufacturer"""
@@ -83,7 +121,7 @@ class ManufacturerListView(ListView):
     model = Manufacturer
     template_name = 'manufacturer_list.html'
     context_object_name = 'manufacturers'
-    success_url = reverse_lazy('manufacturer_list')
+    success_url = reverse_lazy('revision_home')
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -105,28 +143,27 @@ class ManufacturerCreateView(LoginRequiredMixin,CreateView):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('manufacturer_list')
+    success_url = reverse_lazy('manufacturers_list')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        # Získání URL z parametru 'next'
-        next_url = self.request.GET.get('next', self.success_url)
-        # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
-
-        return redirect(next_url)
+        form.instance.created_by = self.request.user
+        form.save()
+        messages.success(self.request, "The item was successfully saved")
+        # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
+        return redirect(self.request.path)
 
 
 class ManufacturerUpdateView(LoginRequiredMixin,UpdateView):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('manufacturer_list')
+    success_url = reverse_lazy('manufacturers_list')
 
 
 class ManufacturerDeleteView(LoginRequiredMixin,DeleteView):
     model = Manufacturer
     template_name = 'confirm_delete.html'
-    success_url = reverse_lazy('delete_manufacturer')
+    success_url = reverse_lazy('manufacturers_list')
     #FixME doresit hlaskovou template pro upozorneni ze se nade smazat
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -146,7 +183,7 @@ class LifetimeOfPpeListView(ListView):
     model = LifetimeOfPpe
     template_name = 'lifetime_of_ppe_list.html'
     context_object_name = 'lifetimes_of_ppe'
-    success_url = reverse_lazy('lifetime_of_ppe_list')
+    success_url = reverse_lazy('revision_home')
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -174,12 +211,11 @@ class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateView):
     success_url = reverse_lazy('lifetimes_of_ppe_list')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        # Získání URL z parametru 'next'
-        next_url = self.request.GET.get('next', self.success_url)
-        # Pokud 'next' není k dispozici, použijeme success_url nebo defaultní link
-
-        return redirect(next_url)
+        form.instance.created_by = self.request.user
+        form.save()
+        messages.success(self.request, "The item was successfully saved")
+        # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
+        return redirect(self.request.path)
 
 
 class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateView):
@@ -196,6 +232,51 @@ class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteView):
 
 
 """Type Of Ppe"""
+
+class TypeOfPpeListView(ListView):
+    model = TypeOfPpe
+    template_name = 'type_of_ppe_list.html'
+    context_object_name = 'types_of_ppe'
+    success_url = reverse_lazy('revision_home')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(group_type_ppe__icontains=query) |  # Vyhledávání podle názvu skupiny
+                Q(price__icontains=query)  # Vyhledávání podle ceny
+            )
+        return queryset
+class TypeOfPpeDetailView(DetailView):
+    model = TypeOfPpe
+    template_name = 'type_of_ppe_detail.html'
+    context_object_name = 'type_of_ppe'
+
+class TypeOfPpeCreateView(LoginRequiredMixin,CreateView):
+    model = TypeOfPpe
+    form_class = TypeOfPpeForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('types_of_ppe_list')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        form.save()
+        messages.success(self.request, "The item was successfully saved")
+        # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
+        return redirect(self.request.path)
+
+class TypeOfPpeUpdateView(LoginRequiredMixin,UpdateView):
+    model = TypeOfPpe
+    form_class = TypeOfPpeForm
+    template_name = 'revision_form.html'
+    success_url = reverse_lazy('types_of_ppe_list')
+
+class TypeOfPpeDeleteView(LoginRequiredMixin,DeleteView):
+    model = TypeOfPpe
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy('types_of_ppe_list')
+
 
 """ Revision data"""
 
@@ -229,25 +310,27 @@ class RevisionDataCreateView(LoginRequiredMixin,CreateView):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('revision_data_list')
+    success_url = reverse_lazy('revision_datas_list')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, "Item successfully uploaded.")
-        return response
+        form.instance.created_by = self.request.user
+        form.save()
+        messages.success(self.request, "The item was successfully saved")
+        # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
+        return redirect(self.request.path)
 
 
 class RevisionDataUpdateView(LoginRequiredMixin,UpdateView):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('revision_data_list')
+    success_url = reverse_lazy('revision_datas_list')
 
 
 class RevisionDataDeleteView(LoginRequiredMixin,DeleteView):
     model = RevisionData
     template_name = 'confirm_delete.html'
-    success_url = reverse_lazy('revision_data_list')
+    success_url = reverse_lazy('revision_datas_list')
 
 
 """ Revision records"""
@@ -257,6 +340,7 @@ class RevisionRecordListView(LoginRequiredMixin,ListView):
     model = RevisionRecord
     template_name = 'revision_record_list.html'
     context_object_name = 'revision_records'
+    success_url = reverse_lazy('revision_home')
     """Vyhledavani v zaznamech """
 
     def get_queryset(self):
@@ -304,7 +388,7 @@ class RevisionRecordUpdateView(LoginRequiredMixin,UpdateView):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
-    success_url = reverse_lazy('revision_record_list')
+    success_url = reverse_lazy('revision_records_list')
 
 
 class RevisionRecordDeleteView(LoginRequiredMixin,DeleteView):
