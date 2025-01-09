@@ -1,4 +1,3 @@
-import os
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
@@ -7,7 +6,7 @@ from django.utils import timezone
 from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, \
     TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
 
-from accounts.models import CustomUser, ItemGroup
+from accounts.models import ItemGroup
 from django.conf import settings
 
 '''PPE = PersonalProtectiveEquipment'''
