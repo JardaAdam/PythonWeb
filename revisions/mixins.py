@@ -1,22 +1,57 @@
 from django.contrib import messages
-from django.db.models import Q, ProtectedError
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
 
-class QuerysetFilterMixin(ListView):
-    search_fields = []
+class FilterAndSortMixin(ListView):
+    default_sort_field = 'id'  # Default field for sorting
+
+    def get_search_fields(self):
+        # Vrátí search_fields z view třídy, pokud je definováno
+        return getattr(self, 'search_fields_by_view', [])
 
     def get_queryset(self):
         queryset = super().get_queryset()
         query = self.request.GET.get('q')
+
         if query:
             queries = Q()
-            for field in self.search_fields:
+            search_fields = self.get_search_fields()
+
+            for field in search_fields:
                 queries |= Q(**{f'{field}__icontains': query})
+
             queryset = queryset.filter(queries).distinct()
+
+        # Sorting logic
+        sort_by = self.request.GET.get('sort_by', self.default_sort_field)
+        sort_order = self.request.GET.get('sort_order', 'asc')
+        order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
+        queryset = queryset.order_by(order_field)
+
         return queryset
+
+# class QuerysetFilterMixin(ListView):
+#     search_fields = []
+#
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         query = self.request.GET.get('q')
+#         if query:
+#             queries = Q()
+#             for field in self.search_fields:
+#                 queries |= Q(**{f'{field}__icontains': query})
+#             queryset = queryset.filter(queries).distinct()
+#         return queryset
+"""- Buď si vědom, že použití `distinct()` může ovlivnit výkon, zvláště pokud máš rozsáhlé tabulky a komplexní vazby.
+
+- Pokud uvidíš problémy s výkonem nebo složitější chování z důvodu použití `ManyToManyField`, 
+může být nutné optimalizovat databázové vztahy nebo přístup k datům jinými způsoby, jako použití `prefetch_related`.
+
+Tento přístup ti umožní zpracovávat `ManyToManyField` v rámci vyhledávání bez opakování položek, 
+což by mělo řešit tvůj aktuální problém s duplicitními výsledky při filtrování."""
 
 class CreateMixin(CreateView):
     success_message = 'The item was successfully saved from CreateMixin'

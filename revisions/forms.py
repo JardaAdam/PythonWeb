@@ -48,7 +48,7 @@ class RevisionDataForm(ModelForm):
         fields = '__all__'
         widgets = {
             'lifetime_of_ppe': Select(attrs={'class': 'form-control select2'}),
-            'group_type_ppe': Select(attrs={'class': 'form-control select2'}),
+            'type_of_ppe': Select(attrs={'class': 'form-control select2'}),
             'standard_ppe': SelectMultiple(attrs={'class': 'form-control select2'}),
         }
 # TODO upravit format zadavani datumu

@@ -1,9 +1,5 @@
 {% extends 'revision_base.html' %}
-
-{% block title %}
-Materials Type
-{% endblock %}
-
+{% block title %}Materials Type{% endblock %}
 {% block revision_content %}
 <div class="container mt-4">
     <div class="row mb-3">
@@ -14,47 +10,47 @@ Materials Type
             <h2>List of Material Types</h2>
         </div>
     </div>
-
-    <div class="row justify-content-center mb-3">
-        <div class="col-auto">
-            <form method="get" class="d-flex align-items-center">
-                <label for="material-type-search" class="me-2">Search Material Type:</label>
-                <input type="text" id="material-type-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
-                <button type="submit" class="btn btn-outline-success">Search</button>
-            </form>
-        </div>
-    </div>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Symbol</th>
-                <th scope="col">Name</th>
+                <th scope="col">
+                    <a href="?q={{ request.GET.q }}&sort_by=id&sort_order={% if request.GET.sort_by == 'id' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        #
+                    </a>
+                </th>
+                <th scope="col">
+                    Symbol
+                </th>
+                <th scope="col">
+                    <a href="?q={{ request.GET.q }}&sort_by=name&sort_order={% if request.GET.sort_by == 'name' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Name
+                    </a>
+                </th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for material_type in materials_type %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>
-                    {% if material_type.symbol %}
-                    <img src="{{ material_type.symbol.url }}" alt="{{ material_type.name }}" style="height: 50px;">
-                    {% else %}
-                    <span>No image</span>
-                    {% endif %}
-                </td>
-                <td>{{ material_type.name }}</td>
-                <td>
-                    <a href="{% url 'material_type_detail' material_type.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                    <a href="{% url 'edit_material_type' material_type.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                    <a href="{% url 'delete_material_type' material_type.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                </td>
-            </tr>
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>
+                        {% if material_type.symbol %}
+                            <img src="{{ material_type.symbol.url }}" alt="{{ material_type.name }}" style="height: 50px;">
+                        {% else %}
+                            <span>No image</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ material_type.name }}</td>
+                    <td>
+                        <a href="{% url 'material_type_detail' material_type.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                        <a href="{% url 'edit_material_type' material_type.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'delete_material_type' material_type.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
             {% empty %}
-            <tr>
-                <td colspan="4" class="text-center">No material types found.</td>
-            </tr>
+                <tr>
+                    <td colspan="4" class="text-center">No material types found.</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
