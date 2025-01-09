@@ -99,7 +99,8 @@ class TypeOfPpe(Model):
     def __repr__(self):
         return (f"TypeOfPpe(id={self.id}, group_type_ppe='{self.group_type_ppe}', "
                 f"price={self.price})")
-# TODO prejmenova group_type_ppe na Type_of_ppe
+
+
 class RevisionData(Model):
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
     image_items = ImageField(upload_to="static/image/revision_data/", default=None)

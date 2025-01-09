@@ -9,13 +9,13 @@ class QuerysetFilterMixin(ListView):
     search_fields = []
 
     def get_queryset(self):
-        queryset = super().get_queryset()  # super() by mělo cílít na třídu, která má metodu get_queryset
-        query = self.request.GET.get('q')  # self.request předpokládá, že třída, která používá tento mixin, dědí od View
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
         if query:
             queries = Q()
             for field in self.search_fields:
                 queries |= Q(**{f'{field}__icontains': query})
-            queryset = queryset.filter(queries)
+            queryset = queryset.filter(queries).distinct()
         return queryset
 
 class CreateMixin(CreateView):

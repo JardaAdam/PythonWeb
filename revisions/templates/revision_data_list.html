@@ -1,6 +1,8 @@
 {% extends 'revision_base.html' %}
 
-{% block title %}Revision Data{% endblock %}
+{% block title %}
+Revision Data
+{% endblock %}
 
 {% block revision_content %}
 <div class="container mt-4">
@@ -21,18 +23,37 @@
             </form>
         </div>
     </div>
-
     <table class="table table-striped mt-4">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Image</th>
-                <th scope="col">Lifetime of PPE</th>
-                <th scope="col">Group Type</th>
-                <th scope="col">Name PPE</th>
+                <th scope="col">
+                    <a href="?sort_by=manufacturer_name&sort_order={% if request.GET.sort_by == 'manufacturer_name' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Manufacturer
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=group_type&sort_order={% if request.GET.sort_by == 'group_type' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Group Type
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=name_ppe&sort_order={% if request.GET.sort_by == 'name_ppe' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Name PPE
+                    </a>
+                </th>
                 <th scope="col">Standards</th>
-                <th scope="col">Manual</th>
-                <th scope="col">Notes</th>
+                <th scope="col">
+                    <a href="?sort_by=manual_url&sort_order={% if request.GET.sort_by == 'manual_url' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Manual
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=notes&sort_order={% if request.GET.sort_by == 'notes' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Notes
+                    </a>
+                </th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -45,10 +66,14 @@
                     <img src="{{ data.image_items.url }}" alt="Image" style="width:100px;height:auto;">
                     {% endif %}
                 </td>
-                <td>{{ data.lifetime_of_ppe }}</td>
-                <td>{{ data.type_of_ppe }}</td>
+                <td>{{ data.lifetime_of_ppe.manufacturer.name }}</td>
+                <td>{{ data.type_of_ppe.group_type_ppe }} - {{ data.type_of_ppe.price|floatformat:0 }} Kč</td>
                 <td>{{ data.name_ppe }}</td>
-                <td>{% for standard in data.standard_ppe.all %}{{ standard }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                <td>
+                    {% for standard in data.standard_ppe.all %}
+                    {{ standard }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
                 <td>
                     {% if data.manual_for_revision %}
                     <a href="{{ data.manual_for_revision.url }}" target="_blank">View Manual</a>

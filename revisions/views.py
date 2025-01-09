@@ -20,6 +20,7 @@ def home(request):
 
 def some_view(request):
     return render(request, 'revision_home.html')
+# TODO kontrola kam se ukladaji soubory
 # TODO do revision_form.html doplnit kolonku pro zobrazovani aktualniho pridavaneho form
 # TODO sjednotit guery sety a form_valid pokud to pujde
 # TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
@@ -293,7 +294,8 @@ class RevisionDataListView(QuerysetFilterMixin,ListView):
     success_url = reverse_lazy('revision_home')
     search_fields = ['lifetime_of_ppe__manufacturer__name',
                      'lifetime_of_ppe__material_type__name',
-                     'group_type_ppe__group_type_ppe',
+                     'type_of_ppe__group_type_ppe',
+                     'type_of_ppe__price',
                      'name_ppe',
                      'standard_ppe__code',
                      'standard_ppe__description']
@@ -345,15 +347,39 @@ class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin,DeleteView):
 
 """ Revision records"""
 
+# TODO doplnit search fields
+# TODO Item group do teto template ma prijit jeste zobrazeni pro pridani nove skupiny, odkaz na vytvoreni nove,
+#  pridavani jednotlivich prvku do skupin
+#  zobrazovani prvku podle skupiny do ktere patri
+#  zobrazeni dle owner
+
 
 class RevisionRecordListView(LoginRequiredMixin,QuerysetFilterMixin,ListView):
     model = RevisionRecord
     template_name = 'revision_record_list.html'
     context_object_name = 'revision_records'
     success_url = reverse_lazy('revision_home')
-    search_fields = ['serial_number','revision_data__lifetime_of_ppe__manufacturer__name',
-                     'revision_data__group_type_ppe__group_type_ppe','revision_data__name_ppe']
+    search_fields = ['revision_data__lifetime_of_ppe__manufacturer__name',
+                     'revision_data__lifetime_of_ppe__material_type__name',
+                     'revision_data__type_of_ppe__group_type_ppe',
+                     'revision_data__name_ppe',
+                     'serial_number',
+                     'verdict']
 
+
+    # TODO doresit klikaci sortovani
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        sort_by = self.request.GET.get('sort_by', 'date_of_revision')  # Výchozí třídění
+        sort_order = self.request.GET.get('sort_order', 'asc')
+
+        # Přidání předpony pro určující pořadí, "-" pro desc
+        if sort_order == 'desc':
+            sort_by = f'-{sort_by}'
+
+        return queryset.order_by(sort_by)
+
+    """ serazeni zaznamu na zaklade kriterii"""
     # def get_queryset(self):
     #     queryset = super().get_queryset()
     #     query = self.request.GET.get('q')

@@ -1,72 +1,109 @@
 {% extends 'revision_base.html' %}
 
-{% block title %}Revision Records{% endblock %}
+{% block title %}
+Revision Records
+{% endblock %}
 
 {% block revision_content %}
 <div class="container mt-4">
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <a href="{% url 'add_revision_record' %}" class="btn btn-primary mb-3">Add Revision record</a>
-            </div>
-
-            <div class="col-12 col-md-6 text-center">
-                <h2>List of Revision records</h2>
-            </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <a href="{% url 'add_revision_record' %}" class="btn btn-primary mb-3">Add Revision record</a>
         </div>
-
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <form method="get" class="d-flex align-items-center">
-                    <label for="revision-record-search" class="me-2">Search records:</label>
-                    <input type="text" id="revision-record-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
-                    <button type="submit" class="btn btn-outline-success">Search</button>
-                </form>
-            </div>
+        <div class="col-12 col-md-6 text-center">
+            <h2>List of Revision records</h2>
         </div>
     </div>
-
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <form method="get" class="d-flex align-items-center">
+                <label for="revision-record-search" class="me-2">Search records:</label>
+                <input type="text" id="revision-record-search" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
+        </div>
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Manufacturer</th>
-                <th scope="col">Group Type</th>
-                <th scope="col">Name PPE</th>
-                <th scope="col">Serial Number</th>
-                <th scope="col">Date of Manufacture</th>
-                <th scope="col">Date of First Use</th>
-                <th scope="col">Date of Revision</th>
-                <th scope="col">Date of Next Revision</th>
-                <th scope="col">Verdict</th>
-                <th scope="col">Notes</th>
+                <th scope="col">
+                    <a href="?sort_by=manufacturer_name&sort_order={% if request.GET.sort_by == 'manufacturer_name' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Manufacturer
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=group_type&sort_order={% if request.GET.sort_by == 'group_type' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Group Type
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=name_ppe&sort_order={% if request.GET.sort_by == 'name_ppe' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Name PPE
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=serial_number&sort_order={% if request.GET.sort_by == 'serial_number' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Serial Number
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=date_manufacture&sort_order={% if request.GET.sort_by == 'date_manufacture' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Date of Manufacture
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=date_of_first_use&sort_order={% if request.GET.sort_by == 'date_of_first_use' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Date of First Use
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=date_of_revision&sort_order={% if request.GET.sort_by == 'date_of_revision' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Date of Revision
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=date_of_next_revision&sort_order={% if request.GET.sort_by == 'date_of_next_revision' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Date of Next Revision
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=verdict&sort_order={% if request.GET.sort_by == 'verdict' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Verdict
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="?sort_by=notes&sort_order={% if request.GET.sort_by == 'notes' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
+                        Notes
+                    </a>
+                </th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for record in revision_records %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ record.revision_data.lifetime_of_ppe.manufacturer.name }}</td>
-                    <td>{{ record.revision_data.type_of_ppe.group_type_ppe }}</td>
-                    <td>{{ record.revision_data.name_ppe }}</td>
-                    <td>{{ record.serial_number }}</td>
-                    <td>{{ record.date_manufacture }}</td>
-                    <td>{{ record.date_of_first_use }}</td>
-                    <td>{{ record.date_of_revision }}</td>
-                    <td>{{ record.date_of_next_revision }}</td>
-                    <td>{{ record.get_verdict_display }}</td>
-                    <td>{{ record.notes }}</td>
-                    <td>
-                        <a href="{% url 'revision_record_detail' record.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                        <a href="{% url 'edit_revision_record' record.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                        <a href="{% url 'delete_revision_record' record.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                    </td>
-                </tr>
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ record.revision_data.lifetime_of_ppe.manufacturer.name }}</td>
+                <td>{{ record.revision_data.type_of_ppe.group_type_ppe }}</td>
+                <td>{{ record.revision_data.name_ppe }}</td>
+                <td>{{ record.serial_number }}</td>
+                <td>{{ record.date_manufacture }}</td>
+                <td>{{ record.date_of_first_use }}</td>
+                <td>{{ record.date_of_revision }}</td>
+                <td>{{ record.date_of_next_revision }}</td>
+                <td>{{ record.get_verdict_display }}</td>
+                <td>{{ record.notes }}</td>
+                <td>
+                    <a href="{% url 'revision_record_detail' record.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'edit_revision_record' record.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_revision_record' record.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
             {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center">No revision records found.</td>
-                </tr>
+            <tr>
+                <td colspan="12" class="text-center">No revision records found.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
