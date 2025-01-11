@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from django.urls import reverse_lazy
 
@@ -66,7 +66,7 @@ class MaterialTypeUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     #     messages.success(self.request, "The changes have been successfully saved")
     #     # Přesměruj uživatele na detailní zobrazení
     #     return redirect(detail_url)
-class MaterialTypeDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
+class MaterialTypeDeleteView(LoginRequiredMixin, DeleteMixin):
     model = MaterialType
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('materials_type_list')
@@ -119,7 +119,7 @@ class StandardPpeUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
     success_url = reverse_lazy('standards_ppe_list')
     detail_url_name = 'standard_ppe_detail'
 
-class StandardPpeDeleteView(LoginRequiredMixin,DeleteMixin,DeleteView):
+class StandardPpeDeleteView(LoginRequiredMixin,DeleteMixin):
     model = StandardPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('standards_ppe_list')
@@ -173,7 +173,7 @@ class ManufacturerUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
     detail_url_name = 'manufacturer_detail'
 
 
-class ManufacturerDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
+class ManufacturerDeleteView(LoginRequiredMixin, DeleteMixin):
     model = Manufacturer
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('manufacturers_list')
@@ -232,7 +232,7 @@ class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
     detail_url_name = 'lifetime_of_ppe_detail'
 
 
-class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin,DeleteView):
+class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin):
     model = LifetimeOfPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('lifetimes_of_ppe_list')
@@ -280,7 +280,7 @@ class TypeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
     success_url = reverse_lazy('types_of_ppe_list')
     detail_url_name = 'type_of_ppe_detail'
 
-class TypeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin,DeleteView):
+class TypeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin):
     model = TypeOfPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('types_of_ppe_list')
@@ -343,7 +343,7 @@ class RevisionDataUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
     success_url = reverse_lazy('revision_datas_list')
     detail_url_name = 'revision_data_detail'
 
-class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin,DeleteView):
+class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin):
     model = RevisionData
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_datas_list')
@@ -423,7 +423,7 @@ class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
     detail_url_name = 'revision_record_detail'
 
 
-class RevisionRecordDeleteView(LoginRequiredMixin,DeleteMixin,DeleteView):
+class RevisionRecordDeleteView(LoginRequiredMixin,DeleteMixin):
     model = RevisionRecord
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_records_list')

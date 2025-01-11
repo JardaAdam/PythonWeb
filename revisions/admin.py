@@ -11,3 +11,4 @@ admin.site.register(TypeOfPpe)
 admin.site.register(RevisionData)
 admin.site.register(RevisionRecord)
 
+# TODO jakym spusobem budu resit permission pro jednotlive skupiny uzivatelu?

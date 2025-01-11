@@ -1,6 +1,7 @@
 from django.forms import ModelForm, Select
 from django.forms.widgets import SelectMultiple
 
+from .base_forms import BaseFileRequirementForm
 from .models import MaterialType, StandardPpe, Manufacturer, LifetimeOfPpe, TypeOfPpe, RevisionData, RevisionRecord
 # TODO doplnit napovedu pro spravny format poli
 # TODO upravit format zadavani datumu
@@ -14,13 +15,13 @@ class MaterialTypeForm(ModelForm):
         fields = '__all__'
 
 
-class StandardPpeForm(ModelForm):
+class StandardPpeForm(BaseFileRequirementForm):
     class Meta:
         model = StandardPpe
         fields = '__all__'
 
 
-class ManufacturerForm(ModelForm):
+class ManufacturerForm(BaseFileRequirementForm):
     class Meta:
         model = Manufacturer
         fields = '__all__'
@@ -42,7 +43,7 @@ class TypeOfPpeForm(ModelForm):
         fields = '__all__'
 
 
-class RevisionDataForm(ModelForm):
+class RevisionDataForm(BaseFileRequirementForm):
     class Meta:
         model = RevisionData
         fields = '__all__'
