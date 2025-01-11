@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 
+
 class BaseFileRequirementForm(ModelForm):
     image_field_name = None
     document_field_name = None
@@ -13,12 +14,14 @@ class BaseFileRequirementForm(ModelForm):
         if self.image_field_name:
             image_field = cleaned_data.get(self.image_field_name)
             if not image_field:
-                raise ValidationError(f'{self.image_field_name} is required.')
+                # Add error to the specific image field
+                self.add_error(self.image_field_name, f'{self.image_field_name} is required.')
 
         # Check for document field
         if self.document_field_name:
             document_field = cleaned_data.get(self.document_field_name)
             if not document_field:
-                raise ValidationError(f'{self.document_field_name} is required.')
+                # Add error to the specific document field
+                self.add_error(self.document_field_name, f'{self.document_field_name} is required.')
 
         return cleaned_data

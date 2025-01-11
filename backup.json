@@ -1,3 +1,4 @@
+
 [
 {
     "model": "admin.logentry",
@@ -1984,6 +1985,14 @@
 },
 {
     "model": "sessions.session",
+    "pk": "fp2l172mudgplwbtsrw4k000olyzf3iq",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tW0eE:BGha3plmAfAIoMzqq0KIXkXxYDh-c5K-XLGqh7rNIAM",
+        "expire_date": "2025-01-23T22:05:02.896Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "g9iox2xkehotnmsqjb7pje0qawv26rdl",
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tUrSS:691ZOb3Mn_JbYnJY2rhXQu58qCiAT-2qytuxB6Xuujw",
@@ -2000,10 +2009,26 @@
 },
 {
     "model": "sessions.session",
+    "pk": "j7pg12mwl9frp9da6stqfgb20xqa5rpx",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tVVyD:YVv6Ch_uM27gSHe8HAZjb2PkYtWl-PcTnGd9Fg5euRg",
+        "expire_date": "2025-01-22T13:19:37.005Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "m5wj69qsp6onfyupqk4zb3ywxf03yhc0",
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tMTRU:yX1fJOAXIbRFniLHiQAcu7NW-cH0yMJRhtqMQeav6og",
         "expire_date": "2024-12-28T14:48:28.834Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "nc5t8aoeg5219fzoih54a07glq382je9",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tV98M:Xwi1i1tCNGmfVFW9wlqjocg5eKfBj3tU_wj8jAqpwV8",
+        "expire_date": "2025-01-21T12:56:34.233Z"
     }
 },
 {
@@ -2072,7 +2097,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
-        "last_login": "2025-01-06T20:14:22.663Z",
+        "last_login": "2025-01-09T22:05:02.892Z",
         "is_superuser": true,
         "username": "Admin-oopp",
         "first_name": "Jaroslav",
@@ -2464,7 +2489,7 @@
     "model": "revisions.manufacturer",
     "pk": 5,
     "fields": {
-        "logo": "static/manufacturer_logo/Singing_Rock_RGB-03.jpg",
+        "logo": "static/image/manufacturer/logo/Singing_Rock_RGB-03.jpg",
         "name": "Singing Rock"
     }
 },
@@ -2490,6 +2515,14 @@
     "fields": {
         "logo": "",
         "name": "SKYLOTEC"
+    }
+},
+{
+    "model": "revisions.manufacturer",
+    "pk": 10,
+    "fields": {
+        "logo": "",
+        "name": "Rock empire"
     }
 },
 {
@@ -2610,6 +2643,36 @@
         "material_type": 1,
         "lifetime_use_years": 10,
         "lifetime_manufacture_years": 10
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 14,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 6,
+        "lifetime_use_years": 8,
+        "lifetime_manufacture_years": 4
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 15,
+    "fields": {
+        "manufacturer": 8,
+        "material_type": 5,
+        "lifetime_use_years": 99,
+        "lifetime_manufacture_years": 99
+    }
+},
+{
+    "model": "revisions.lifetimeofppe",
+    "pk": 16,
+    "fields": {
+        "manufacturer": 10,
+        "material_type": 5,
+        "lifetime_use_years": 99,
+        "lifetime_manufacture_years": 99
     }
 },
 {
@@ -2785,7 +2848,7 @@
 },
 {
     "model": "revisions.typeofppe",
-    "pk": 20,
+    "pk": 22,
     "fields": {
         "image": "",
         "group_type_ppe": "fall_absorber",
@@ -2794,10 +2857,19 @@
 },
 {
     "model": "revisions.typeofppe",
-    "pk": 21,
+    "pk": 23,
     "fields": {
         "image": "",
         "group_type_ppe": "fall_absorber_with_conector",
+        "price": "150.00"
+    }
+},
+{
+    "model": "revisions.typeofppe",
+    "pk": 24,
+    "fields": {
+        "image": "",
+        "group_type_ppe": "cambium_saver",
         "price": "120.00"
     }
 },
@@ -2807,7 +2879,7 @@
     "fields": {
         "image_items": "static/image/revision_data/Flash_industry.jpg",
         "lifetime_of_ppe": 5,
-        "group_type_ppe": 1,
+        "type_of_ppe": 1,
         "name_ppe": "Flash industry",
         "manual_for_revision": "static/revision_data/manuals/Flash_industry_manual.pdf",
         "notes": "",
@@ -2817,10 +2889,106 @@
     }
 },
 {
+    "model": "revisions.revisiondata",
+    "pk": 4,
+    "fields": {
+        "image_items": "static/image/revision_data/locker_sling.jpg",
+        "lifetime_of_ppe": 2,
+        "type_of_ppe": 17,
+        "name_ppe": "Locker sling",
+        "manual_for_revision": "static/revision_data/manuals/IOU_16S97022539_LOCKER_SLING.pdf",
+        "notes": "",
+        "standard_ppe": [
+            3,
+            18
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 5,
+    "fields": {
+        "image_items": "static/image/revision_data/Locker.jpg",
+        "lifetime_of_ppe": 4,
+        "type_of_ppe": 11,
+        "name_ppe": "Locker",
+        "manual_for_revision": "static/revision_data/manuals/IOU_16K002201800_LOCKER.pdf",
+        "notes": "",
+        "standard_ppe": [
+            30,
+            2,
+            13
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 6,
+    "fields": {
+        "image_items": "static/image/revision_data/eye_sling.jpg",
+        "lifetime_of_ppe": 2,
+        "type_of_ppe": 17,
+        "name_ppe": "EYE SLING BLUE 80 cm",
+        "manual_for_revision": "static/revision_data/manuals/IOU_16S97022236_SLINGS.pdf",
+        "notes": "",
+        "standard_ppe": [
+            3,
+            14
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 7,
+    "fields": {
+        "image_items": "static/image/revision_data/eye_sling_WHW5yJ2.jpg",
+        "lifetime_of_ppe": 2,
+        "type_of_ppe": 17,
+        "name_ppe": "EYE SLING Yellow 60 cm",
+        "manual_for_revision": "static/revision_data/manuals/IOU_16S97022236_SLINGS_Efb2EoJ.pdf",
+        "notes": "",
+        "standard_ppe": [
+            3,
+            14
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 8,
+    "fields": {
+        "image_items": "static/image/revision_data/ozone_triple_lock.jpg",
+        "lifetime_of_ppe": 4,
+        "type_of_ppe": 16,
+        "name_ppe": "OZONE triple lock",
+        "manual_for_revision": "static/revision_data/manuals/KL_K0018_OZONE_TRIPLELOCK_CZ.pdf",
+        "notes": "",
+        "standard_ppe": [
+            26,
+            10
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 9,
+    "fields": {
+        "image_items": "static/image/revision_data/steal_triple_lock.jpg",
+        "lifetime_of_ppe": 4,
+        "type_of_ppe": 16,
+        "name_ppe": "STEEL oval triple",
+        "manual_for_revision": "static/revision_data/manuals/KL_K4241_STEEL_TRIPLE_OVAL_CZ.pdf",
+        "notes": "",
+        "standard_ppe": [
+            10
+        ]
+    }
+},
+{
     "model": "revisions.revisionrecord",
     "pk": 2,
     "fields": {
-        "photo_of_item": "",
+        "photo_of_item": "media/image/revision_record/Flash_green_nzFk7P8.jpg",
         "revision_data": 3,
         "serial_number": "0314W9601",
         "date_manufacture": "2019-03-23",
@@ -2833,7 +3001,47 @@
         "notes": "",
         "created_by": 1,
         "created": "2025-01-06T18:17:50.792Z",
-        "updated": "2025-01-06T18:17:50.792Z"
+        "updated": "2025-01-08T21:29:28.943Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 3,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 4,
+        "serial_number": "0206/1659025",
+        "date_manufacture": "2023-01-02",
+        "date_of_first_use": "2024-04-02",
+        "date_of_revision": "2025-01-08",
+        "date_of_next_revision": "2026-01-08",
+        "item_group": null,
+        "owner": 1,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-08T21:37:12.871Z",
+        "updated": "2025-01-09T21:23:31.239Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 5,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 5,
+        "serial_number": "0481",
+        "date_manufacture": "2017-11-01",
+        "date_of_first_use": "2018-05-15",
+        "date_of_revision": "2025-01-09",
+        "date_of_next_revision": "2026-01-09",
+        "item_group": null,
+        "owner": 1,
+        "verdict": "retire",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-09T18:54:52.845Z",
+        "updated": "2025-01-09T21:24:16.418Z"
     }
 }
 ]

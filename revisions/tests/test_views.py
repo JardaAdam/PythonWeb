@@ -8,6 +8,8 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from isort import logo
+
 from accounts import urls
 from revisions.models import *
 
@@ -80,8 +82,6 @@ class StandardPpeViewsTest(BaseViewsTest):
         self.assertEqual(response.status_code, 302)
         return response
 
-
-
     def access_requires_login(self, url_name):
         self.client.logout()
         response = self.client.get(reverse(url_name))
@@ -96,14 +96,12 @@ class StandardPpeViewsTest(BaseViewsTest):
 
     def test_add_standard_ppe_view_post_valid(self):
         url = reverse('add_standard_ppe')
-        uploaded_logo = SimpleUploadedFile(
+        uploaded_image_ppe = SimpleUploadedFile(
             "logo.jpg", self.create_test_image(), content_type='image/jpeg')
-        data = {'code': 'EN124', 'description': 'New Standard', 'image': uploaded_logo}
+        data = {'code': 'EN124', 'description': 'New Standard', 'image': uploaded_image_ppe}
         response = self.client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, 302)
         self.assertTrue(StandardPpe.objects.filter(code='EN124').exists())
-
-
 
     def test_add_standard_ppe_view_post_invalid(self):
         url = reverse('add_standard_ppe')
@@ -125,9 +123,20 @@ class StandardPpeViewsTest(BaseViewsTest):
         self.get_and_assert_template('edit_standard_ppe', 'revision_form.html', args=[std_ppe.pk])
 
     def test_edit_standard_ppe_view_post_valid(self):
-        std_ppe = StandardPpe.objects.create(code='EN125', description='Existing Standard')
-        data = {'code': 'EN126', 'description': 'Updated Standard'}
+        image_content = self.create_test_image()
+        uploaded_image_ppe = SimpleUploadedFile(
+            "test_image.jpg", image_content, content_type="image/jpeg"
+        )
+        std_ppe = StandardPpe.objects.create(code='EN125', description='Existing Standard', image=uploaded_image_ppe)
+        new_uploaded_image = SimpleUploadedFile(
+            "new_test_image.jpg", image_content, content_type="image/jpeg"
+        )
+        data = {'code': 'EN126', 'description': 'Updated Standard', 'image': new_uploaded_image}
+
+        # Spuštění testu pro funkci editace
         self.post_and_assert_redirect('edit_standard_ppe', data, args=[std_ppe.pk])
+
+        # Ověření, že data byla správně aktualizována
         std_ppe.refresh_from_db()
         self.assertEqual(std_ppe.code, 'EN126')
 
@@ -190,7 +199,11 @@ class ManufacturerViewsTest(BaseViewsTest):
         self.get_and_assert_template('edit_manufacturer', 'revision_form.html', args=[self.manufacturer.pk])
 
     def test_edit_manufacturer_view_post_valid(self):
-        data = {'name': 'Updated Manufacturer'}
+        image_content = self.create_test_image()
+        uploaded_image_ppe = SimpleUploadedFile(
+            "test_image.jpg", image_content, content_type="image/jpeg"
+        )
+        data = {'name': 'Updated Manufacturer', 'logo': uploaded_image_ppe}
         self.post_and_assert_redirect('edit_manufacturer', data, args=[self.manufacturer.pk])
         self.manufacturer.refresh_from_db()
         self.assertEqual(self.manufacturer.name, 'Updated Manufacturer')

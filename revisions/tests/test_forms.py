@@ -1,4 +1,4 @@
-from datetime import *
+import datetime
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -8,32 +8,32 @@ from accounts.models import ItemGroup
 from django.contrib.auth import get_user_model
 from revisions.forms import RevisionDataForm, ManufacturerForm, StandardPpeForm, MaterialTypeForm, TypeOfPpeForm, \
     RevisionRecordForm
-from revisions.models import TypeOfPpe, LifetimeOfPpe, MaterialType, Manufacturer, RevisionData
+from revisions.models import TypeOfPpe, LifetimeOfPpe, MaterialType, Manufacturer, RevisionData, StandardPpe
 
 User = get_user_model()
 
 """Forms"""
 
-class StandardPpeFormTest(TestCase):
-    def test_form_valid_data(self):
-        form = StandardPpeForm(data={
-            'code': 'EN362',
-            'description': 'Test Description'
-        })
-        self.assertTrue(form.is_valid())
-
-    def test_form_no_data(self):
-        form = StandardPpeForm(data={})
-        self.assertFalse(form.is_valid())
-        self.assertEqual(len(form.errors), 2)  # Očekáváme chyby pro `code` a `description`
-
-    def test_form_invalid_code(self):
-        form = StandardPpeForm(data={
-            'code': '',  # Nevalidní, protože je vyžadován
-            'description': 'Test Description'
-        })
-        self.assertFalse(form.is_valid())
-        self.assertIn('code', form.errors)
+# class StandardPpeFormTest(TestCase):
+#     def test_form_valid_data(self):
+#         form = StandardPpeForm(data={
+#             'code': 'EN362',
+#             'description': 'Test Description'
+#         })
+#         self.assertTrue(form.is_valid())
+#
+#     def test_form_no_data(self):
+#         form = StandardPpeForm(data={})
+#         self.assertFalse(form.is_valid())
+#         self.assertEqual(len(form.errors), 2)  # Očekáváme chyby pro `code` a `description`
+#
+#     def test_form_invalid_code(self):
+#         form = StandardPpeForm(data={
+#             'code': '',  # Nevalidní, protože je vyžadován
+#             'description': 'Test Description'
+#         })
+#         self.assertFalse(form.is_valid())
+#         self.assertIn('code', form.errors)
 
 
 class BaseFormTest(TestCase):
@@ -48,6 +48,7 @@ class BaseFormTest(TestCase):
     def setUpTestData(cls):
         # Common setup that can be used across form tests
         cls.user = User.objects.create_user(username='testuser', password='testpass')
+        cls.standard_ppe = StandardPpe.objects.create(code="EN 360", description="Test Descriptions")
         cls.manufacturer = Manufacturer.objects.create(name="Test Manufacturer")
         cls.material_type = MaterialType.objects.create(name="Test Material")
         cls.lifetime_of_ppe = LifetimeOfPpe.objects.create(
@@ -57,6 +58,8 @@ class BaseFormTest(TestCase):
             lifetime_manufacture_years=15
         )
         cls.type_of_ppe = TypeOfPpe.objects.create(group_type_ppe='Test Group', price=100.00)
+
+
 class FormWithImageTest(BaseFormTest):
 
     def test_material_type_form_with_image(self):
@@ -78,7 +81,7 @@ class FormWithImageTest(BaseFormTest):
     def test_manufacturer_form_with_logo(self):
         image_content = self.create_test_image()
         uploaded_image = SimpleUploadedFile("manufacturer_logo.jpg", image_content, content_type="image/jpeg")
-        form_data = {'name': 'Test Manufacturer'}
+        form_data = {'name': 'Test Manufacturer1'}
         form = ManufacturerForm(data=form_data, files={'logo': uploaded_image})
 
         self.assertTrue(form.is_valid())
@@ -86,19 +89,20 @@ class FormWithImageTest(BaseFormTest):
     def test_type_of_ppe_form_with_image(self):
         image_content = self.create_test_image()
         uploaded_image = SimpleUploadedFile("type_of_ppe_image.jpg", image_content, content_type="image/jpeg")
-        form_data = {'group_type_ppe': 'Test Group', 'price': 100.00}
+        form_data = {'group_type_ppe': 'Test Group1', 'price': 100.00}
         form = TypeOfPpeForm(data=form_data, files={'image': uploaded_image})
 
         self.assertTrue(form.is_valid())
 
     def test_revision_data_form_with_files(self):
         image_content = self.create_test_image()
-        uploaded_image = SimpleUploadedFile("revision_image.jpg", image_content, content_type="image/jpeg")
+        uploaded_image = SimpleUploadedFile("revision_data_image.jpg", image_content, content_type="image/jpeg")
         uploaded_document = SimpleUploadedFile("manual.pdf", b"dummy content", content_type="application/pdf")
         form_data = {
-            'name_ppe': 'Valid PPE',
+            'name_ppe': 'Valid document PPE',
             'lifetime_of_ppe': self.lifetime_of_ppe.id,
-            'type_of_ppe': self.type_of_ppe.id
+            'type_of_ppe': self.type_of_ppe.id,
+            'standard_ppe': [self.standard_ppe.id],
         }
         form = RevisionDataForm(data=form_data, files={
             'image_items': uploaded_image,
@@ -109,24 +113,50 @@ class FormWithImageTest(BaseFormTest):
 
     def test_revision_record_form_with_image(self):
         image_content = self.create_test_image()
-        uploaded_image = SimpleUploadedFile("record_image.jpg", image_content, content_type="image/jpeg")
+        uploaded_image = SimpleUploadedFile("record_data_image.jpg", image_content, content_type="image/jpeg")
+        uploaded_image_record = SimpleUploadedFile("record_record_image.jpg", image_content, content_type="image/jpeg")
         revision_data = RevisionData.objects.create(
             image_items=uploaded_image,
             lifetime_of_ppe=self.lifetime_of_ppe,
             type_of_ppe=self.type_of_ppe,
-            name_ppe='Test PPE',
+            name_ppe='Test PPE2',
             manual_for_revision=SimpleUploadedFile("manual1.pdf", b"dummy content", content_type="application/pdf"),
         )
         form_data = {
+            'photo_of_items': uploaded_image_record,
             'revision_data': revision_data.id,
-            'serial_number': 'SN12345',
-            'date_manufacture': timezone.now().date(),
+            'serial_number': 'SN1234',
+            'date_manufacture': datetime.date(2020, 3, 15),
+            'date_of_first_use': datetime.date(2020, 3, 16),  # PŘIDÁNÍ TÉTO HODNOTY
             'owner': self.user.id
         }
-        form = RevisionRecordForm(data=form_data, files={'photo_of_item': uploaded_image})
+        form = RevisionRecordForm(data=form_data, files={'photo_of_item': uploaded_image_record})
 
         self.assertTrue(form.is_valid())
+
 class StandardPpeFormTest(BaseFormTest):
+
+    def test_form_valid_data(self):
+        image_content = self.create_test_image()
+        uploaded_image_ppe = SimpleUploadedFile("image_ppe.jpg", image_content, content_type="image/jpeg")
+        form = StandardPpeForm(data={
+            'code': 'EN362',
+            'description': 'Test Description'
+        }, files={'image': uploaded_image_ppe})
+        self.assertTrue(form.is_valid())
+
+    def test_form_no_data(self):
+        form = StandardPpeForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 3)  # Očekáváme chyby pro `code` a `description`
+
+    def test_form_invalid_code(self):
+        form = StandardPpeForm(data={
+            'code': '',  # Nevalidní, protože je vyžadován
+            'description': 'Test Description'
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn('code', form.errors)
 
     def test_standard_ppe_form_upload(self):
         form_data = {'code': 'EN123', 'description': 'Test Standard'}
@@ -146,7 +176,8 @@ class StandardPpeFormTest(BaseFormTest):
         form = StandardPpeForm(data=form_data)
 
         self.assertFalse(form.is_valid())
-        self.assertIn('image', form.errors)  # Replace 'image' with correct field name
+        self.assertIn('image', form.errors)
+        self.assertIn('image is required.', form.errors['image'])
 
 
 class ManufacturerFormTest(BaseFormTest):
@@ -170,13 +201,16 @@ class ManufacturerFormTest(BaseFormTest):
 
         self.assertFalse(form.is_valid())
         self.assertIn('logo', form.errors)  # Replace 'logo' with correct field name
+        self.assertIn('logo is required.', form.errors['logo'])
+
 class RevisionDataFormTest(BaseFormTest):
 
     def test_valid_revision_data_form(self):
         form_data = {
             'name_ppe': 'Valid PPE',
             'lifetime_of_ppe': self.lifetime_of_ppe.id,
-            'type_of_ppe': self.type_of_ppe.id
+            'type_of_ppe': self.type_of_ppe.id,
+            'standard_ppe': [self.standard_ppe.id],
         }
         uploaded_image_content = self.create_test_image()
         uploaded_image = SimpleUploadedFile("image.jpg", uploaded_image_content, content_type="image/jpeg")

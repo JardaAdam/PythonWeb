@@ -84,7 +84,6 @@ class UpdateMixin(UpdateView):
     success_message = 'The changes have been successfully uploaded from CreateMixin'
     error_message = ''
     warning_message = ''
-# TODO doplnit message pole do template _detail.html doresit kde se sprava zobrazuje
     def form_valid(self, form):
         response = super().form_valid(form)
         messages.success(self.request, self.success_message)
