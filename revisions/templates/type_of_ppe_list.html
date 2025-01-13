@@ -1,5 +1,8 @@
 {% extends 'revision_base.html' %}
+{% load sort_tags %}  <!-- Načte vlastní templatetag -->
+
 {% block title %}Types of PPE{% endblock %}
+
 {% block revision_content %}
 <div class="container mt-4">
     <div class="row mb-3">
@@ -13,48 +16,36 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=id&sort_order={% if request.GET.sort_by == 'id' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        #
-                    </a>
-                </th>
+                <th scope="col">{% sort_link request 'id' '#' %}</th>
                 <th scope="col">Image</th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=group_type_ppe&sort_order={% if request.GET.sort_by == 'group_type_ppe' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Group Type
-                    </a>
-                </th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=price&sort_order={% if request.GET.sort_by == 'price' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Price (Kč)
-                    </a>
-                </th>
+                <th scope="col">{% sort_link request 'group_type_ppe' 'Group Type' %}</th>
+                <th scope="col">{% sort_link request 'price' 'Price (Kč)' %}</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for ppe_type in types_of_ppe %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>
-                        {% if ppe_type.image %}
-                            <img src="{{ ppe_type.image.url }}" alt="{{ ppe_type.group_type_ppe }}" style="height: 50px;">
-                        {% else %}
-                            <span>No image</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ ppe_type.group_type_ppe }}</td>
-                    <td>{{ ppe_type.price }}</td>
-                    <td>
-                        <a href="{% url 'type_of_ppe_detail' ppe_type.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                        <a href="{% url 'edit_type_of_ppe' ppe_type.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                        <a href="{% url 'delete_type_of_ppe' ppe_type.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                    </td>
-                </tr>
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    {% if ppe_type.image %}
+                    <img src="{{ ppe_type.image.url }}" alt="{{ ppe_type.group_type_ppe }}" style="height: 50px;">
+                    {% else %}
+                    <span>No image</span>
+                    {% endif %}
+                </td>
+                <td>{{ ppe_type.group_type_ppe }}</td>
+                <td>{{ ppe_type.price }}</td>
+                <td>
+                    <a href="{% url 'type_of_ppe_detail' ppe_type.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'edit_type_of_ppe' ppe_type.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'delete_type_of_ppe' ppe_type.pk %}" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
             {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center">No types of PPE found.</td>
-                </tr>
+            <tr>
+                <td colspan="5" class="text-center">No types of PPE found.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

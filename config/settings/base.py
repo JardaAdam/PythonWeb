@@ -36,7 +36,8 @@ INSTALLED_APPS = [
 
     # Externí knihovny
     'django_dump_load_utf8',
-
+    # hlavni app
+    'config',
     # Vlastní aplikace
     'accounts',
     'calculator',

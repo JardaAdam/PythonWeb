@@ -1,8 +1,7 @@
 {% extends 'revision_base.html' %}
+{% load sort_tags %}  <!-- Načte vlastní templatetag -->
 
-{% block title %}
-Revision Data
-{% endblock %}
+{% block title %}Revision Data{% endblock %}
 
 {% block revision_content %}
 <div class="container mt-4">
@@ -17,34 +16,14 @@ Revision Data
     <table class="table table-striped mt-4">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">{% sort_link request 'id' '#' %}</th>
                 <th scope="col">Image</th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=lifetime_of_ppe__manufacturer__name&sort_order={% if request.GET.sort_by == 'lifetime_of_ppe__manufacturer__name' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Manufacturer
-                    </a>
-                </th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=type_of_ppe__group_type_ppe&sort_order={% if request.GET.sort_by == 'type_of_ppe__group_type_ppe' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Group Type
-                    </a>
-                </th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=name_ppe&sort_order={% if request.GET.sort_by == 'name_ppe' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Name PPE
-                    </a>
-                </th>
+                <th scope="col">{% sort_link request 'lifetime_of_ppe__manufacturer__name' 'Manufacturer' %}</th>
+                <th scope="col">{% sort_link request 'type_of_ppe__group_type_ppe' 'Group Type' %}</th>
+                <th scope="col">{% sort_link request 'name_ppe' 'Name PPE' %}</th>
                 <th scope="col">Standards</th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=manual_for_revision&sort_order={% if request.GET.sort_by == 'manual_for_revision' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Manual
-                    </a>
-                </th>
-                <th scope="col">
-                    <a href="?q={{ request.GET.q }}&sort_by=notes&sort_order={% if request.GET.sort_by == 'notes' and request.GET.sort_order == 'asc' %}desc{% else %}asc{% endif %}">
-                        Notes
-                    </a>
-                </th>
+                <th scope="col">{% sort_link request 'manual_for_revision' 'Manual' %}</th>
+                <th scope="col">{% sort_link request 'notes' 'Notes' %}</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
