@@ -16,6 +16,7 @@ položek a fotmulař mu spočítá cenu.
     - SheetOfPpe = seznam všech revidovaných položek
     - Revision = pomocna jsou zde všechny vyráběné položky a jejich návody na provedení revize
     - Inquiries = výstup z kalkulatoru 
+
 2. Kalkulačka ceny revize OOPP ( Formulář )
 **použité tabulky** -> TypeOfPpe
 - **Funkce:**
