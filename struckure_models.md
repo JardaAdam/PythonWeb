@@ -77,41 +77,55 @@ typ použitých prostředků.
 ### `revision/models.py`
 
 #### Model `MaterialType` 
+- **`symbol`**: 
+- **`name`**: Typ materiálu (např. Textile, Helmet, Harness, Ropes).
 
-- **`name`**: Typ materiálu (např. Harness, Ropes).
+### Model `StandardPpe`
+- **`image`**:
+- **`code`**:
+- **`description`**:
 
 #### Model `Manufacturer`
-
+- **`logo`**:
 - **`name`**: Jméno výrobce.
+
+### Model `LifetimeOfPpe`
+- **`manufacturer`**:
 - **`material_type`**: Odkazuje na `MaterialType`.
-- **`lifetime_use_months`**: Maximální doba používání od data prvního použití.
+- **`lifetime_use_years`**: Maximální doba používání od data prvního použití.
 - **`lifetime_manufacture_years`**: Maximální doba od data výroby.
 
 #### Model `TypeOfPpe` 
-
+- **`image`**:
 - **`group_type_ppe`**: Identifikuje skupinu OOP (osobních ochranných prostředků).
 - **`price`**: Cena asociovaná se skupinou PPE.
 
 
 #### Model `RevisionData`
 
-- **`image`**: Obrázek spojený s typem revize.
-- **`manufacturer`**: Odkazuje na `Manufacturer`.
-- **`group_type_ppe`**: Odkazuje na `TypeOfPpe`.
+- **`image_items`**: Obrázek spojený s typem revize.
+- **`lifetime_of_ppe`**: Odkazuje na `lifetime_of_ppe`.
+- **`type_of_ppe`**: Odkazuje na `TypeOfPpe`.
 - **`name_ppe`**: jméno ochranného prostředku.
 - **`standard_ppe`**: norma ochranného prostředku.
 - **`manual_for_revision`**: Manuál k revizi.
+- **`notes`**:
 
 #### Model `RevisionRecord`
-
+- **`photo_of_item`**:
 - **`revision_data`**: Odkazuje na `RevisionData`.
 - **`serial_number`**: Unikátní sériové číslo.
-- **`date_manufacture`, `date_of_first_use`**: Datum výroby a prvního použití.
-- **`date_of_revision`, `date_of_next_revision`**: Datum poslední a příští revize.
+- **`date_manufacture`**: Datum výroby
+- **`date_of_first_use`**: Datum prvního použití.
+- **`date_of_revision`**: Datum poslední revize.
+- **`date_of_next_revision`**: Datum příští revize.
 - **`owner`**: Odkazuje na `CustomUser`.
 - **`item_group`**: Přiřazeno k `ItemGroup`.
 - **`verdict`**: Hodnocení stavu položky.
 - **`notes`**: Poznámky.
+- **`created_by`**:
+- **`created`**:
+- **`updated`**:
 
 ### Obecné doporučení
 1. **Pojmenování a konvence**: Udržujte konzistentní pojmenování proměnných a metod. To zlepší čitelnost a údržbu kódu.
