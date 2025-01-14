@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from .views import SubmittableLoginView, LoginSuccessView, UserRegisterView, CompanyCreateView, CustomUserView, \
     CustomUserUpdateView, CompanyUpdateView, CompanyDeleteView, ItemGroupListView, ItemGroupCreateView, \
     ItemGroupUpdateView, \
-    ItemGroupDeleteView, CompanyView, CompanyListView, CompanyDetailView
+    ItemGroupDeleteView, CompanyView, CompanyListView, CompanyDetailView, ItemGroupDetailView
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),  # defaultní cesty a views z Djanga
@@ -24,6 +24,7 @@ urlpatterns = [
     path('company/delete/<int:pk>/', CompanyDeleteView.as_view(), name='delete_company'),
 
     path('item_groups/', ItemGroupListView.as_view(), name='item_group_list'),
+    path('item_group/<int:pk>/', ItemGroupDetailView.as_view(), name='item_group_detail'),
     path('item_group/add/', ItemGroupCreateView.as_view(), name='add_item_group'),
     path('item_group/edit/<int:pk>/', ItemGroupUpdateView.as_view(), name='edit_item_group'),
     path('item_group/delete/<int:pk>/', ItemGroupDeleteView.as_view(), name='delete_item_group'),

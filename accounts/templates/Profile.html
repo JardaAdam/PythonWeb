@@ -1,61 +1,71 @@
-
 {% extends 'base.html' %}
-{% block title %}Profil uživatele{% endblock %}
+
+{% block title %}User Profile{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Profil uživatele: {{ user.username }}</h2>
+    <h2>User Profile: {{ user.username }}</h2>
     <dl class="row">
-        <!-- Základní uživatelské informace -->
-        <dt class="col-sm-3">Uživatelské jméno:</dt>
-        <dd class="col-sm-9">{{ user.username }}</dd>
-        <dt class="col-sm-3">Jméno:</dt>
-        <dd class="col-sm-9">{{ user.first_name }}</dd>
-        <dt class="col-sm-3">Příjmení:</dt>
-        <dd class="col-sm-9">{{ user.last_name }}</dd>
+        <!-- Basic User Information -->
+        <dt class="col-sm-3">Username:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.username }}</dd>
+
+        <dt class="col-sm-3">First Name:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.first_name }}</dd>
+
+        <dt class="col-sm-3">Last Name:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.last_name }}</dd>
+
         <dt class="col-sm-3">Email:</dt>
-        <dd class="col-sm-9">{{ user.email }}</dd>
-        <!-- Doplňující informace z modelu CustomUser -->
-        <dt class="col-sm-3">Společnost:</dt>
-        <dd class="col-sm-9">
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.email }}</dd>
+
+        <!-- Additional Information from CustomUser Model -->
+        <dt class="col-sm-3">Company:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">
             {% if user.company %}
                 {{ user.company.name }}
-                <a class="btn btn-info btn-sm" href="{% url 'company_detail' user.company.id %}">Zobrazit Společnost</a>
+                <a class="btn btn-info btn-sm" href="{% url 'company_detail' user.company.id %}">View Company</a>
             {% else %}
-                Žádná společnost 
+                No Company
             {% endif %}
         </dd>
-        <dt class="col-sm-3">Země:</dt>
-        <dd class="col-sm-9">
+
+        <dt class="col-sm-3">Country:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">
             {% if user.country %}
                 {{ user.country.name }}
             {% else %}
-                Žádná země
+                No Country
             {% endif %}
         </dd>
-        <dt class="col-sm-3">Adresa:</dt>
-        <dd class="col-sm-9">{{ user.address }}</dd>
-        <dt class="col-sm-3">Město:</dt>
-        <dd class="col-sm-9">{{ user.city }}</dd>
-        <dt class="col-sm-3">PSČ:</dt>
-        <dd class="col-sm-9">{{ user.postcode }}</dd>
-        <dt class="col-sm-3">Telefon:</dt>
-        <dd class="col-sm-9">{{ user.phone_number }}</dd>
-        <dt class="col-sm-3">Identifikační číslo:</dt>
-        <dd class="col-sm-9">{{ user.business_id }}</dd>
-        <dt class="col-sm-3">Daňové identifikační číslo:</dt>
-        <dd class="col-sm-9">{{ user.tax_id }}</dd>
-        <dt class="col-sm-3">Poslední aktualizace:</dt>
-        <dd class="col-sm-9">{{ user.last_updated }}</dd>
+
+        <dt class="col-sm-3">Address:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.address }}</dd>
+
+        <dt class="col-sm-3">City:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.city }}</dd>
+
+        <dt class="col-sm-3">Postcode:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.postcode }}</dd>
+
+        <dt class="col-sm-3">Phone Number:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.phone_number }}</dd>
+
+        <dt class="col-sm-3">Business ID:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.business_id }}</dd>
+
+        <dt class="col-sm-3">Tax ID:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.tax_id }}</dd>
+
+        <dt class="col-sm-3">Last Updated:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.last_updated }}</dd>
     </dl>
-    
-    <!-- Tlačítka pro úpravy a přidání -->
-    <a class="btn btn-primary" href="{% url 'edit_profile' %}">Upravit Profil</a>
+
+    <!-- Edit and Add Buttons -->
+    <a class="btn btn-warning" href="{% url 'edit_profile' %}"><i class="fas fa-edit"></i> Profile</a>
     {% if not user.company %}
-        <a class="btn btn-secondary" href="{% url 'company_list' %}">Najít Společnost</a>
-        <a class="btn btn-secondary" href="{% url 'add_company' %}">Přidat Firmu</a>
+        <a class="btn btn-primary" href="{% url 'add_company' %}">Add Company</a>
     {% endif %}
-    <a class="btn btn-secondary" href="{% url 'add_item_group' %}">Přidat Item Group</a>
-    <a class="btn btn-secondary" href="{% url 'item_group_list' %}">Zobrazit Item Groups</a>
+    <a class="btn btn-info" href="{% url 'item_group_list' %}"><i class="fas fa-eye"></i> Item Groups</a>
 </div>
 {% endblock %}

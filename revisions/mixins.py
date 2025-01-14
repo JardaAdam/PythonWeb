@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
-
+# TODO vyhledávání dat které maji háčky a čárky je case sensitive !
 class FilterAndSortMixin(ListView):
     default_sort_field = 'id'  # Definovat výchozí tříditelné pole
 

@@ -3,24 +3,28 @@
 {% block title %}Revision form{% endblock %}
 
 {% block revision_content %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        {% if show_add_revision_data_button %}
-        <tr>
-            <td colspan="2">
-                <a href="{% url 'add_revision_data' %}?next={{ request.path }}" class="btn btn-secondary"> Add New Revision Data</a>
-            </td>
-        </tr>
-        {% endif %}
-    </table>
-    <button type="button" class="btn btn-secondary" onclick="history.back()">
-        <i class="fas fa-arrow-left"></i> Back
-    </button>
-    <button type="submit" id="id_submit" class="btn btn-primary">
-        Save <i class="fas fa-save"></i>
-    </button>
-</form>
-
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <h2>{{ view_title }}</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+                {% if show_add_revision_data_button %}
+                <tr>
+                    <td colspan="2">
+                        <a href="{% url 'add_revision_data' %}?next={{ request.path }}" class="btn btn-secondary"> Add New Revision Data</a>
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+            <button type="button" class="btn btn-secondary" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="submit" id="id_submit" class="btn btn-primary">
+                Save <i class="fas fa-save"></i>
+            </button>
+        </form>
+   </div>
+</div>
 {% endblock %}

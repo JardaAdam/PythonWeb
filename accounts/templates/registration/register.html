@@ -1,18 +1,34 @@
 {% extends 'base.html' %}
-{% block title %}Registrace{% endblock %}
+{% load static %}
+
+{% block title %}
+Registrace
+{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6">
         <h2>Registrace</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ user_form.as_p }} <!-- Vykreslení uživatelského formuláře -->
+            <table class="table">
+                {% for field in user_form %}
+                <tr>
+                    <th class="font-weight-bold">{{ field.label_tag }}</th>
+                    <td>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
-        <hr>
-        <a href="{% url 'add_company' %}" class="btn btn-secondary mt-3">Přidat Společnost</a> 
-        <!-- Předpokládáme, že budete mít URL pattern s názvem 'add_company' pro přidání nové společnosti -->
     </div>
 </div>
 {% endblock %}

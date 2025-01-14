@@ -24,34 +24,37 @@
                         </dd>
                         {% endif %}
                         <dt class="col-sm-4">Revision Data</dt>
-                        <dd class="col-sm-8">{{ object.revision_data }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.revision_data }}</dd>
 
                         <dt class="col-sm-4">Serial Number</dt>
-                        <dd class="col-sm-8">{{ object.serial_number }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.serial_number }}</dd>
 
                         <dt class="col-sm-4">Manufacture Date</dt>
-                        <dd class="col-sm-8">{{ object.date_manufacture }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.date_manufacture }}</dd>
 
                         <dt class="col-sm-4">First Use Date</dt>
-                        <dd class="col-sm-8">{{ object.date_of_first_use }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.date_of_first_use }}</dd>
 
                         <dt class="col-sm-4">Revision Date</dt>
-                        <dd class="col-sm-8">{{ object.date_of_revision }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.date_of_revision }}</dd>
 
                         <dt class="col-sm-4">Next Revision Date</dt>
-                        <dd class="col-sm-8">{{ object.date_of_next_revision }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.date_of_next_revision }}</dd>
 
                         <dt class="col-sm-4">Verdict</dt>
-                        <dd class="col-sm-8">{{ object.get_verdict_display }}</dd>
-
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.get_verdict_display }}</dd>
+                    
                         <dt class="col-sm-4">Notes</dt>
-                        <dd class="col-sm-8">{{ object.notes }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.notes }}</dd>
+                    
+                        <dt class="col-sm-4">Item group</dt>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.item_group.name }}</dd>
 
                         <dt class="col-sm-4">Created by User</dt>
-                        <dd class="col-sm-8">{{ object.created_by.username }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.created_by.username }}</dd>
 
                         <dt class="col-sm-4">Updated On</dt>
-                        <dd class="col-sm-8">{{ object.updated }}</dd>
+                        <dd class="col-sm-8 border-bottom pb-2">{{ object.updated }}</dd>
                     </dl>
                 </div>
                 <div class="card-footer text-end">

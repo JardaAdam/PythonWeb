@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Úspěšné přihlášení{% endblock %}
+{% block title %}Successful Login{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6">
-        <h2>Přihlášení proběhlo úspěšně!</h2>
-        <p>Vítejte zpět, {{ user.username }}!</p>
+        <h2>Login Successful!</h2>
+        <p>Welcome back, {{ user.username }}!</p>
         <!-- Doplnění odkazu nebo tlačítka pro navigaci dále -->
-        <a href="{% url 'home' %}">Pokračovat na hlavní stránku</a>
+        <a href="{% url 'home' %}">Proceed to the main page</a>
     </div>
 </div>
 {% endblock %}
