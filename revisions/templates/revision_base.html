@@ -41,11 +41,11 @@
 <div class="container my-3">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form method="get" id="search-form" class="d-flex align-items-center">
+            <form method="get" id="revision-search-form" class="d-flex align-items-center">
                 <label for="revision-search" class="me-2">Search:</label>
                 <div class="input-group">
                     <input type="text" id="revision-search" name="q" class="form-control" placeholder="Search..." value="{{ request.GET.q }}">
-                    <button type="button" class="btn btn-outline-secondary" onclick="clearSearch();">&times;</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="clearSearch('revision-search');">&times;</button>
                 </div>
                 <button type="submit" class="btn btn-outline-success ms-2">Search</button>
             </form>

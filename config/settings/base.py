@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import logging
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -133,3 +133,45 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Přihlašovací odkazy pro aplikaci accounts
 LOGIN_REDIRECT_URL = 'login_success'
 LOGOUT_REDIRECT_URL = 'home'
+
+LOGGING = {
+       'version': 1,
+       'disable_existing_loggers': False,
+       'formatters': {
+           'verbose': {
+               'format': '{levelname} {asctime} {module} {message}',
+               'style': '{',
+           },
+           'simple': {
+               'format': '{levelname} {message}',
+               'style': '{',
+           },
+       },
+       'handlers': {
+           'console': {
+               'class': logging.StreamHandler,
+               'formatter': 'simple',
+           },
+           'file': {
+               'class': logging.FileHandler,
+               'filename': BASE_DIR / 'logs/django.log',
+               'formatter': 'verbose',
+           },
+       },
+       'root': {
+           'handlers': ['console', 'file'],
+           'level': 'DEBUG',
+       },
+       'loggers': {
+           'django': {
+               'handlers': ['console', 'file'],
+               'level': 'INFO',
+               'propagate': False,
+           },
+           'django.request': {
+               'handlers': ['file'],
+               'level': 'ERROR',
+               'propagate': False,
+           },
+       },
+   }

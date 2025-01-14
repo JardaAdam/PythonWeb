@@ -1,0 +1,61 @@
+
+{% extends 'base.html' %}
+{% block title %}Profil uživatele{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Profil uživatele: {{ user.username }}</h2>
+    <dl class="row">
+        <!-- Základní uživatelské informace -->
+        <dt class="col-sm-3">Uživatelské jméno:</dt>
+        <dd class="col-sm-9">{{ user.username }}</dd>
+        <dt class="col-sm-3">Jméno:</dt>
+        <dd class="col-sm-9">{{ user.first_name }}</dd>
+        <dt class="col-sm-3">Příjmení:</dt>
+        <dd class="col-sm-9">{{ user.last_name }}</dd>
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9">{{ user.email }}</dd>
+        <!-- Doplňující informace z modelu CustomUser -->
+        <dt class="col-sm-3">Společnost:</dt>
+        <dd class="col-sm-9">
+            {% if user.company %}
+                {{ user.company.name }}
+                <a class="btn btn-info btn-sm" href="{% url 'company_detail' user.company.id %}">Zobrazit Společnost</a>
+            {% else %}
+                Žádná společnost 
+            {% endif %}
+        </dd>
+        <dt class="col-sm-3">Země:</dt>
+        <dd class="col-sm-9">
+            {% if user.country %}
+                {{ user.country.name }}
+            {% else %}
+                Žádná země
+            {% endif %}
+        </dd>
+        <dt class="col-sm-3">Adresa:</dt>
+        <dd class="col-sm-9">{{ user.address }}</dd>
+        <dt class="col-sm-3">Město:</dt>
+        <dd class="col-sm-9">{{ user.city }}</dd>
+        <dt class="col-sm-3">PSČ:</dt>
+        <dd class="col-sm-9">{{ user.postcode }}</dd>
+        <dt class="col-sm-3">Telefon:</dt>
+        <dd class="col-sm-9">{{ user.phone_number }}</dd>
+        <dt class="col-sm-3">Identifikační číslo:</dt>
+        <dd class="col-sm-9">{{ user.business_id }}</dd>
+        <dt class="col-sm-3">Daňové identifikační číslo:</dt>
+        <dd class="col-sm-9">{{ user.tax_id }}</dd>
+        <dt class="col-sm-3">Poslední aktualizace:</dt>
+        <dd class="col-sm-9">{{ user.last_updated }}</dd>
+    </dl>
+    
+    <!-- Tlačítka pro úpravy a přidání -->
+    <a class="btn btn-primary" href="{% url 'edit_profile' %}">Upravit Profil</a>
+    {% if not user.company %}
+        <a class="btn btn-secondary" href="{% url 'company_list' %}">Najít Společnost</a>
+        <a class="btn btn-secondary" href="{% url 'add_company' %}">Přidat Firmu</a>
+    {% endif %}
+    <a class="btn btn-secondary" href="{% url 'add_item_group' %}">Přidat Item Group</a>
+    <a class="btn btn-secondary" href="{% url 'item_group_list' %}">Zobrazit Item Groups</a>
+</div>
+{% endblock %}

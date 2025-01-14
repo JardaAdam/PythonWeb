@@ -2,10 +2,10 @@ from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField
-from .models import CustomUser, Company
+from .models import CustomUser, Company, ItemGroup
 
 
-class RegistrationForm(ModelForm):
+class UserRegistrationForm(ModelForm):
     password = CharField(widget=PasswordInput, label='Password')
     confirm_password = CharField(widget=PasswordInput, label='Confirm Password')
     company = ModelChoiceField(queryset=Company.objects, required=False, empty_label="-- None --",
@@ -16,7 +16,7 @@ class RegistrationForm(ModelForm):
         fields = [
             'username', 'password', 'confirm_password', 'first_name', 'last_name',
             'email', 'country', 'address', 'city', 'postcode',
-            'phone_number', 'business_id', 'tax_id', 'company',
+            'phone_number', 'business_id', 'tax_id'
         ]
 
     def clean_first_name(self):
@@ -26,6 +26,15 @@ class RegistrationForm(ModelForm):
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name', '')
         return last_name.strip().title()
+
+    """Navrh na zmenu """
+
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     if email:
+    #         validator = EmailValidator()
+    #         validator(email)
+    #     return email
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -43,9 +52,17 @@ class RegistrationForm(ModelForm):
         confirm_password = cleaned_data.get('confirm_password')
 
         if password != confirm_password:
-            raise ValidationError("Passwords do not match.")
+            self.add_error('confirm_password', "Passwords do not match.")
 
         return cleaned_data
+
+class UserEditForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = [  # Vyberte pole, která uživatel může upravit
+            'first_name', 'last_name', 'email', 'country', 'address',
+            'city', 'postcode', 'phone_number', 'business_id', 'tax_id'
+        ]
 
 
 class CompanyForm(ModelForm):
@@ -60,6 +77,11 @@ class CompanyForm(ModelForm):
         cleaned_data = super().clean()
         # Další validace, pokud je potřeba
         return cleaned_data
+
+class ItemGroupForm(ModelForm):
+    class Meta:
+        model = ItemGroup
+        fields = ['name','user','company']
 
 # class ItemGroupForm(ModelForm):
 #     class Meta:

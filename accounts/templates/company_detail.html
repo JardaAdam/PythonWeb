@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail Společnosti: {{ company.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Detail Společnosti</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Název:</dt>
+        <dd class="col-sm-9">{{ company.name }}</dd>
+
+        <dt class="col-sm-3">Země:</dt>
+        <dd class="col-sm-9">{{ company.country.name }}</dd>
+
+        <dt class="col-sm-3">Adresa:</dt>
+        <dd class="col-sm-9">{{ company.address }}</dd>
+
+        <dt class="col-sm-3">Město:</dt>
+        <dd class="col-sm-9">{{ company.city }}</dd>
+
+        <dt class="col-sm-3">PSČ:</dt>
+        <dd class="col-sm-9">{{ company.postcode }}</dd>
+
+        <dt class="col-sm-3">Telefonní číslo:</dt>
+        <dd class="col-sm-9">{{ company.phone_number }}</dd>
+
+        <dt class="col-sm-3">IČO:</dt>
+        <dd class="col-sm-9">{{ company.business_id }}</dd>
+
+        <dt class="col-sm-3">DIČ:</dt>
+        <dd class="col-sm-9">{{ company.tax_id }}</dd>
+
+        <dt class="col-sm-3">Datum Přidání:</dt>
+        <dd class="col-sm-9">{{ company.date_joined }}</dd>
+
+        <dt class="col-sm-3">Poslední Aktualizace:</dt>
+        <dd class="col-sm-9">{{ company.last_updated }}</dd>
+    </dl>
+    
+    <div class="mt-4">
+        <a class="btn btn-primary" href="{% url 'edit_company' company.pk %}">Upravit</a>
+        <a class="btn btn-danger" href="{% url 'delete_company' company.pk %}">Smazat</a>
+        <a class="btn btn-secondary" href="{% url 'company_list' %}">Zpět na seznam společností</a>
+    </div>
+</div>
+{% endblock %}

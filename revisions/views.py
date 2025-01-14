@@ -24,6 +24,7 @@ def some_view(request):
 # TODO sjednotit guery sety a form_valid pokud to pujde
 # TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
 # TODO osetrit vypisi v situacich kdy nemuze uzivatel udelat nejaky ukon. ProtectedError atd.
+# TODO doplnit listovani do vsech Template_list (paginate_by = 10), {% include "includes/pagination.html" %}
 """ MaterialType """
 
 class MaterialTypeListView(FilterAndSortMixin,ListView):
@@ -294,6 +295,7 @@ class RevisionDataListView(FilterAndSortMixin,ListView):
     template_name = 'revision_data_list.html'
     context_object_name = 'revisions_data'
     success_url = reverse_lazy('revision_home')
+    paginate_by = 10
     search_fields_by_view = ['lifetime_of_ppe__manufacturer__name',
                              'lifetime_of_ppe__material_type__name',
                              'type_of_ppe__group_type_ppe',

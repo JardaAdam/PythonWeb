@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}account Delete{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Smazat Item Group</h2>
+    <p>Opravdu chcete smazat "{{ object.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Ano, smazat</button>
+        <a class="btn btn-secondary" href="{% url 'item_group_list' %}">Ne, vrátit se</a>
+    </form>
+</div>
+{% endblock %}

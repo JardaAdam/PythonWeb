@@ -7,6 +7,7 @@ from django.core.validators import RegexValidator
 from django.conf import settings
 
 # TODO hodilo by se sem jeste dodat nejake image do modelu
+# TODO oddelit validatory
 class Country(Model):
     """ Slouzi k jednodussi registraci uzivatele a nastavuje format jednotlivich kolonek"""
     name = CharField(max_length=32, unique=True)
@@ -140,8 +141,6 @@ class CustomUser(AbstractUser):
 
 
 
-
-# TODO Zeptat se na spravné umístění možná bz mělo být spíš v revision
 class ItemGroup(Model):
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden

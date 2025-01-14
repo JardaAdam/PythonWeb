@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block title %}Registrace{% endblock %}
 
 {% block content %}
@@ -9,10 +8,11 @@
         <form method="post">
             {% csrf_token %}
             {{ user_form.as_p }} <!-- Vykreslení uživatelského formuláře -->
-            <hr>
-            {{ company_form.as_p }}
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
+        <hr>
+        <a href="{% url 'add_company' %}" class="btn btn-secondary mt-3">Přidat Společnost</a> 
+        <!-- Předpokládáme, že budete mít URL pattern s názvem 'add_company' pro přidání nové společnosti -->
     </div>
 </div>
 {% endblock %}
