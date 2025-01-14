@@ -1,0 +1,21 @@
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page=1">&laquo; První</a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}">&lsaquo; Předchozí</a>
+    {% else %}
+        &laquo; První
+        &lsaquo; Předchozí
+    {% endif %}
+
+    <span>Strana {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}">Další &rsaquo;</a>
+        <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Poslední &raquo;</a>
+    {% else %}
+        Další &rsaquo;
+        Poslední &raquo;
+    {% endif %}
+</div>
+{% endif %}

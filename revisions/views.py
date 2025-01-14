@@ -24,6 +24,8 @@ def some_view(request):
 # TODO sjednotit guery sety a form_valid pokud to pujde
 # TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
 # TODO osetrit vypisi v situacich kdy nemuze uzivatel udelat nejaky ukon. ProtectedError atd.
+# TODO doplnit listovani do vsech Template_list (paginate_by = 10), {% include "includes/pagination.html" %}
+# TODO doplnit pro create a update context_data pro view_title
 """ MaterialType """
 
 class MaterialTypeListView(FilterAndSortMixin,ListView):
@@ -294,6 +296,7 @@ class RevisionDataListView(FilterAndSortMixin,ListView):
     template_name = 'revision_data_list.html'
     context_object_name = 'revisions_data'
     success_url = reverse_lazy('revision_home')
+    paginate_by = 10
     search_fields_by_view = ['lifetime_of_ppe__manufacturer__name',
                              'lifetime_of_ppe__material_type__name',
                              'type_of_ppe__group_type_ppe',
@@ -370,21 +373,7 @@ class RevisionRecordListView(LoginRequiredMixin,FilterAndSortMixin,ListView):
                              'serial_number',
                              'verdict']
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #
-    #     # Zpracování parametrů řazení
-    #     sort_by = self.request.GET.get('sort_by', 'id')  # `id` je výchozí pole pro řazení
-    #     sort_order = self.request.GET.get('sort_order', 'asc')
-    #
-    #     # Prepnutí pořadí na sestupné, pokud je potřeba
-    #     order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
-    #     queryset = queryset.order_by(order_field)
-    #
-    #     # Vrátíme se k logice mixinu QuerysetFilterMixin
-    #     return queryset
 
-    # TODO doresit klikaci sortovani
 
 
 
@@ -428,18 +417,4 @@ class RevisionRecordDeleteView(LoginRequiredMixin,DeleteMixin):
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_records_list')
 
-# def create_revision_record(request):
-#     if request.method == 'POST':
-#         form = RevisionRecordForm(request.POST)
-#         if form.is_valid():
-#             revision_record = form.save(commit=False)
-#             revision_record.created_by = request.user  # Nastavení aktuálního uživatele jako tvůrce
-#             revision_record.save()
-#             return redirect('some-success-url')
-#         else:
-#             # zpracování chyb
-#             pass
-#     else:
-#         form = RevisionRecordForm()
-#
-#     return render(request, 'template.html', {'form': form})
+

@@ -3,14 +3,22 @@ from django.core.exceptions import ValidationError
 from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint
 
 from django.core.validators import RegexValidator
-
 from django.conf import settings
+from .validators import (
+    validate_business_id,
+    validate_tax_id,
+    validate_phone_number,
+    validate_postcode,
+)
 
 # TODO hodilo by se sem jeste dodat nejake image do modelu
+# TODO oddelit validatory
 class Country(Model):
+    # TODO pridat sloupce pro phone_number_format, phone_number_validator, business_id_validator, tax_id_validator
     """ Slouzi k jednodussi registraci uzivatele a nastavuje format jednotlivich kolonek"""
     name = CharField(max_length=32, unique=True)
     language_code = CharField(max_length=10, blank=True, help_text="Kód jazyka pro uživatele (např. 'cs' pro češtinu)")
+    # FIXme upravid delku regexu a opravit regex pro validaci
     postcode_format = CharField(max_length=6, blank=True, help_text="Regex pro validaci poštovního směrovacího čísla")
     phone_number_prefix = CharField(max_length=10, blank=True, help_text="Telefonní předvolba")
     business_id_format = CharField(max_length=10, blank=True)  # Regex pro validaci business ID
@@ -29,6 +37,7 @@ class Country(Model):
 
 
 class Company(Model):
+    # TODO pridat pole pro vlozeni fotky spolecnosti
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     name = CharField(max_length=255, unique=True, blank=True,null=True)
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='companies')
@@ -54,36 +63,44 @@ class Company(Model):
 
     def clean(self):
         super().clean()
-        # Validace dle vybrané země
         if self.country:
-            if self.country.business_id_format:
-                business_id_validator = RegexValidator(
-                    regex=self.country.business_id_format,
-                    message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-                )
-                business_id_validator(self.business_id)
-
-            if self.country.tax_id_format:
-                tax_id_validator = RegexValidator(
-                    regex=self.country.tax_id_format,
-                    message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-                )
-                tax_id_validator(self.tax_id)
-
-            if self.country.phone_number_prefix:
-                if self.phone_number:
-                    # Pokud telefonní číslo neobsahuje prefix na začátku, přidejte ho
-                    if not self.phone_number.startswith(self.country.phone_number_prefix):
-                        self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
-
-            if self.country.postcode_format:
-                postcode_validator = RegexValidator(
-                    regex=self.country.postcode_format,
-                    message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
-                )
-                postcode_validator(self.postcode)
+            validate_business_id(self.business_id, self.country)
+            validate_tax_id(self.tax_id, self.country)
+            self.phone_number = validate_phone_number(self.phone_number, self.country)
+            validate_postcode(self.postcode, self.country)
+    # def clean(self):
+    #     super().clean()
+    #     # Validace dle vybrané země
+    #     if self.country:
+    #         if self.country.business_id_format:
+    #             business_id_validator = RegexValidator(
+    #                 regex=self.country.business_id_format,
+    #                 message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
+    #             )
+    #             business_id_validator(self.business_id)
+    #
+    #         if self.country.tax_id_format:
+    #             tax_id_validator = RegexValidator(
+    #                 regex=self.country.tax_id_format,
+    #                 message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
+    #             )
+    #             tax_id_validator(self.tax_id)
+    #
+    #         if self.country.phone_number_prefix:
+    #             if self.phone_number:
+    #                 # Pokud telefonní číslo neobsahuje prefix na začátku, přidejte ho
+    #                 if not self.phone_number.startswith(self.country.phone_number_prefix):
+    #                     self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
+    #
+    #         if self.country.postcode_format:
+    #             postcode_validator = RegexValidator(
+    #                 regex=self.country.postcode_format,
+    #                 message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
+    #             )
+    #             postcode_validator(self.postcode)
 
 class CustomUser(AbstractUser):
+    # TODO pole pro fotku uzivatele
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL,related_name='country_users')
     address = CharField(max_length=128, null=True, blank=True)
@@ -94,6 +111,8 @@ class CustomUser(AbstractUser):
     tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
     last_updated = DateTimeField(auto_now=True)
 
+
+
     class Meta:
         ordering = ['username']
 
@@ -103,46 +122,51 @@ class CustomUser(AbstractUser):
     def __repr__(self):
         return f"CustomUser(username={self.username}, company={self.company}, country={self.country})"
 
-
-
     def clean(self):
         super().clean()
-
-        # Validace dle vybrané země
         if self.country:
-            if self.country.business_id_format:
-                business_id_validator = RegexValidator(
-                    regex=self.country.business_id_format,
-                    message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-                )
-                business_id_validator(self.business_id)
+            validate_business_id(self.business_id, self.country)
+            validate_tax_id(self.tax_id, self.country)
+            self.phone_number = validate_phone_number(self.phone_number, self.country)
+            validate_postcode(self.postcode, self.country)
 
-            if self.country.tax_id_format:
-                tax_id_validator = RegexValidator(
-                    regex=self.country.tax_id_format,
-                    message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-                )
-                tax_id_validator(self.tax_id)
+    # def clean(self):
+    #     super().clean()
+    #
+    #     # Validace dle vybrané země
+    #     if self.country:
+    #         if self.country.business_id_format:
+    #             business_id_validator = RegexValidator(
+    #                 regex=self.country.business_id_format,
+    #                 message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
+    #             )
+    #             business_id_validator(self.business_id)
+    #
+    #         if self.country.tax_id_format:
+    #             tax_id_validator = RegexValidator(
+    #                 regex=self.country.tax_id_format,
+    #                 message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
+    #             )
+    #             tax_id_validator(self.tax_id)
+    #
+    #         if self.country.phone_number_prefix:
+    #             if self.phone_number is not None:
+    #                 # Přidat prefix, pouze pokud číslo není None a nezačíná již prefixem
+    #                 if not self.phone_number.startswith(self.country.phone_number_prefix):
+    #                     self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
+    #
+    #         if self.country.postcode_format:
+    #             postcode_validator = RegexValidator(
+    #                 regex=self.country.postcode_format,
+    #                 message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
+    #             )
+    #             postcode_validator(self.postcode)
 
-            if self.country.phone_number_prefix:
-                if self.phone_number is not None:
-                    # Přidat prefix, pouze pokud číslo není None a nezačíná již prefixem
-                    if not self.phone_number.startswith(self.country.phone_number_prefix):
-                        self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
-
-            if self.country.postcode_format:
-                postcode_validator = RegexValidator(
-                    regex=self.country.postcode_format,
-                    message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
-                )
-                postcode_validator(self.postcode)
 
 
 
-
-
-# TODO Zeptat se na spravné umístění možná bz mělo být spíš v revision
 class ItemGroup(Model):
+    # TODO forku item group
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden
         - CustomUser rozdelene polozky do vice skupin podle pouziti (rescue bag, working at heihgt equipments
@@ -158,10 +182,6 @@ class ItemGroup(Model):
             UniqueConstraint(fields=['name', 'user', 'company'], name='unique_name_user_company')
         ]
 
-    def clean(self):
-        # Zajištění, že je vyplněno alespoň jedno z polí `user` nebo `company`
-        if not self.user and not self.company:
-            raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
 
     def __str__(self):
         user_name = f"{self.user.first_name} {self.user.last_name}" if self.user else "Žádný uživatel"
@@ -170,3 +190,12 @@ class ItemGroup(Model):
 
     def __repr__(self):
         return f"ItemGroup(name={self.name}, user={self.user}, company={self.company})"
+
+    def clean(self):
+        if not self.user and not self.company:
+            raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
+
+    # def clean(self):
+    #     # Zajištění, že je vyplněno alespoň jedno z polí `user` nebo `company`
+    #     if not self.user and not self.company:
+    #         raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')

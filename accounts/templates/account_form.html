@@ -1,33 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-Registrace
-{% endblock %}
+
+{% block title %}Account Form{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6">
-        <h2>Registrace</h2>
+        <h2>{{ view_title }}</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <table class="table">
-                {% for field in user_form %}
+                {% for field in form %}
                 <tr>
                     <th class="font-weight-bold">{{ field.label_tag }}</th>
                     <td>
                         {{ field }}
                         {% if field.help_text %}
-                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
                         {% endif %}
                         {% if field.errors %}
-                            <div class="text-danger">{{ field.errors }}</div>
+                        <div class="text-danger">{{ field.errors }}</div>
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </table>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="button" class="btn btn-secondary" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="submit" class="btn btn-primary">Save <i class="fas fa-save"></i></button>
         </form>
     </div>
 </div>

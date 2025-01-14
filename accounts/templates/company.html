@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Moje Společnost{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Moje Společnost</h2>
+    {% if company %}
+        <dl class="row">
+            <dt class="col-sm-3">Název:</dt>
+            <dd class="col-sm-9">{{ company.name }}</dd>
+
+            <dt class="col-sm-3">Země:</dt>
+            <dd class="col-sm-9">{{ company.country.name }}</dd>
+
+            <dt class="col-sm-3">Adresa:</dt>
+            <dd class="col-sm-9">{{ company.address }}</dd>
+
+            <dt class="col-sm-3">Město:</dt>
+            <dd class="col-sm-9">{{ company.city }}</dd>
+
+            <dt class="col-sm-3">PSČ:</dt>
+            <dd class="col-sm-9">{{ company.postcode }}</dd>
+
+            <dt class="col-sm-3">Telefonní číslo:</dt>
+            <dd class="col-sm-9">{{ company.phone_number }}</dd>
+
+            <dt class="col-sm-3">IČO:</dt>
+            <dd class="col-sm-9">{{ company.business_id }}</dd>
+
+            <dt class="col-sm-3">DIČ:</dt>
+            <dd class="col-sm-9">{{ company.tax_id }}</dd>
+        </dl>
+        <a class="btn btn-primary" href="{% url 'edit_company' company.pk %}">Upravit Společnost</a>
+    {% else %}
+        <p>{{ no_company_message }}</p>
+        <a class="btn btn-secondary" href="{% url 'add_company' %}">Přidat Společnost</a>
+    {% endif %}
+</div>
+{% endblock %}

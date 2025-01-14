@@ -21,6 +21,12 @@
             <ul class="navbar-nav ms-auto" style="display: grid; grid-auto-flow: column; gap: 0.4rem;">
         {% if user.is_authenticated %}
                     <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}" style="padding: 0; display: inline-block;">Profile</a>
+                    </li>
+                    <li class="nav-item" style="padding: 0 0.2rem;">
+                    |
+                    </li>
+                    <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" class="nav-link btn btn-link" style="padding: 0; border: none; background: none;">

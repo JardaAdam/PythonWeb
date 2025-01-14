@@ -5,33 +5,35 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
-
+# TODO vyhledávání dat které maji háčky a čárky je case sensitive !
 class FilterAndSortMixin(ListView):
-    default_sort_field = 'id'  # Default field for sorting
+    default_sort_field = 'id'  # Definovat výchozí tříditelné pole
 
     def get_search_fields(self):
-        # Vrátí search_fields z view třídy, pokud je definováno
         return getattr(self, 'search_fields_by_view', [])
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
+    def get_filtered_queryset(self, queryset):
+        # Logika filtrování
         query = self.request.GET.get('q')
-
         if query:
             queries = Q()
             search_fields = self.get_search_fields()
-
             for field in search_fields:
                 queries |= Q(**{f'{field}__icontains': query})
-
             queryset = queryset.filter(queries).distinct()
+        return queryset
 
-        # Sorting logic
+    def get_sorted_queryset(self, queryset):
+        # Logika řazení
         sort_by = self.request.GET.get('sort_by', self.default_sort_field)
         sort_order = self.request.GET.get('sort_order', 'asc')
         order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
-        queryset = queryset.order_by(order_field)
+        return queryset.order_by(order_field)
 
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Toto očekává dědictví nebo směsimo do třídy s `get_queryset`
+        queryset = self.get_filtered_queryset(queryset)
+        queryset = self.get_sorted_queryset(queryset)
         return queryset
 
 # class QuerysetFilterMixin(ListView):

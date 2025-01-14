@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>User Profile: {{ user.username }}</h2>
+    <dl class="row">
+        <!-- Basic User Information -->
+        <dt class="col-sm-3">Username:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.username }}</dd>
+
+        <dt class="col-sm-3">First Name:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.first_name }}</dd>
+
+        <dt class="col-sm-3">Last Name:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.last_name }}</dd>
+
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.email }}</dd>
+
+        <!-- Additional Information from CustomUser Model -->
+        <dt class="col-sm-3">Company:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">
+            {% if user.company %}
+                {{ user.company.name }}
+                <a class="btn btn-info btn-sm" href="{% url 'company_detail' user.company.id %}">View Company</a>
+            {% else %}
+                No Company
+            {% endif %}
+        </dd>
+
+        <dt class="col-sm-3">Country:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">
+            {% if user.country %}
+                {{ user.country.name }}
+            {% else %}
+                No Country
+            {% endif %}
+        </dd>
+
+        <dt class="col-sm-3">Address:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.address }}</dd>
+
+        <dt class="col-sm-3">City:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.city }}</dd>
+
+        <dt class="col-sm-3">Postcode:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.postcode }}</dd>
+
+        <dt class="col-sm-3">Phone Number:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.phone_number }}</dd>
+
+        <dt class="col-sm-3">Business ID:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.business_id }}</dd>
+
+        <dt class="col-sm-3">Tax ID:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.tax_id }}</dd>
+
+        <dt class="col-sm-3">Last Updated:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.last_updated }}</dd>
+    </dl>
+
+    <!-- Edit and Add Buttons -->
+    <a class="btn btn-warning" href="{% url 'edit_profile' %}"><i class="fas fa-edit"></i> Profile</a>
+    {% if not user.company %}
+        <a class="btn btn-primary" href="{% url 'add_company' %}">Add Company</a>
+    {% endif %}
+    <a class="btn btn-info" href="{% url 'item_group_list' %}"><i class="fas fa-eye"></i> Item Groups</a>
+</div>
+{% endblock %}
