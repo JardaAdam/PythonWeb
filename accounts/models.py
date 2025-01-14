@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint
+from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint, ImageField
 
 from django.core.validators import RegexValidator
 from django.conf import settings
@@ -14,16 +14,20 @@ from .validators import (
 # TODO hodilo by se sem jeste dodat nejake image do modelu
 # TODO oddelit validatory
 class Country(Model):
-    # TODO pridat sloupce pro phone_number_format, phone_number_validator, business_id_validator, tax_id_validator
-    """ Slouzi k jednodussi registraci uzivatele a nastavuje format jednotlivich kolonek"""
+    """ Facilitates easier user registration by setting format for individual fields """
     name = CharField(max_length=32, unique=True)
-    language_code = CharField(max_length=10, blank=True, help_text="Kód jazyka pro uživatele (např. 'cs' pro češtinu)")
-    # FIXme upravid delku regexu a opravit regex pro validaci
-    postcode_format = CharField(max_length=6, blank=True, help_text="Regex pro validaci poštovního směrovacího čísla")
-    phone_number_prefix = CharField(max_length=10, blank=True, help_text="Telefonní předvolba")
-    business_id_format = CharField(max_length=10, blank=True)  # Regex pro validaci business ID
-    tax_id_format = CharField(max_length=12, blank=True)  # Regex pro validaci tax ID
-    tax_id_prefix = CharField(max_length=4, blank=True, help_text="Tax ID prefix (např. CZ)")
+    language_code = CharField(max_length=10, blank=True, help_text="Language code for the user (e.g., 'cs' for Czech)")
+    postcode_validator = CharField(max_length=20, blank=True, help_text="Regex for postal code validation")
+    postcode_format = CharField(max_length=20, blank=True, help_text="Auxiliary format for postal code")
+    phone_number_prefix = CharField(max_length=10, blank=True, help_text="Phone number prefix")
+    phone_number_validator = CharField(max_length=20, blank=True, help_text="Regex for phone number validation")
+    phone_number_format = CharField(max_length=20, blank=True, help_text="Auxiliary format for phone number")
+    business_id_validator = CharField(max_length=20, blank=True, help_text="Regex for business ID validation")
+    business_id_format = CharField(max_length=20, blank=True, help_text="Auxiliary format for business ID")
+    tax_id_prefix = CharField(max_length=20, blank=True, help_text="Tax ID prefix (e.g., CZ)")
+    tax_id_validator = CharField(max_length=20, blank=True, help_text="Regex for tax ID validation")
+    tax_id_format = CharField(max_length=20, blank=True, help_text="Auxiliary format for tax ID")
+
 
     class Meta:
         ordering = ['name']
@@ -39,6 +43,7 @@ class Country(Model):
 class Company(Model):
     # TODO pridat pole pro vlozeni fotky spolecnosti
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
+    logo = ImageField(upload_to="media/company/", null=True, blank=True)
     name = CharField(max_length=255, unique=True, blank=True,null=True)
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='companies')
     address = CharField(max_length=255, null=True, blank=True)
@@ -68,39 +73,10 @@ class Company(Model):
             validate_tax_id(self.tax_id, self.country)
             self.phone_number = validate_phone_number(self.phone_number, self.country)
             validate_postcode(self.postcode, self.country)
-    # def clean(self):
-    #     super().clean()
-    #     # Validace dle vybrané země
-    #     if self.country:
-    #         if self.country.business_id_format:
-    #             business_id_validator = RegexValidator(
-    #                 regex=self.country.business_id_format,
-    #                 message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-    #             )
-    #             business_id_validator(self.business_id)
-    #
-    #         if self.country.tax_id_format:
-    #             tax_id_validator = RegexValidator(
-    #                 regex=self.country.tax_id_format,
-    #                 message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-    #             )
-    #             tax_id_validator(self.tax_id)
-    #
-    #         if self.country.phone_number_prefix:
-    #             if self.phone_number:
-    #                 # Pokud telefonní číslo neobsahuje prefix na začátku, přidejte ho
-    #                 if not self.phone_number.startswith(self.country.phone_number_prefix):
-    #                     self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
-    #
-    #         if self.country.postcode_format:
-    #             postcode_validator = RegexValidator(
-    #                 regex=self.country.postcode_format,
-    #                 message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
-    #             )
-    #             postcode_validator(self.postcode)
+
 
 class CustomUser(AbstractUser):
-    # TODO pole pro fotku uzivatele
+    photo = ImageField(upload_to="media/user/", null=True, blank=True)
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL,related_name='country_users')
     address = CharField(max_length=128, null=True, blank=True)
@@ -130,47 +106,16 @@ class CustomUser(AbstractUser):
             self.phone_number = validate_phone_number(self.phone_number, self.country)
             validate_postcode(self.postcode, self.country)
 
-    # def clean(self):
-    #     super().clean()
-    #
-    #     # Validace dle vybrané země
-    #     if self.country:
-    #         if self.country.business_id_format:
-    #             business_id_validator = RegexValidator(
-    #                 regex=self.country.business_id_format,
-    #                 message=f"Business ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-    #             )
-    #             business_id_validator(self.business_id)
-    #
-    #         if self.country.tax_id_format:
-    #             tax_id_validator = RegexValidator(
-    #                 regex=self.country.tax_id_format,
-    #                 message=f"Tax ID neodpovídá formátu pro zvolenou zemi {self.country.name}. Zkontrolujte formát."
-    #             )
-    #             tax_id_validator(self.tax_id)
-    #
-    #         if self.country.phone_number_prefix:
-    #             if self.phone_number is not None:
-    #                 # Přidat prefix, pouze pokud číslo není None a nezačíná již prefixem
-    #                 if not self.phone_number.startswith(self.country.phone_number_prefix):
-    #                     self.phone_number = f"{self.country.phone_number_prefix}{self.phone_number}"
-    #
-    #         if self.country.postcode_format:
-    #             postcode_validator = RegexValidator(
-    #                 regex=self.country.postcode_format,
-    #                 message=f"Poštovní směrovací číslo neodpovídá formátu pro zvolenou zemi {self.country.name}."
-    #             )
-    #             postcode_validator(self.postcode)
 
 
 
 
 class ItemGroup(Model):
-    # TODO forku item group
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden
         - CustomUser rozdelene polozky do vice skupin podle pouziti (rescue bag, working at heihgt equipments
         - Company rozdelene polozky dle zamestnancu/pracovist/aut/atd."""
+    photo = ImageField(upload_to="media/item_group/", null=True, blank=True)
     name = CharField(max_length=64)
     user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='user_item_groups')
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_item_groups')

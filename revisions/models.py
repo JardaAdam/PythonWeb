@@ -62,9 +62,9 @@ class LifetimeOfPpe(Model):
     manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='lifetime')
     material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='material_type')
     lifetime_use_years = IntegerField(blank=False, null=False,
-                                      help_text="Maximální doba používání od 1.použití v letech")
+                                      help_text="Maximum period of use from 1st use in years")
     lifetime_manufacture_years = IntegerField(blank=False, null=False,
-                                              help_text="Maximální doba používání od data výroby v letech")
+                                              help_text="Maximum period of use from date of manufacture in years")
 
     class Meta:
         constraints = [
@@ -172,10 +172,10 @@ class RevisionRecord(Model):
 
     def __str__(self):
         manufacturer_name = self.revision_data.lifetime_of_ppe.manufacturer.name if (
-            self.revision_data.lifetime_of_ppe.manufacturer) else "Neznámý výrobce"
+            self.revision_data.lifetime_of_ppe.manufacturer) else "Unknown manufacturer"
         group_type = self.revision_data.type_of_ppe.group_type_ppe if self.revision_data.type_of_ppe \
-            else "Neznámý typ"
-        name_ppe = self.revision_data.name_ppe if self.revision_data.name_ppe else "Neznámé PPE"
+            else "Unknown type"
+        name_ppe = self.revision_data.name_ppe if self.revision_data.name_ppe else "Unknown PPE"
 
         return (f"{manufacturer_name} | {group_type} | {name_ppe} | "
                 f"{self.serial_number} | {self.date_manufacture} | {self.date_of_first_use} | "
