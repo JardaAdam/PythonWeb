@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint, ImageField
 
-from django.core.validators import RegexValidator
 from django.conf import settings
 from .validators import (
     validate_business_id,
@@ -71,7 +70,7 @@ class Company(Model):
         if self.country:
             validate_business_id(self.business_id, self.country)
             validate_tax_id(self.tax_id, self.country)
-            self.phone_number = validate_phone_number(self.phone_number, self.country)
+            validate_phone_number(self.phone_number, self.country)
             validate_postcode(self.postcode, self.country)
 
 
@@ -101,10 +100,41 @@ class CustomUser(AbstractUser):
     def clean(self):
         super().clean()
         if self.country:
+            validate_postcode(self.postcode, self.country)
+            validate_phone_number(self.phone_number, self.country)
             validate_business_id(self.business_id, self.country)
             validate_tax_id(self.tax_id, self.country)
-            self.phone_number = validate_phone_number(self.phone_number, self.country)
-            validate_postcode(self.postcode, self.country)
+
+
+
+    # def clean(self):
+    #     super().clean()
+    #
+    #     if self.country:
+    #         # Validace postcode
+    #         try:
+    #             self.postcode = validate_postcode(self.postcode, self.country)
+    #         except ValidationError as e:
+    #             raise ValidationError({'postcode': e.message})
+    #         # Validace phone number
+    #         try:
+    #             self.phone_number = validate_phone_number(self.phone_number, self.country)
+    #         except ValidationError as e:
+    #             raise ValidationError({'phone_number': e.message})
+    #         # Validace business ID
+    #         try:
+    #             self.business_id = validate_business_id(self.business_id, self.country)
+    #         except ValidationError as e:
+    #             raise ValidationError({'business_id': e.message})
+    #         # Validace tax ID
+    #         try:
+    #             self.tax_id = validate_tax_id(self.tax_id, self.country)
+    #         except ValidationError as e:
+    #             raise ValidationError({'tax_id': e.message})
+
+
+
+
 
 
 

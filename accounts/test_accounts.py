@@ -3,7 +3,105 @@ from unittest import skip
 from django.test import TestCase, Client
 from django.urls import reverse
 
+from .forms import UserRegistrationForm
 from .models import CustomUser, Country, Company
+
+
+class UserRegistrationFormTest(TestCase):
+
+    def setUp(self):
+        # Vytvoření testovací instance Country
+        self.country = Country.objects.create(name="Testland",
+                                              postcode_validator=r"\d{5}",
+                                              phone_number_prefix="+420",
+                                              phone_number_validator=r"^(?:\+420)?\d{9}$",
+                                              business_id_validator=r"^\d{8}$",
+                                              tax_id_prefix="CZ",
+                                              tax_id_validator=r"\d{10}$"
+                                              )
+
+    def test_valid_data(self):
+        form = UserRegistrationForm(data={
+            'username': 'testuser',
+            'password1': 'strongpassword123',
+            'password2': 'strongpassword123',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john.doe@example.com',
+            'country': self.country.id,
+            'address': '123 Test Street',
+            'city': 'Test City',
+            'postcode': '12345',
+            'phone_number': '123456789',
+            'business_id': '12345678',
+            'tax_id': '0123456789',
+            'company': None,
+        })
+
+        self.assertTrue(form.is_valid())
+
+    def test_mismatched_passwords(self):
+        form = UserRegistrationForm(data={
+            'username': 'testuser',
+            'password1': 'strongpassword123',
+            'password2': 'anotherpassword',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john.doe@example.com',
+            'country': self.country.id,
+            'address': '123 Test Street',
+            'city': 'Test City',
+            'postcode': '12345',
+            'phone_number': '123456789',
+            'business_id': 'TL-123456',
+            'tax_id': 'TL-123456',
+            'company': None,
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['password2'], ["Passwords do not match."])
+
+    def test_invalid_phone_number(self):
+        form = UserRegistrationForm(data={
+            'username': 'testuser',
+            'password': 'strongpassword123',
+            'confirm_password': 'strongpassword123',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john.doe@example.com',
+            'country': self.country.id,
+            'address': '123 Test Street',
+            'city': 'Test City',
+            'postcode': '12345',
+            'phone_number': '12345',  # Invalid phone number
+            'business_id': '12345678',
+            'tax_id': 'CZ1234567890',
+            'company': None,
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('phone_number', form.errors)
+
+    def test_missing_tax_id_prefix(self):
+        form = UserRegistrationForm(data={
+            'username': 'testuser',
+            'password': 'strongpassword123',
+            'confirm_password': 'strongpassword123',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john.doe@example.com',
+            'country': self.country.id,
+            'address': '123 Test Street',
+            'city': 'Test City',
+            'postcode': '12345',
+            'phone_number': '123456789',
+            'business_id': 'TL-123456',
+            'tax_id': '123456',  # Missing prefix
+            'company': None,
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('tax_id', form.errors)
 
 
 class UserLoginTest(TestCase):
@@ -95,8 +193,8 @@ class UserRegistrationTest(TestCase):
     def test_register_user_without_company(self):
         user_data = {
             'username': 'testuser',
-            'password': 'SafePassword123',
-            'confirm_password': 'SafePassword123',
+            'password1': 'SafePassword123',
+            'password2': 'SafePassword123',
             'first_name': 'jane',
             'last_name': 'doe',
             'email': 'janedoe@example.com',
@@ -132,8 +230,8 @@ class UserRegistrationTest(TestCase):
         # Ukázkový test pro nesprávný formát PSČ
         user_data = {
             'username': 'testuser2',
-            'password': 'SafePassword123',
-            'confirm_password': 'SafePassword123',
+            'password1': 'SafePassword123',
+            'password2': 'SafePassword123',
             'first_name': 'Jane',
             'last_name': 'Doe',
             'email': 'janedoe@example.com',
@@ -157,8 +255,8 @@ class UserRegistrationTest(TestCase):
         # Simulace dat pro nového uživatele, který se chce připojit k existující společnosti
         data = {
             'username': 'companyuser',
-            'password': 'SecurePassword44',
-            'confirm_password': 'SecurePassword44',
+            'password1': 'SecurePassword44',
+            'password2': 'SecurePassword44',
             'first_name': 'Alice',
             'last_name': 'Smith',
             'email': 'alicesmith@example.com',

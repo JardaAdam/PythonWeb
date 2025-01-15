@@ -28,16 +28,16 @@ class UserRegisterView(View):
             'user_form': user_form
         })
 
-    @transaction.atomic
     def post(self, request):
         user_form = UserRegistrationForm(request.POST)
+
         if user_form.is_valid():
-            user = user_form.save(commit=False)
-            user.set_password(user_form.cleaned_data['password'])
-            user.save()
+            # Save the user instance including password
+            user = user_form.save()  # .save() již volá set_password v rámci formy
             login(request, user)
             return redirect('login_success')
 
+        # Pokud form není validní, zobrazí chyby zpět na template
         return render(request, self.template_name, {'user_form': user_form})
 
 class CustomUserView(LoginRequiredMixin, TemplateView):
@@ -64,7 +64,7 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return get_object_or_404(CustomUser, pk=self.request.user.pk)
 
-    @transaction.atomic
+
     def form_valid(self, form):
         user = form.save(commit=False)
         # Update the user's company based on form selection

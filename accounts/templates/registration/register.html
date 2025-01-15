@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}
-Registrace
-{% endblock %}
+{% block title %} Registrace {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-5">
@@ -18,10 +15,10 @@ Registrace
                     <td>
                         {{ field }}
                         {% if field.help_text %}
-                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
                         {% endif %}
                         {% if field.errors %}
-                            <div class="text-danger">{{ field.errors }}</div>
+                        <div class="text-danger">{{ field.errors }}</div>
                         {% endif %}
                     </td>
                 </tr>
