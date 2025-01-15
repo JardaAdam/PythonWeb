@@ -41,11 +41,10 @@ class Country(Model):
 
 
 class Company(Model):
-    # TODO pridat pole pro vlozeni fotky spolecnosti
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
     name = CharField(max_length=255, unique=True, blank=True, null=True)
-    country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='companies')
+    country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='user_by_country')
     address = CharField(max_length=255, null=True, blank=True)
     city = CharField(max_length=32, null=True, blank=True)
     postcode = CharField(max_length=6, null=True, blank=True)

@@ -59,8 +59,8 @@ class Manufacturer(Model):
 
 class LifetimeOfPpe(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
-    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='lifetime')
-    material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='material_type')
+    manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='lifetimes')
+    material_type = ForeignKey(MaterialType, on_delete=PROTECT, related_name='lifetimes')
     lifetime_use_years = IntegerField(blank=False, null=False,
                                       help_text="Maximum period of use from 1st use in years")
     lifetime_manufacture_years = IntegerField(blank=False, null=False,
@@ -103,11 +103,10 @@ class TypeOfPpe(Model):
 class RevisionData(Model):
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
     image_items = ImageField(upload_to="static/image/revision_data/", default=None)
-    lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_data',
-                                 related_query_name='revision_data')
+    lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_datas')
     type_of_ppe = ForeignKey(TypeOfPpe, on_delete=PROTECT, blank=False, null=False, related_name='group_type')
     name_ppe = CharField(max_length=32, null=False, blank=False)
-    standard_ppe = ManyToManyField(StandardPpe, related_name='standard_ppe')  # Množství norem
+    standard_ppe = ManyToManyField(StandardPpe, related_name='standards_ppe')  # Množství norem
     manual_for_revision = FileField(upload_to='static/revision_data/manuals/')
     notes = TextField(blank=True, null=True)
 
@@ -141,9 +140,9 @@ class RevisionRecord(Model):
     date_of_first_use = DateField(null=True, blank=True)
     date_of_revision = DateField(blank=True, null=True) # automaticky vyplnovane po ukonceni vkladani!
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
-    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='item_group',
-                            related_query_name='item_group')
-    owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True)
+    item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records',
+                            related_query_name='revision_record')
+    owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='owner_records')
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
     VERDICT_RETIRE = 'retire'
