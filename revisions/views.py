@@ -362,6 +362,7 @@ class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin):
 # TODO pri zvoleni new pri update se zobrazi ulozeni probehlo vporadku ale zaznam se nezmeni
 #
 class RevisionRecordListView(LoginRequiredMixin,FilterAndSortMixin,ListView):
+    # FIXME doplnit vyhledavani podle itemgroup a owner
     model = RevisionRecord
     template_name = 'revision_record_list.html'
     context_object_name = 'revision_records'
@@ -378,6 +379,7 @@ class RevisionRecordListView(LoginRequiredMixin,FilterAndSortMixin,ListView):
 
 
 class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
+    # FIXME Doplnit owner do detail view
     model = RevisionRecord
     template_name = 'revision_record_detail.html'
     context_object_name = 'revision_record'
@@ -386,6 +388,7 @@ class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
 # TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
 
 class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+    # FIXME Upravit zobrazovani chyb ve formulari
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'

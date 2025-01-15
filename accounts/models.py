@@ -10,6 +10,7 @@ from .validators import (
     validate_postcode,
 )
 
+
 # TODO hodilo by se sem jeste dodat nejake image do modelu
 # TODO oddelit validatory
 class Country(Model):
@@ -27,11 +28,11 @@ class Country(Model):
     tax_id_validator = CharField(max_length=20, blank=True, help_text="Regex for tax ID validation")
     tax_id_format = CharField(max_length=20, blank=True, help_text="Auxiliary format for tax ID")
 
-
     class Meta:
         ordering = ['name']
         verbose_name = "Country"
         verbose_name_plural = "Countries"
+
     def __str__(self):
         return self.name
 
@@ -43,7 +44,7 @@ class Company(Model):
     # TODO pridat pole pro vlozeni fotky spolecnosti
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
-    name = CharField(max_length=255, unique=True, blank=True,null=True)
+    name = CharField(max_length=255, unique=True, blank=True, null=True)
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='companies')
     address = CharField(max_length=255, null=True, blank=True)
     city = CharField(max_length=32, null=True, blank=True)
@@ -77,7 +78,7 @@ class Company(Model):
 class CustomUser(AbstractUser):
     photo = ImageField(upload_to="media/user/", null=True, blank=True)
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
-    country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL,related_name='country_users')
+    country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='country_users')
     address = CharField(max_length=128, null=True, blank=True)
     city = CharField(max_length=32, null=True, blank=True)
     postcode = CharField(max_length=6, null=True, blank=True)
@@ -85,8 +86,6 @@ class CustomUser(AbstractUser):
     business_id = CharField(max_length=10, null=True, blank=True, verbose_name="Business ID")
     tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
     last_updated = DateTimeField(auto_now=True)
-
-
 
     class Meta:
         ordering = ['username']
@@ -104,8 +103,6 @@ class CustomUser(AbstractUser):
             validate_phone_number(self.phone_number, self.country)
             validate_business_id(self.business_id, self.country)
             validate_tax_id(self.tax_id, self.country)
-
-
 
     # def clean(self):
     #     super().clean()
@@ -133,13 +130,6 @@ class CustomUser(AbstractUser):
     #             raise ValidationError({'tax_id': e.message})
 
 
-
-
-
-
-
-
-
 class ItemGroup(Model):
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden
@@ -157,7 +147,7 @@ class ItemGroup(Model):
             UniqueConstraint(fields=['name', 'user', 'company'], name='unique_name_user_company')
         ]
 
-
+    # TODO mozna upravit styl zobrazovani pro vypis v update ItemGroup
     def __str__(self):
         user_name = f"{self.user.first_name} {self.user.last_name}" if self.user else "Žádný uživatel"
         company_name = self.company.name if self.company else "Žádná společnost"

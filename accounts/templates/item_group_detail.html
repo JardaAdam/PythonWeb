@@ -1,12 +1,23 @@
-{% extends "revision_base.html" %}
+{% extends "base.html" %}
 {% load sort_tags %}
 {% block title %}Item Group{% endblock %}
 
-{% block revision_content %}
+{% block content %}
 <div class="container mt-4">
     <h2>{{ item_group.name }}</h2>
+    {% include 'includes/search_account_form.html' %}
+    {# <img src="{{ item_group.photo.url }}" alt="Group Photo" class="img-fluid mb-3" style="max-width: 150px;"> #}
+
     <p>Company: {{ item_group.company }}</p>
     <p>User: {{ item_group.user }}</p>
+    <p>Created: {{ item_group.created }}</p>
+    <p>Updated: {{ item_group.updated }}</p>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Number of Items in Group: {{ revision_records.count }}</h3>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-12 text-center">

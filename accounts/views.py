@@ -1,6 +1,7 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth import login
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views import View
@@ -167,8 +168,46 @@ class ItemGroupDetailView(LoginRequiredMixin, DetailView):
     model = ItemGroup
     template_name = 'item_group_detail.html'
     context_object_name = 'item_group'
+    search_fields_by_view = ['revision_data__lifetime_of_ppe__manufacturer__name',
+                             'revision_data__lifetime_of_ppe__material_type__name',
+                             'revision_data__type_of_ppe__group_type_ppe',
+                             'revision_data__name_ppe',
+                             'serial_number',
+                             'verdict']
+    default_sort_field = ['date_manufacturer']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Získání všech záznamů, které patří do této skupiny
+        context['revision_records'] = RevisionRecord.objects.filter(item_group=self.object)
+        return context
 
+    def get_search_fields(self):
+        return getattr(self, 'search_fields_by_view', [])
+
+    def get_filtered_queryset(self, queryset):
+        # Logika filtrování
+        query = self.request.GET.get('q')
+        if query:
+            queries = Q()
+            search_fields = self.get_search_fields()
+            for field in search_fields:
+                queries |= Q(**{f'{field}__icontains': query})
+            queryset = queryset.filter(queries).distinct()
+        return queryset
+
+    def get_sorted_queryset(self, queryset):
+        # Logika řazení
+        sort_by = self.request.GET.get('sort_by', self.default_sort_field)
+        sort_order = self.request.GET.get('sort_order', 'asc')
+        order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
+        return queryset.order_by(order_field)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Toto očekává dědictví nebo směsimo do třídy s `get_queryset`
+        queryset = self.get_filtered_queryset(queryset)
+        queryset = self.get_sorted_queryset(queryset)
+        return queryset
 
 class ItemGroupCreateView(LoginRequiredMixin, CreateView):
     model = ItemGroup

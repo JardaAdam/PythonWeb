@@ -158,7 +158,8 @@ class UserEditForm(FormValidationMixin):
 
 
 
-class CompanyForm(ModelForm):
+class CompanyForm(FormValidationMixin):
+    # TODO nesmi se dat vytvorit prazdny zaznam povine pole podobne jako u UserView
     class Meta:
         model = Company
         fields = [
@@ -174,7 +175,7 @@ class CompanyForm(ModelForm):
 class ItemGroupForm(ModelForm):
     class Meta:
         model = ItemGroup
-        fields = ['name','user','company']
+        fields = '__all__'
 
 
     def clean(self):
@@ -186,3 +187,4 @@ class ItemGroupForm(ModelForm):
             raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
 
         return cleaned_data
+
