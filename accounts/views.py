@@ -1,5 +1,4 @@
 import logging
-from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth import login
 from django.urls import reverse_lazy
@@ -15,7 +14,8 @@ from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
 
 logger = logging.getLogger(__name__)
-
+# TODO nastavit resset hesla
+# TODO skontrolovat vsechny preklady do Aj !!
 # Create your views here.
 """ Custom User"""
 class UserRegisterView(View):
@@ -117,7 +117,7 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
         context['view_title'] = 'Add Company'
         return context
 
-    @transaction.atomic
+
     def form_valid(self, form):
         response = super().form_valid(form)
         messages.success(self.request, 'Company added successfully.')
@@ -134,7 +134,7 @@ class CompanyUpdateView(LoginRequiredMixin, UpdateView):
         context['view_title'] = 'Edit Company'
         return context
 
-    @transaction.atomic
+
     def form_valid(self, form):
         messages.success(self.request, 'Company was successfully updated.')
         return super().form_valid(form)
@@ -181,7 +181,7 @@ class ItemGroupCreateView(LoginRequiredMixin, CreateView):
         context['view_title'] = 'Add PPE Group'
         return context
 
-    @transaction.atomic
+
     def form_valid(self, form):
         messages.success(self.request, 'Item Group was successfully created.')
         return super().form_valid(form)
@@ -197,7 +197,7 @@ class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
         context['view_title'] = 'Edit PPE Group'
         return context
 
-    @transaction.atomic
+
     def form_valid(self, form):
         messages.success(self.request, 'Item Group was successfully updated.')
         return super().form_valid(form)

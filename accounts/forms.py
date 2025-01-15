@@ -1,17 +1,12 @@
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+from django.db.transaction import atomic
 
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput
 
 from .mixins import FormValidationMixin
 from .models import CustomUser, Company, ItemGroup, Country
-from .validators import (
-    validate_no_numbers,
-    validate_business_id,
-    validate_tax_id,
-    validate_phone_number,
-    validate_postcode,
-)
+from .validators import validate_no_numbers
 
 class UserRegistrationForm(FormValidationMixin):
     password1 = CharField(widget=PasswordInput, label='Password')
@@ -73,6 +68,7 @@ class UserRegistrationForm(FormValidationMixin):
 
         return cleaned_data
 
+    @atomic
     def save(self, commit=True):
         user = super().save(commit=False)
         password = self.cleaned_data.get("password1")
