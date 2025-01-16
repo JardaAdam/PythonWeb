@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint, ImageField
@@ -73,6 +74,13 @@ class Company(Model):
             validate_phone_number(self.phone_number, self.country)
             validate_postcode(self.postcode, self.country)
 
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.logo and os.path.isfile(self.logo.path):
+            os.remove(self.logo.path)
+
+        super().delete(*args, **kwargs)
+
 
 class CustomUser(AbstractUser):
     photo = ImageField(upload_to="media/user/", null=True, blank=True)
@@ -103,30 +111,7 @@ class CustomUser(AbstractUser):
             validate_business_id(self.business_id, self.country)
             validate_tax_id(self.tax_id, self.country)
 
-    # def clean(self):
-    #     super().clean()
-    #
-    #     if self.country:
-    #         # Validace postcode
-    #         try:
-    #             self.postcode = validate_postcode(self.postcode, self.country)
-    #         except ValidationError as e:
-    #             raise ValidationError({'postcode': e.message})
-    #         # Validace phone number
-    #         try:
-    #             self.phone_number = validate_phone_number(self.phone_number, self.country)
-    #         except ValidationError as e:
-    #             raise ValidationError({'phone_number': e.message})
-    #         # Validace business ID
-    #         try:
-    #             self.business_id = validate_business_id(self.business_id, self.country)
-    #         except ValidationError as e:
-    #             raise ValidationError({'business_id': e.message})
-    #         # Validace tax ID
-    #         try:
-    #             self.tax_id = validate_tax_id(self.tax_id, self.country)
-    #         except ValidationError as e:
-    #             raise ValidationError({'tax_id': e.message})
+
 
 
 class ItemGroup(Model):
@@ -148,8 +133,8 @@ class ItemGroup(Model):
 
     # TODO mozna upravit styl zobrazovani pro vypis v update ItemGroup
     def __str__(self):
-        user_name = f"{self.user.first_name} {self.user.last_name}" if self.user else "Žádný uživatel"
-        company_name = self.company.name if self.company else "Žádná společnost"
+        user_name = f"{self.user.first_name} {self.user.last_name}" if self.user else "unknown user"
+        company_name = self.company.name if self.company else "unknown company"
         return f"Revize {self.name} Company: {company_name} User: {user_name}"
 
     def __repr__(self):
@@ -157,9 +142,13 @@ class ItemGroup(Model):
 
     def clean(self):
         if not self.user and not self.company:
-            raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
+            raise ValidationError('At least one of the user or company fields must be filled in.')
 
-    # def clean(self):
-    #     # Zajištění, že je vyplněno alespoň jedno z polí `user` nebo `company`
-    #     if not self.user and not self.company:
-    #         raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
+    def delete(self, *args, **kwargs):
+
+        if self.photo and os.path.isfile(self.photo.path):
+            os.remove(self.photo.path)
+
+
+        # Call the delete function of the parent class
+        super().delete(*args, **kwargs)

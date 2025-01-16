@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from django.urls import reverse_lazy
 
-from .mixins import FilterAndSortMixin, CreateMixin, UpdateMixin, DeleteMixin
+from .mixins import SearchSortMixin, CreateMixin, UpdateMixin, DeleteMixin
 
 from .forms import MaterialTypeForm, StandardPpeForm, ManufacturerForm, TypeOfPpeForm, RevisionDataForm, \
     RevisionRecordForm, LifetimeOfPpeForm
@@ -18,9 +18,10 @@ def home(request):
 
 def some_view(request):
     return render(request, 'revision_home.html')
-# TODO zhodnotit jake template jsou lepsi zda ListView nebo TemplateView
+# TODO doplnit do templates rozkliknuti fotek
 # TODO kontrola kam se ukladaji soubory
 # TODO do revision_form.html doplnit kolonku pro zobrazovani aktualniho pridavaneho form
+# TODO pokud to pujde tak pro jednoduzsi listy sjednotit Template do jednoho
 # TODO sjednotit guery sety a form_valid pokud to pujde
 # TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
 # TODO osetrit vypisi v situacich kdy nemuze uzivatel udelat nejaky ukon. ProtectedError atd.
@@ -28,20 +29,33 @@ def some_view(request):
 # TODO doplnit pro create a update context_data pro view_title
 """ MaterialType """
 
-class MaterialTypeListView(FilterAndSortMixin,ListView):
+class MaterialTypeListView(SearchSortMixin,ListView):
     model = MaterialType
     template_name = 'materials_type_list.html'
     context_object_name = 'materials_type'
     success_url = reverse_lazy('revision_home')
+    default_sort_field = 'name'
     search_fields_by_view = ['id','name']
 
+
+    def get_queryset(self):
+        # Získáme původní queryset definovaný modelem
+        queryset = super().get_queryset()
+
+        # Filtrujeme data podle vstupu uživatele
+        queryset = self.filter_queryset(queryset)
+
+        # Řadíme data podle uživatelského vstupu nebo výchozí verze
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
 class MaterialTypeDetailView(DetailView):
     model = MaterialType
     template_name = 'material_type_detail.html'
     context_object_name = 'material_type'
     success_url = reverse_lazy('materials_type_list')
 
-class MaterialTypeCreateView(LoginRequiredMixin,CreateMixin, CreateView):
+class MaterialTypeCreateView(LoginRequiredMixin,CreateMixin):
     model = MaterialType
     form_class = MaterialTypeForm
     template_name = 'revision_form.html'
@@ -54,7 +68,7 @@ class MaterialTypeCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     #     # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
     #     return redirect(self.request.path)
 
-class MaterialTypeUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
+class MaterialTypeUpdateView(LoginRequiredMixin,UpdateMixin):
     model = MaterialType
     form_class = MaterialTypeForm
     template_name = 'revision_form.html'
@@ -76,22 +90,22 @@ class MaterialTypeDeleteView(LoginRequiredMixin, DeleteMixin):
 """ Standart PPE"""
 
 
-class StandardPpeListView(FilterAndSortMixin,ListView):
+class StandardPpeListView(SearchSortMixin,ListView):
+    # FIXME dolatit template tak aby nadpis byl na stredu
     model = StandardPpe
     template_name = 'standard_ppe_list.html'
     context_object_name = 'standards_ppe'
     success_url = reverse_lazy('revision_home')
+    default_sort_field = 'code'
     search_fields_by_view = ['code', 'description']
+      # Zvolte jedno, které je smysluplné pro váš případ
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     query = self.request.GET.get('q')
-    #     if query:
-    #         queryset = queryset.filter(
-    #             Q(code__icontains=query) |
-    #             Q(description__icontains=query)
-    #         )
-    #     return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
 
 
 class StandardPpeDetailView(DetailView):
@@ -100,7 +114,7 @@ class StandardPpeDetailView(DetailView):
     context_object_name = 'standard_ppe'
     success_url = reverse_lazy('standards_ppe_list')
 
-class StandardPpeCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+class StandardPpeCreateView(LoginRequiredMixin,CreateMixin):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
@@ -114,7 +128,7 @@ class StandardPpeCreateView(LoginRequiredMixin,CreateMixin,CreateView):
     #     return redirect(self.request.path)
 
 
-class StandardPpeUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
+class StandardPpeUpdateView(LoginRequiredMixin,UpdateMixin):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
@@ -130,21 +144,21 @@ class StandardPpeDeleteView(LoginRequiredMixin,DeleteMixin):
 """Manufacturer"""
 
 
-class ManufacturerListView(FilterAndSortMixin,ListView):
+class ManufacturerListView(SearchSortMixin,ListView):
     model = Manufacturer
     template_name = 'manufacturer_list.html'
     context_object_name = 'manufacturers'
     success_url = reverse_lazy('revision_home')
+    default_sort_field = 'name'
     search_fields_by_view = ['name']
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     query = self.request.GET.get('q')
-    #     if query:
-    #         queryset = queryset.filter(
-    #             Q(name__icontains=query)
-    #         )
-    #     return queryset
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
 
 
 class ManufacturerDetailView(DetailView):
@@ -153,7 +167,7 @@ class ManufacturerDetailView(DetailView):
     context_object_name = 'manufacturer'
 
 
-class ManufacturerCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+class ManufacturerCreateView(LoginRequiredMixin,CreateMixin):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
@@ -167,7 +181,7 @@ class ManufacturerCreateView(LoginRequiredMixin,CreateMixin,CreateView):
     #     return redirect(self.request.path)
 
 
-class ManufacturerUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
+class ManufacturerUpdateView(LoginRequiredMixin,UpdateMixin):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
@@ -179,31 +193,27 @@ class ManufacturerDeleteView(LoginRequiredMixin, DeleteMixin):
     model = Manufacturer
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('manufacturers_list')
-    #FixME doresit hlaskovou template pro upozorneni ze se nade smazat
 
 
 """Lifetime Of Ppe"""
 
 
-class LifetimeOfPpeListView(FilterAndSortMixin,ListView):
+class LifetimeOfPpeListView(SearchSortMixin,ListView):
     model = LifetimeOfPpe
     template_name = 'lifetime_of_ppe_list.html'
     context_object_name = 'lifetimes_of_ppe'
     success_url = reverse_lazy('revision_home')
+    default_sort_field = 'manufacturer__name'
     search_fields_by_view = ['manufacturer__name','material_type__name',
                              'lifetime_use_years',
                              'lifetime_manufacture_years']
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     query = self.request.GET.get('q')
-    #     if query:
-    #         queryset = queryset.filter(
-    #             Q(manufacturer__name__icontains=query) |
-    #             Q(material_type__name__icontains=query) |
-    #             Q(lifetime_use_years__icontains=query) |
-    #             Q(lifetime_manufacture_years__icontains=query)
-    #         )
-    #     return queryset
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
 
 
 class LifetimeOfPpeDetailView(DetailView):
@@ -212,7 +222,7 @@ class LifetimeOfPpeDetailView(DetailView):
     context_object_name = 'lifetime_of_ppe'
 
 
-class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateMixin):
     model = LifetimeOfPpe
     form_class = LifetimeOfPpeForm
     template_name = 'revision_form.html'
@@ -226,7 +236,7 @@ class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateMixin,CreateView):
     #     return redirect(self.request.path)
 
 
-class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
+class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin):
     model = LifetimeOfPpe
     form_class = LifetimeOfPpeForm
     template_name = 'revision_form.html'
@@ -242,27 +252,26 @@ class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin):
 
 """Type Of Ppe"""
 
-class TypeOfPpeListView(FilterAndSortMixin,ListView):
+class TypeOfPpeListView(SearchSortMixin,ListView):
     model = TypeOfPpe
     template_name = 'type_of_ppe_list.html'
     context_object_name = 'types_of_ppe'
     success_url = reverse_lazy('revision_home')
+    default_sort_field = 'group_type_ppe'
     search_fields_by_view = ['group_type_ppe','price']
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     query = self.request.GET.get('q')
-    #     if query:
-    #         queryset = queryset.filter(
-    #             Q(group_type_ppe__icontains=query) |  # Vyhledávání podle názvu skupiny
-    #             Q(price__icontains=query)  # Vyhledávání podle ceny
-    #         )
-    #     return queryset
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
 class TypeOfPpeDetailView(DetailView):
     model = TypeOfPpe
     template_name = 'type_of_ppe_detail.html'
     context_object_name = 'type_of_ppe'
 
-class TypeOfPpeCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+class TypeOfPpeCreateView(LoginRequiredMixin,CreateMixin):
     model = TypeOfPpe
     form_class = TypeOfPpeForm
     template_name = 'revision_form.html'
@@ -275,7 +284,7 @@ class TypeOfPpeCreateView(LoginRequiredMixin,CreateMixin,CreateView):
     #     # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
     #     return redirect(self.request.path)
 
-class TypeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
+class TypeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin):
     model = TypeOfPpe
     form_class = TypeOfPpeForm
     template_name = 'revision_form.html'
@@ -291,12 +300,13 @@ class TypeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin):
 """ Revision data"""
 
 
-class RevisionDataListView(FilterAndSortMixin,ListView):
+class RevisionDataListView(SearchSortMixin,ListView):
     model = RevisionData
+    paginate_by = 10
     template_name = 'revision_data_list.html'
     context_object_name = 'revisions_data'
     success_url = reverse_lazy('revision_home')
-    paginate_by = 10
+    default_sort_field = 'name_ppe'
     search_fields_by_view = ['lifetime_of_ppe__manufacturer__name',
                              'lifetime_of_ppe__material_type__name',
                              'type_of_ppe__group_type_ppe',
@@ -305,19 +315,12 @@ class RevisionDataListView(FilterAndSortMixin,ListView):
                              'standard_ppe__code',
                              'standard_ppe__description']
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #
-    #     # Zpracování parametrů řazení
-    #     sort_by = self.request.GET.get('sort_by', 'id')  # `id` je výchozí pole pro řazení
-    #     sort_order = self.request.GET.get('sort_order', 'asc')
-    #
-    #     # Prepnutí pořadí na sestupné, pokud je potřeba
-    #     order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
-    #     queryset = queryset.order_by(order_field)
-    #
-    #     # Vrátíme se k logice mixinu QuerysetFilterMixin
-    #     return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
 
 class RevisionDataDetailView(DetailView):
     model = RevisionData
@@ -325,7 +328,7 @@ class RevisionDataDetailView(DetailView):
     context_object_name = 'revision_data'
 
 
-class RevisionDataCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+class RevisionDataCreateView(LoginRequiredMixin,CreateMixin):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
@@ -339,7 +342,7 @@ class RevisionDataCreateView(LoginRequiredMixin,CreateMixin,CreateView):
     #     return redirect(self.request.path)
 
 
-class RevisionDataUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
+class RevisionDataUpdateView(LoginRequiredMixin,UpdateMixin):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
@@ -354,19 +357,21 @@ class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin):
 
 """ Revision records"""
 
-# TODO doplnit search fields
+
 # TODO Item group do teto template ma prijit jeste zobrazeni pro pridani nove skupiny, odkaz na vytvoreni nove,
 #  pridavani jednotlivich prvku do skupin
 #  zobrazovani prvku podle skupiny do ktere patri
 #  zobrazeni dle owner
 # TODO pri zvoleni new pri update se zobrazi ulozeni probehlo vporadku ale zaznam se nezmeni
 #
-class RevisionRecordListView(LoginRequiredMixin,FilterAndSortMixin,ListView):
-    # FIXME doplnit vyhledavani podle itemgroup a owner
+class RevisionRecordListView(LoginRequiredMixin,SearchSortMixin,ListView):
+    # FIXME doplnit vyhledavani podle itemgroup a owner, date of manufacture......
     model = RevisionRecord
+    paginate_by = 10
     template_name = 'revision_record_list.html'
     context_object_name = 'revision_records'
     success_url = reverse_lazy('revision_home')
+    default_sort_field = 'revision_data__name_ppe'
     search_fields_by_view = ['revision_data__lifetime_of_ppe__manufacturer__name',
                              'revision_data__lifetime_of_ppe__material_type__name',
                              'revision_data__type_of_ppe__group_type_ppe',
@@ -374,11 +379,17 @@ class RevisionRecordListView(LoginRequiredMixin,FilterAndSortMixin,ListView):
                              'serial_number',
                              'verdict']
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
 
+        return queryset
 
 
 
 class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
+    # TODO zobrazovat i forku z revision data
     # FIXME Doplnit owner do detail view
     model = RevisionRecord
     template_name = 'revision_record_detail.html'
@@ -387,8 +398,9 @@ class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
 
 # TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
 
-class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin,CreateView):
+class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin):
     # FIXME Upravit zobrazovani chyb ve formulari
+    # FIXME sort by created date
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
@@ -407,7 +419,7 @@ class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin,CreateView):
         return context
 
 
-class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin,UpdateView):
+class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'

@@ -1183,6 +1183,552 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 92,
+    "fields": {
+        "action_time": "2025-01-14T13:02:06.663Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "3",
+        "object_repr": "Chceme revize",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 93,
+    "fields": {
+        "action_time": "2025-01-14T14:33:20.139Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "4",
+        "object_repr": "Revision_Technic",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 94,
+    "fields": {
+        "action_time": "2025-01-14T14:33:57.987Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "4",
+        "object_repr": "Revision_Technic",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Last login\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 95,
+    "fields": {
+        "action_time": "2025-01-14T15:03:05.615Z",
+        "user": 1,
+        "content_type": 3,
+        "object_id": "1",
+        "object_repr": "basic_user",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 96,
+    "fields": {
+        "action_time": "2025-01-14T15:03:40.771Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "3",
+        "object_repr": "First_user_only_create_new",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Groups\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 97,
+    "fields": {
+        "action_time": "2025-01-14T16:51:30.394Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 98,
+    "fields": {
+        "action_time": "2025-01-14T20:55:33.485Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "6",
+        "object_repr": "Unknown company",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 99,
+    "fields": {
+        "action_time": "2025-01-14T20:55:53.830Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "2",
+        "object_repr": "Revize CZ",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 100,
+    "fields": {
+        "action_time": "2025-01-14T21:03:06.096Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "7",
+        "object_repr": "Unknown company",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 101,
+    "fields": {
+        "action_time": "2025-01-14T22:36:16.178Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode validator\", \"Postcode format\", \"Phone number validator\", \"Phone number format\", \"Business id validator\", \"Business id format\", \"Tax id validator\", \"Tax id format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 102,
+    "fields": {
+        "action_time": "2025-01-14T23:59:42.921Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number validator\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 103,
+    "fields": {
+        "action_time": "2025-01-15T00:37:16.974Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "6",
+        "object_repr": "jfvironvjk",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 104,
+    "fields": {
+        "action_time": "2025-01-15T00:46:52.065Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "7",
+        "object_repr": "testova_user",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 105,
+    "fields": {
+        "action_time": "2025-01-15T00:52:52.306Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "8",
+        "object_repr": "test_user",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 106,
+    "fields": {
+        "action_time": "2025-01-15T00:54:12.628Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "9",
+        "object_repr": "test_user",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 107,
+    "fields": {
+        "action_time": "2025-01-15T01:26:36.862Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 108,
+    "fields": {
+        "action_time": "2025-01-15T01:30:04.526Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Business ID\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 109,
+    "fields": {
+        "action_time": "2025-01-15T01:31:41.215Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Tax ID\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 110,
+    "fields": {
+        "action_time": "2025-01-15T01:31:50.502Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 111,
+    "fields": {
+        "action_time": "2025-01-15T01:33:30.093Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Tax id validator\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 112,
+    "fields": {
+        "action_time": "2025-01-15T01:33:39.175Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 113,
+    "fields": {
+        "action_time": "2025-01-15T01:33:49.807Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Tax ID\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 114,
+    "fields": {
+        "action_time": "2025-01-15T01:34:06.698Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "11",
+        "object_repr": "test_user1",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 115,
+    "fields": {
+        "action_time": "2025-01-15T01:39:41.968Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "12",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 116,
+    "fields": {
+        "action_time": "2025-01-15T01:39:56.776Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "12",
+        "object_repr": "test_user1",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 117,
+    "fields": {
+        "action_time": "2025-01-15T01:45:56.124Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "13",
+        "object_repr": "test_user1",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 118,
+    "fields": {
+        "action_time": "2025-01-15T01:46:04.295Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "13",
+        "object_repr": "test_user1",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 119,
+    "fields": {
+        "action_time": "2025-01-15T02:25:06.977Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "10",
+        "object_repr": "test_user",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 120,
+    "fields": {
+        "action_time": "2025-01-15T02:26:45.064Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "15",
+        "object_repr": "test_user",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 121,
+    "fields": {
+        "action_time": "2025-01-15T02:32:38.396Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "17",
+        "object_repr": "user_test2",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 122,
+    "fields": {
+        "action_time": "2025-01-15T02:52:22.194Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "16",
+        "object_repr": "test",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 123,
+    "fields": {
+        "action_time": "2025-01-15T02:52:22.194Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "19",
+        "object_repr": "test_pasword",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 124,
+    "fields": {
+        "action_time": "2025-01-15T02:52:22.194Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "14",
+        "object_repr": "user_test",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 125,
+    "fields": {
+        "action_time": "2025-01-15T02:52:22.194Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "18",
+        "object_repr": "user_test2",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 126,
+    "fields": {
+        "action_time": "2025-01-15T03:03:45.633Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "20",
+        "object_repr": "testovaci.heslo",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 127,
+    "fields": {
+        "action_time": "2025-01-15T03:11:13.112Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "21",
+        "object_repr": "user_test",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 128,
+    "fields": {
+        "action_time": "2025-01-15T03:35:34.437Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "26",
+        "object_repr": "eavcwecwa",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 129,
+    "fields": {
+        "action_time": "2025-01-15T03:35:34.437Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "25",
+        "object_repr": "fcesfcec",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 130,
+    "fields": {
+        "action_time": "2025-01-15T03:35:34.437Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "24",
+        "object_repr": "ldaksjhvcuri",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 131,
+    "fields": {
+        "action_time": "2025-01-15T03:35:34.437Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "23",
+        "object_repr": "test_wrong",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 132,
+    "fields": {
+        "action_time": "2025-01-15T03:35:34.437Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "22",
+        "object_repr": "user_test",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 133,
+    "fields": {
+        "action_time": "2025-01-15T21:27:11.655Z",
+        "user": 1,
+        "content_type": 9,
+        "object_id": "8",
+        "object_repr": "Revize Arbo batoh Company: Žádná společnost User: Jaroslav Adam",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Photo\"]}}]"
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -1831,6 +2377,31 @@
     }
 },
 {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+        "name": "basic_user",
+        "permissions": [
+            25,
+            28,
+            24,
+            30,
+            32,
+            33,
+            34,
+            35,
+            36,
+            72,
+            60,
+            52,
+            64,
+            68,
+            56,
+            48
+        ]
+    }
+},
+{
     "model": "contenttypes.contenttype",
     "pk": 1,
     "fields": {
@@ -1976,18 +2547,26 @@
 },
 {
     "model": "sessions.session",
-    "pk": "01er989iv2yxi1vsqmfsta8x3yhaqbwz",
-    "fields": {
-        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tXLV0:MYbrCPSLNgRPR-XsdDaxeHn8-H2O8JvTqAFTaqXTCIE",
-        "expire_date": "2025-01-27T14:33:02.498Z"
-    }
-},
-{
-    "model": "sessions.session",
     "pk": "6rbuuufg0blp5ms73aact7kw6f0al584",
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tUt2m:0FKHs6M1IwOrWr4yyVEkuFAVzXZdn1YYCch3U12FqNY",
         "expire_date": "2025-01-20T19:45:44.128Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "8wlr3qektj6c6w359mqwm8aoowv1ick2",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2pCpFCgu3fcMZJgZpGpoUtqV8e7apAvd_vfef6mI21ri1mSJE6uLMur0uyWkh9Qd8B3rbdY013WZkt4VfdCmx5nleT3cv4OCrXzrzhEz2GS63jiL2RB6dGS9dYO4ECQDW4MGxPEZ0pBSzgIEHrj3gbJ6fwDqQDhf:1tY6JQ:kLJM_IDINUqSYCX-bTbfxPO2A_VsaEqN6dK3l5FmdQ0",
+        "expire_date": "2025-01-29T16:32:12.709Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "aw7xbaqq81nembj8olrbi8o4omzn59nu",
+    "fields": {
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tXhyq:Z9Kcg9zWw6aVQUKzz2GWXJs4TuL_9hZfYOUiL-P6mas",
+        "expire_date": "2025-01-28T14:33:20.157Z"
     }
 },
 {
@@ -2004,14 +2583,6 @@
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tMBiY:Dn37LQDrbadyZJ4yudSkwxRUWvQuUHXdQoBQ-0uxV9s",
         "expire_date": "2024-12-27T19:52:54.964Z"
-    }
-},
-{
-    "model": "sessions.session",
-    "pk": "j7pg12mwl9frp9da6stqfgb20xqa5rpx",
-    "fields": {
-        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tVVyD:YVv6Ch_uM27gSHe8HAZjb2PkYtWl-PcTnGd9Fg5euRg",
-        "expire_date": "2025-01-22T13:19:37.005Z"
     }
 },
 {
@@ -2052,43 +2623,67 @@
     "fields": {
         "name": "Česká republika",
         "language_code": "CZ",
-        "postcode_format": "^\\d{3}",
+        "postcode_validator": "^\\d{3}\\s\\d{2}$",
+        "postcode_format": "123 45",
         "phone_number_prefix": "+420",
-        "business_id_format": "^\\d{8}$",
-        "tax_id_format": "^CZ\\d{10}$",
-        "tax_id_prefix": "CZ"
-    }
-},
-{
-    "model": "accounts.company",
-    "pk": 1,
-    "fields": {
-        "name": null,
-        "country": null,
-        "address": null,
-        "city": null,
-        "postcode": null,
-        "phone_number": null,
-        "business_id": null,
-        "tax_id": null,
-        "date_joined": "2024-12-13T21:27:12.817Z",
-        "last_updated": "2024-12-13T21:27:12.817Z"
+        "phone_number_validator": "^(?:\\+420)?\\d{9}$",
+        "phone_number_format": "123456789",
+        "business_id_validator": "^\\d{8}$",
+        "business_id_format": "12345678",
+        "tax_id_prefix": "CZ",
+        "tax_id_validator": "\\d{10}$",
+        "tax_id_format": "CZ0123456789"
     }
 },
 {
     "model": "accounts.company",
     "pk": 2,
     "fields": {
+        "logo": "",
         "name": "Revize CZ",
         "country": 1,
         "address": "Poděbradova 712",
         "city": "Úvaly",
-        "postcode": "250 82",
+        "postcode": "25082",
         "phone_number": "+420605728384",
         "business_id": "03368351",
         "tax_id": "CZ9303030708",
         "date_joined": "2024-12-14T01:15:32.390Z",
-        "last_updated": "2025-01-04T01:41:21.604Z"
+        "last_updated": "2025-01-14T20:55:53.825Z"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 4,
+    "fields": {
+        "logo": "",
+        "name": "Chceme revize",
+        "country": 1,
+        "address": "Revizni 105",
+        "city": "Praha",
+        "postcode": "181 00",
+        "phone_number": "+420777555333",
+        "business_id": "76543210",
+        "tax_id": "CZ9876543210",
+        "date_joined": "2025-01-14T13:02:08.379Z",
+        "last_updated": "2025-01-14T13:02:08.379Z"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 5,
+    "fields": {
+        "logo": "",
+        "name": "Normalni spolecnost",
+        "country": 1,
+        "address": "Normalni 100",
+        "city": "Praha",
+        "postcode": "10800",
+        "phone_number": "+420111222333",
+        "business_id": "12345678",
+        "tax_id": "CZ9876543210",
+        "date_joined": "2025-01-14T15:36:15.750Z",
+        "last_updated": "2025-01-14T16:47:40.555Z"
     }
 },
 {
@@ -2096,7 +2691,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
-        "last_login": "2025-01-13T14:33:02.492Z",
+        "last_login": "2025-01-15T15:11:02.727Z",
         "is_superuser": true,
         "username": "Admin-oopp",
         "first_name": "Jaroslav",
@@ -2105,6 +2700,7 @@
         "is_staff": true,
         "is_active": true,
         "date_joined": "2024-12-13T19:52:41Z",
+        "photo": "",
         "company": null,
         "country": 1,
         "address": "Poděbradova 712",
@@ -2113,7 +2709,7 @@
         "phone_number": "+420605728384",
         "business_id": "03368351",
         "tax_id": "CZ9303070832",
-        "last_updated": "2025-01-04T22:57:57.280Z",
+        "last_updated": "2025-01-15T21:44:33.557Z",
         "groups": [],
         "user_permissions": []
     }
@@ -2132,6 +2728,7 @@
         "is_staff": false,
         "is_active": true,
         "date_joined": "2024-12-14T01:15:32Z",
+        "photo": "",
         "company": 2,
         "country": 1,
         "address": "Poděbradova 712",
@@ -2146,14 +2743,189 @@
     }
 },
 {
+    "model": "accounts.customuser",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$EhMLgtkD1symDZ3iUMVprA$7kWsFEwpaGWeqVK6wKCwax07aH9a/JrMHM6vR/mEJY0=",
+        "last_login": "2025-01-15T16:32:12.706Z",
+        "is_superuser": false,
+        "username": "First_user_only_create_new",
+        "first_name": "Normalní",
+        "last_name": "Uživtel",
+        "email": "jsem@seznam.cz",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-01-13T18:21:01Z",
+        "photo": "",
+        "company": 5,
+        "country": 1,
+        "address": "Průběžná 103",
+        "city": "Horoušany",
+        "postcode": "25082",
+        "phone_number": "+420605728384",
+        "business_id": "01234567",
+        "tax_id": "CZ9303030702",
+        "last_updated": "2025-01-14T20:45:27.358Z",
+        "groups": [
+            1
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$aDdSkAq2g9fD7j1MHW8SwV$3A8fW4T5UW7Jx++654gTZDVFQW+urUhsKbsSRp3nKFw=",
+        "last_login": "2025-01-14T14:31:30Z",
+        "is_superuser": false,
+        "username": "Revision_Technic",
+        "first_name": "Revizak",
+        "last_name": "Revidovací",
+        "email": "revize@revizaci.cz",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-01-14T14:31:29Z",
+        "photo": "",
+        "company": 2,
+        "country": 1,
+        "address": "Poděbradova 805",
+        "city": "Škvorec",
+        "postcode": "250 82",
+        "phone_number": "+420777888999",
+        "business_id": "12345678",
+        "tax_id": "CZ0123456789",
+        "last_updated": "2025-01-14T14:33:57.983Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$265CgJ5xUF99JVgl0sNTf7$aV1fN1N3zs3EV1qGSVXNF++h+1EwBCXlHlzFYlP4Org=",
+        "last_login": "2025-01-14T17:27:19.735Z",
+        "is_superuser": false,
+        "username": "user_add_company",
+        "first_name": "Uzivatel",
+        "last_name": "Firmy",
+        "email": "firemn@email.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-01-14T17:27:18.912Z",
+        "photo": "",
+        "company": 5,
+        "country": 1,
+        "address": "za rybnikem 15",
+        "city": "Řiť",
+        "postcode": "15020",
+        "phone_number": "+420111222333",
+        "business_id": "12365478",
+        "tax_id": "CZ0987654321",
+        "last_updated": "2025-01-14T18:21:55.546Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "accounts.customuser",
+    "pk": 27,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$moiceHDi1xccouDCISZowK$DYymB3YHvTfVZmZxABNTwixr06MUR95TNRUe9L20mqI=",
+        "last_login": "2025-01-15T15:10:06.360Z",
+        "is_superuser": false,
+        "username": "Chci_revizi",
+        "first_name": "Honza",
+        "last_name": "Zakaznik",
+        "email": "jardadam93@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-01-15T15:10:05.545Z",
+        "photo": "",
+        "company": null,
+        "country": 1,
+        "address": "Dlouhá",
+        "city": "Horoušany",
+        "postcode": "250 82",
+        "phone_number": "+420605728384",
+        "business_id": "23456789",
+        "tax_id": "CZ8765432191",
+        "last_updated": "2025-01-15T15:10:06.335Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "accounts.itemgroup",
     "pk": 1,
     "fields": {
-        "name": "Výškové práce",
+        "photo": "media/item_group/1_Tree_Contractor.jpg",
+        "name": "Batoh výškovky",
         "user": 1,
         "company": null,
         "created": "2025-01-04T21:59:30.539Z",
-        "updated": "2025-01-04T21:59:30.539Z"
+        "updated": "2025-01-15T21:26:34.044Z"
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 2,
+    "fields": {
+        "photo": "",
+        "name": "Batoh",
+        "user": 3,
+        "company": 5,
+        "created": "2025-01-13T19:54:07.251Z",
+        "updated": "2025-01-14T16:47:07.555Z"
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 5,
+    "fields": {
+        "photo": "",
+        "name": "kufr",
+        "user": 3,
+        "company": null,
+        "created": "2025-01-14T01:22:11.778Z",
+        "updated": "2025-01-14T01:22:11.778Z"
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 6,
+    "fields": {
+        "photo": "",
+        "name": "Červený batoh",
+        "user": 4,
+        "company": 2,
+        "created": "2025-01-14T14:35:02.253Z",
+        "updated": "2025-01-14T20:30:38.561Z"
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 7,
+    "fields": {
+        "photo": "",
+        "name": "Kufr",
+        "user": 27,
+        "company": null,
+        "created": "2025-01-15T15:10:41.385Z",
+        "updated": "2025-01-15T15:10:41.385Z"
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 10,
+    "fields": {
+        "photo": "media/item_group/1_Tree_Contractor.jpg",
+        "name": "Arbo Bag",
+        "user": 1,
+        "company": null,
+        "created": "2025-01-15T21:35:10.049Z",
+        "updated": "2025-01-15T21:35:10.049Z"
     }
 },
 {
@@ -2194,6 +2966,14 @@
     "fields": {
         "symbol": "",
         "name": "Helmet"
+    }
+},
+{
+    "model": "revisions.materialtype",
+    "pk": 19,
+    "fields": {
+        "symbol": "static/image/material/pulley_system.png",
+        "name": "Pulleys"
     }
 },
 {
@@ -2675,6 +3455,16 @@
     }
 },
 {
+    "model": "revisions.lifetimeofppe",
+    "pk": 17,
+    "fields": {
+        "manufacturer": 5,
+        "material_type": 19,
+        "lifetime_use_years": 10,
+        "lifetime_manufacture_years": 15
+    }
+},
+{
     "model": "revisions.typeofppe",
     "pk": 1,
     "fields": {
@@ -2814,7 +3604,7 @@
     "pk": 16,
     "fields": {
         "image": "",
-        "group_type_ppe": "carbine",
+        "group_type_ppe": "carabiner",
         "price": "35.00"
     }
 },
@@ -2938,22 +3728,6 @@
 },
 {
     "model": "revisions.revisiondata",
-    "pk": 7,
-    "fields": {
-        "image_items": "static/image/revision_data/eye_sling_WHW5yJ2.jpg",
-        "lifetime_of_ppe": 2,
-        "type_of_ppe": 17,
-        "name_ppe": "EYE SLING Yellow 60 cm",
-        "manual_for_revision": "static/revision_data/manuals/IOU_16S97022236_SLINGS_Efb2EoJ.pdf",
-        "notes": "",
-        "standard_ppe": [
-            3,
-            14
-        ]
-    }
-},
-{
-    "model": "revisions.revisiondata",
     "pk": 8,
     "fields": {
         "image_items": "static/image/revision_data/ozone_triple_lock.jpg",
@@ -2984,6 +3758,53 @@
     }
 },
 {
+    "model": "revisions.revisiondata",
+    "pk": 10,
+    "fields": {
+        "image_items": "static/image/revision_data/oxy_triple_lock.jpg",
+        "lifetime_of_ppe": 4,
+        "type_of_ppe": 16,
+        "name_ppe": "Oxy triple lock",
+        "manual_for_revision": "static/revision_data/manuals/KL_K0122_OXY_EN.pdf",
+        "notes": "",
+        "standard_ppe": [
+            26,
+            10
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 11,
+    "fields": {
+        "image_items": "static/image/revision_data/tandem_puley.jpg",
+        "lifetime_of_ppe": 4,
+        "type_of_ppe": 13,
+        "name_ppe": "Tandem pulley",
+        "manual_for_revision": "static/revision_data/manuals/KL_RK803_TANDEM_PULLEY_CZ.pdf",
+        "notes": "",
+        "standard_ppe": [
+            28
+        ]
+    }
+},
+{
+    "model": "revisions.revisiondata",
+    "pk": 12,
+    "fields": {
+        "image_items": "static/image/revision_data/sling_laniard_w2016x.jpg",
+        "lifetime_of_ppe": 2,
+        "type_of_ppe": 17,
+        "name_ppe": "sling_lanyard",
+        "manual_for_revision": "static/revision_data/manuals/IOU_16S97022236_SLINGS_rhd1OzP.pdf",
+        "notes": "",
+        "standard_ppe": [
+            3,
+            14
+        ]
+    }
+},
+{
     "model": "revisions.revisionrecord",
     "pk": 2,
     "fields": {
@@ -2994,13 +3815,13 @@
         "date_of_first_use": "2021-04-21",
         "date_of_revision": "2025-01-06",
         "date_of_next_revision": "2026-01-06",
-        "item_group": null,
+        "item_group": 1,
         "owner": 1,
         "verdict": "fit",
         "notes": "",
         "created_by": 1,
         "created": "2025-01-06T18:17:50.792Z",
-        "updated": "2025-01-08T21:29:28.943Z"
+        "updated": "2025-01-16T00:37:11.365Z"
     }
 },
 {
@@ -3014,13 +3835,13 @@
         "date_of_first_use": "2024-04-02",
         "date_of_revision": "2025-01-08",
         "date_of_next_revision": "2026-01-08",
-        "item_group": null,
+        "item_group": 1,
         "owner": 1,
         "verdict": "fit",
         "notes": "",
         "created_by": 1,
         "created": "2025-01-08T21:37:12.871Z",
-        "updated": "2025-01-09T21:23:31.239Z"
+        "updated": "2025-01-14T20:01:30.110Z"
     }
 },
 {
@@ -3034,13 +3855,113 @@
         "date_of_first_use": "2018-05-15",
         "date_of_revision": "2025-01-09",
         "date_of_next_revision": "2026-01-09",
-        "item_group": null,
+        "item_group": 1,
         "owner": 1,
-        "verdict": "retire",
+        "verdict": "fit",
         "notes": "",
         "created_by": 1,
         "created": "2025-01-09T18:54:52.845Z",
-        "updated": "2025-01-09T21:24:16.418Z"
+        "updated": "2025-01-15T16:49:55.859Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 6,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 3,
+        "serial_number": "1234",
+        "date_manufacture": "2019-03-23",
+        "date_of_first_use": "2021-04-21",
+        "date_of_revision": "2025-01-15",
+        "date_of_next_revision": "2026-01-15",
+        "item_group": 2,
+        "owner": 3,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-15T16:53:13.590Z",
+        "updated": "2025-01-15T16:53:13.590Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 7,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 8,
+        "serial_number": "4510",
+        "date_manufacture": "2017-11-01",
+        "date_of_first_use": "2021-04-21",
+        "date_of_revision": "2025-01-15",
+        "date_of_next_revision": "2026-01-15",
+        "item_group": 2,
+        "owner": 3,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-15T16:58:16.051Z",
+        "updated": "2025-01-15T17:00:03.923Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 8,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 10,
+        "serial_number": "0446",
+        "date_manufacture": "2023-04-01",
+        "date_of_first_use": "2024-04-02",
+        "date_of_revision": "2025-01-15",
+        "date_of_next_revision": "2026-01-15",
+        "item_group": 1,
+        "owner": 1,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-15T17:04:51.776Z",
+        "updated": "2025-01-15T19:32:10.006Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 9,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 9,
+        "serial_number": "1785",
+        "date_manufacture": "2018-09-01",
+        "date_of_first_use": "2018-09-01",
+        "date_of_revision": "2025-01-15",
+        "date_of_next_revision": "2026-01-15",
+        "item_group": null,
+        "owner": 1,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 3,
+        "created": "2025-01-15T20:24:49.885Z",
+        "updated": "2025-01-15T20:24:49.885Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 10,
+    "fields": {
+        "photo_of_item": "media/image/revision_record/tandem_pulley_ja.JPG",
+        "revision_data": 11,
+        "serial_number": "0105",
+        "date_manufacture": "2023-12-10",
+        "date_of_first_use": "2024-03-10",
+        "date_of_revision": "2025-01-15",
+        "date_of_next_revision": "2026-01-15",
+        "item_group": 1,
+        "owner": 1,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-15T22:35:46.903Z",
+        "updated": "2025-01-16T00:01:19.436Z"
     }
 }
 ]

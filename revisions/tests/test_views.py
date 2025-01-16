@@ -1,30 +1,37 @@
-import os, io
+import io
 from PIL import Image
 from datetime import date
 from unittest import skip
-
+import tempfile
+import shutil
+from django.core.files.base import ContentFile
 from django.db.models import ProtectedError
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-from isort import logo
 
-from accounts import urls
+
 from revisions.models import *
 
 User = get_user_model()
 
+
 class BaseViewsTest(TestCase):
     @classmethod
+    # Create a new image with RGB mode and size 100x100
     def create_test_image(cls):
-        img = Image.new('RGB', (100, 100), color='red')
-        byte_arr = io.BytesIO()
-        img.save(byte_arr, format='JPEG')  # Uloží jako JPEG
-        return byte_arr.getvalue()
+        file_obj = io.BytesIO()
+        image = Image.new('RGB', (100, 100), color='red')
+        image.save(file_obj, 'JPEG')
+        file_obj.seek(0)
+        return file_obj.getvalue()
 
     @classmethod
     def setUpTestData(cls):
+        # Nastavte dočasné úložiště pro testy
+        cls.temp_media = tempfile.mkdtemp()
+        settings.MEDIA_ROOT = cls.temp_media
         cls.client = Client()
         cls.user = User.objects.create_user(username='testuser', password='testpass')
         cls.manufacturer = Manufacturer.objects.create(name='Test Manufacturer')
@@ -38,20 +45,31 @@ class BaseViewsTest(TestCase):
         cls.type_of_ppe = TypeOfPpe.objects.create(group_type_ppe='Test Group', price=100.00)
         cls.standard_ppe = StandardPpe.objects.create(code='EN123', description='Test Standard')
 
-        """ Revision data"""
-        uploaded_image_content = cls.create_test_image()
-        uploaded_image = SimpleUploadedFile(
-            "image.jpg", uploaded_image_content, content_type='image/jpeg'
-        )
+        # Vytvoření a uložení obrázku
+        cls.uploaded_image_content = cls.create_test_image()
+        cls.uploaded_image = SimpleUploadedFile(
+            "image.jpg", cls.uploaded_image_content, content_type='image/jpeg')
 
-        cls.revision_data = RevisionData.objects.create(
-            image_items=uploaded_image,
+        # Uložení dalších dat
+        cls.revision_data = RevisionData(
+            image_items=cls.uploaded_image,
             lifetime_of_ppe=cls.lifetime_of_ppe,
             type_of_ppe=cls.type_of_ppe,
             name_ppe='Flash industry',
-            manual_for_revision=SimpleUploadedFile("manual.pdf", b"Dummy content")  # Přidej dummy soubor zde
+            manual_for_revision=SimpleUploadedFile("manual.pdf", b"Dummy content")
         )
+        cls.revision_data.save()
         cls.revision_data.standard_ppe.add(cls.standard_ppe)
+        cls.revision_data.save()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Odstraňte dočasné úložiště po ukončení testů
+        shutil.rmtree(cls.temp_media, ignore_errors=True)
+        super().tearDownClass()
+
+
+
 
     def setUp(self):
         self.client.login(username='testuser', password='testpass')
@@ -453,27 +471,31 @@ class RevisionDataViewsTest(BaseViewsTest):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'revision_form.html')
 
+#open(self.revision_data.image_items.path, 'rb') as image_file, \
+
     def test_edit_revision_data_view_post_valid(self):
+        image_content = self.create_test_image()
+        uploaded_image = SimpleUploadedFile(
+            "test_image.jpg", image_content, content_type="image/jpeg"
+        )
+        uploaded_document = SimpleUploadedFile("manual.pdf", b"dummy content", content_type="application/pdf")
         url = reverse('edit_revision_data', args=[self.revision_data.id])
-        with open(self.revision_data.image_items.path, 'rb') as image_file, \
-                open(self.revision_data.manual_for_revision.path, 'rb') as manual_file:
-            uploaded_image = SimpleUploadedFile(
-                os.path.basename(image_file.name), image_file.read(), content_type='image/jpeg'
-            )
-            uploaded_manual = SimpleUploadedFile(
-                os.path.basename(manual_file.name), manual_file.read(), content_type='text/plain'
-            )
-            data = {
-                'name_ppe': 'Updated PPE',
-                'lifetime_of_ppe': self.lifetime_of_ppe.id,
-                'type_of_ppe': self.type_of_ppe.id,
-                'standard_ppe': [self.standard_ppe.id],
-                'image_items': uploaded_image,
-                'manual_for_revision': uploaded_manual
-            }
-            response = self.client.post(url, data, follow=True)  # Sledujeme přesměrování
-        self.assertEqual(response.status_code, 200)  # Po přesměrování by měl být kód 200
-        self.assertContains(response, 'The changes have been successfully uploaded from CreateMixin')  # Kontrola zprávy
+
+
+        data = {
+            'name_ppe': 'Updated PPE',
+            'lifetime_of_ppe': self.lifetime_of_ppe.id,
+            'type_of_ppe': self.type_of_ppe.id,
+            'standard_ppe': [self.standard_ppe.id],
+            'image_items': uploaded_image,
+            'manual_for_revision': uploaded_document
+        }
+
+        response = self.client.post(url, data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'The changes have been successfully uploaded from UpdateMixin')
+
+        # Kontrola zaktualizovaných dat
         self.revision_data.refresh_from_db()
         self.assertEqual(self.revision_data.name_ppe, 'Updated PPE')
 
@@ -589,6 +611,12 @@ class RevisionRecordViewsTest(BaseViewsTest):
         self.get_and_assert_template('edit_revision_record', 'revision_form.html', args=[self.revision_record.id])
 
     def test_edit_revision_record_view_post_valid(self):
+        # Create a temporary image file to simulate file upload
+        image_content = self.create_test_image()  # You will need to have this helper method to generate test image binary data
+        uploaded_image = SimpleUploadedFile(
+            "image.jpg", image_content, content_type="image/jpeg"
+        )
+
         data = {
             'revision_data': self.revision_data.id,
             'serial_number': 'SNupdated',
@@ -596,9 +624,12 @@ class RevisionRecordViewsTest(BaseViewsTest):
             'date_of_first_use': date.today(),
             'owner': self.user.id,
             'verdict': 'fit',
-            'photo_of_item': self.revision_record.photo_of_item
+            'photo_of_item': uploaded_image  # Use uploaded image here
         }
+
         self.post_and_assert_redirect('edit_revision_record', data, args=[self.revision_record.id])
+
+        # Refresh from db and check your assertions
         self.revision_record.refresh_from_db()
         self.assertEqual(self.revision_record.serial_number, 'SNupdated')
 
@@ -619,3 +650,7 @@ class RevisionRecordViewsTest(BaseViewsTest):
     def test_delete_revision_record_view(self):
         self.post_and_assert_redirect('delete_revision_record', {}, args=[self.revision_record.id])
         self.assertFalse(RevisionRecord.objects.filter(id=self.revision_record.id).exists())
+
+
+
+

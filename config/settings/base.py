@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Mezinárodní nastavení
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'CET'
 
 USE_I18N = True
 USE_L10N = True

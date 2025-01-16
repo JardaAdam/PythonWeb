@@ -2,13 +2,21 @@
 {% block title %}account Delete{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Smazat Item Group</h2>
-    <p>Opravdu chcete smazat "{{ object.name }}"?</p>
     <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Ano, smazat</button>
-        <a class="btn btn-secondary" href="{% url 'item_group_list' %}">Ne, vrátit se</a>
-    </form>
-</div>
+       {% csrf_token %}
+       
+       <!-- Zobrazí chybovou zprávu, pokud existuje -->
+       {% if error %}
+           <div class="alert alert-danger" role="alert">
+               {{ error }}
+           </div>
+       {% endif %}
+       
+       <p>Are you sure you want to delete "{{ object }}"?</p>
+       
+       <button type="button" class="btn btn-secondary" onclick="history.back()">
+           <i class="fas fa-arrow-left"></i> Back</button>
+       <button type="submit" class="btn btn-danger">
+           <i class="fas fa-trash-alt"></i> Delete</button>
+   </form>
 {% endblock %}

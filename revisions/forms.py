@@ -55,9 +55,11 @@ class RevisionDataForm(BaseFileRequirementForm):
             'type_of_ppe': Select(attrs={'class': 'form-control select2'}),
             'standard_ppe': SelectMultiple(attrs={'class': 'form-control select2'}),
         }
-# TODO upravit format zadavani datumu
+
 
 class RevisionRecordForm(ModelForm):
+    # TODO upravit format zadavani datumu
+    # FIXME upravit logiku zadavani verdict pole
     class Meta:
         model = RevisionRecord
         fields = '__all__'

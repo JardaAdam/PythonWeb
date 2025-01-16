@@ -1,7 +1,6 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth import login
-from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views import View
@@ -9,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 
-from revisions.mixins import FilterAndSortMixin
+from revisions.mixins import SearchSortMixin, DeleteMixin
 from .forms import UserRegistrationForm, CompanyForm, UserEditForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
@@ -78,14 +77,27 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
 
 """ Company """
 # FIXME omezit uzivateli aby mohl upravovat pouze company do ktere patri
-class CompanyListView(LoginRequiredMixin, FilterAndSortMixin, ListView):
+class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
+    # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
     model = Company
     template_name = 'company_list.html'
     context_object_name = 'companies'
     paginate_by = 10
     search_fields_by_view = ['name', 'country__name', 'city', 'business_id']
+    default_sort_field = 'name'  # Zvolte jedno, které je smysluplné pro váš případ
 
-    # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
+    def get_queryset(self):
+        # Získáme původní queryset definovaný modelem
+        queryset = super().get_queryset()
+
+        # Filtrujeme data podle vstupu uživatele
+        queryset = self.filter_queryset(queryset)
+
+        # Řadíme data podle uživatelského vstupu nebo výchozí verze
+        queryset = self.sort_queryset(queryset)
+
+        return queryset
+
 
 class CompanyView(LoginRequiredMixin, TemplateView):
     """View solely for the user assigned to the company"""
@@ -140,31 +152,36 @@ class CompanyUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Company was successfully updated.')
         return super().form_valid(form)
 
-class CompanyDeleteView(LoginRequiredMixin, DeleteView):
+class CompanyDeleteView(LoginRequiredMixin, DeleteMixin):
     model = Company
     template_name = 'account_delete.html'
     success_url = reverse_lazy('profile')
 
 
 """ ItemGroup """
-# TODO pri vytvareni Itemgroup chci podminit podle uzivatelskeho opravneni ze
-# uzivatel muze pridat skupinu ktera patri pouze jemu
-class ItemGroupListView(LoginRequiredMixin, FilterAndSortMixin, ListView):
+
+class ItemGroupListView(LoginRequiredMixin, SearchSortMixin, ListView):
     model = ItemGroup
     template_name = 'item_group_list.html'
     context_object_name = 'item_groups'
+    default_sort_field = 'name'
     search_fields_by_view = ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated']
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            queryset = ItemGroup.objects.all()
-        else:
-            queryset = ItemGroup.objects.filter(user=self.request.user)
+        queryset = super().get_queryset()
 
-        return self.get_filtered_queryset(self.get_sorted_queryset(queryset))
+        # Filtrujeme podle aktuálního uživatele, aby viděli pouze své ItemGroups
+        queryset = queryset.filter(user=self.request.user)
 
-class ItemGroupDetailView(LoginRequiredMixin, DetailView):
-    # TODO doresit jak se bude zobrazovat tento detail jestli bude zobrazovat polozky a jak se v nich bude filtrovat
+        # Použití zbytku logiky pro filtrování a řazení pomocí mixinu
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+        return queryset
+
+class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
+    # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
+    #  a formular v revisions nechat pouze pro revizni techniky?,
+    # TODO
     model = ItemGroup
     template_name = 'item_group_detail.html'
     context_object_name = 'item_group'
@@ -174,42 +191,22 @@ class ItemGroupDetailView(LoginRequiredMixin, DetailView):
                              'revision_data__name_ppe',
                              'serial_number',
                              'verdict']
-    default_sort_field = ['date_manufacturer']
+    default_sort_field = 'date_manufacture'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Získání všech záznamů, které patří do této skupiny
-        context['revision_records'] = RevisionRecord.objects.filter(item_group=self.object)
+        queryset = RevisionRecord.objects.filter(item_group=self.object)
+        queryset = self.filter_queryset(queryset)
+        queryset = self.sort_queryset(queryset)
+        context['revision_records'] = queryset
+        context[
+            'user_full_name'] = f"{self.object.user.first_name} {self.object.user.last_name}" \
+            if self.object.user else "Unknown user"
         return context
 
-    def get_search_fields(self):
-        return getattr(self, 'search_fields_by_view', [])
-
-    def get_filtered_queryset(self, queryset):
-        # Logika filtrování
-        query = self.request.GET.get('q')
-        if query:
-            queries = Q()
-            search_fields = self.get_search_fields()
-            for field in search_fields:
-                queries |= Q(**{f'{field}__icontains': query})
-            queryset = queryset.filter(queries).distinct()
-        return queryset
-
-    def get_sorted_queryset(self, queryset):
-        # Logika řazení
-        sort_by = self.request.GET.get('sort_by', self.default_sort_field)
-        sort_order = self.request.GET.get('sort_order', 'asc')
-        order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
-        return queryset.order_by(order_field)
-
-    def get_queryset(self):
-        queryset = super().get_queryset()  # Toto očekává dědictví nebo směsimo do třídy s `get_queryset`
-        queryset = self.get_filtered_queryset(queryset)
-        queryset = self.get_sorted_queryset(queryset)
-        return queryset
-
 class ItemGroupCreateView(LoginRequiredMixin, CreateView):
+    # TODO pri vytvareni Itemgroup chci podminit podle uzivatelskeho opravneni ze
+    #  uzivatel muze pridat skupinu ktera patri pouze jemu
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -241,14 +238,12 @@ class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Item Group was successfully updated.')
         return super().form_valid(form)
 
-class ItemGroupDeleteView(LoginRequiredMixin, DeleteView):
+class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin):
     model = ItemGroup
     template_name = 'account_delete.html'
     success_url = reverse_lazy('item_group_list')
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Item Group was successfully deleted.')
-        return super().delete(request, *args, **kwargs)
+
 
 class SubmittableLoginView(LoginView):
     template_name = 'registration/login.html'

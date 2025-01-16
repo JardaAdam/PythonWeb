@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
@@ -29,6 +30,13 @@ class MaterialType(Model):
         verbose_name = "Material Type"
         verbose_name_plural = "Material Types"
 
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.symbol and os.path.isfile(self.symbol.path):
+            os.remove(self.symbol.path)
+
+        super().delete(*args, **kwargs)
+
 class StandardPpe(Model):
     """databaze norem pro OOPP"""
     image = ImageField(upload_to='static/image/standard_ppe/logo/', blank=True, null=True)
@@ -45,6 +53,13 @@ class StandardPpe(Model):
     def __repr__(self):
         return f"StandardPpe(id={self.id}, code='{self.code}', description='{self.description[:20]}...')"
 
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+
+        super().delete(*args, **kwargs)
+
 class Manufacturer(Model):
     """Uchovává základní informace o výrobci."""
     logo = ImageField(upload_to='static/image/manufacturer/logo/', blank=True, null=True)  # logo vyrobce
@@ -57,6 +72,12 @@ class Manufacturer(Model):
     def __repr__(self):
         return f"Manufacturer(id={self.id}, name='{self.name}')"
 
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.logo and os.path.isfile(self.logo.path):
+            os.remove(self.logo.path)
+
+        super().delete(*args, **kwargs)
 class LifetimeOfPpe(Model):
     """uchovava informace ohledne zivotnosti jednotlivich polozek definovanych virobcem"""
     manufacturer = ForeignKey(Manufacturer, on_delete=PROTECT, related_name='lifetimes')
@@ -99,6 +120,12 @@ class TypeOfPpe(Model):
         return (f"TypeOfPpe(id={self.id}, group_type_ppe='{self.group_type_ppe}', "
                 f"price={self.price})")
 
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+
+        super().delete(*args, **kwargs)
 
 class RevisionData(Model):
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
@@ -124,6 +151,15 @@ class RevisionData(Model):
         return (f"RevisionData(id={self.id}, name_ppe='{self.name_ppe}', "
                 f"manufacturer='{self.lifetime_of_ppe.manufacturer.name}')")
 
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.image_items and os.path.isfile(self.image_items.path):
+            os.remove(self.image_items.path)
+        if self.manual_for_revision and os.path.isfile(self.manual_for_revision.path):
+            os.remove(self.manual_for_revision.path)
+
+        # Call the delete function of the parent class
+        super().delete(*args, **kwargs)
 
 
 
@@ -251,4 +287,11 @@ class RevisionRecord(Model):
             self.date_of_next_revision = self.date_of_revision + timedelta(days=365)
 
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Delete associated files if they exist
+        if self.photo_of_item and os.path.isfile(self.photo_of_item.path):
+            os.remove(self.photo_of_item.path)
+
+        super().delete(*args, **kwargs)
 
