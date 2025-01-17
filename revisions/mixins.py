@@ -55,7 +55,7 @@ může být nutné optimalizovat databázové vztahy nebo přístup k datům jin
 Tento přístup ti umožní zpracovávat `ManyToManyField` v rámci vyhledávání bez opakování položek, 
 což by mělo řešit tvůj aktuální problém s duplicitními výsledky při filtrování."""
 # TODO po odladeni sprav po premeni spravi tady musim upravit spravi i v testech
-class CreateMixin(CreateView):
+class CreateMixin():
     success_message = 'The item was successfully saved from CreateMixin'
     error_message = 'error message from CreateMixin'
     warning_message = 'warning message from CreateMixin'
@@ -80,7 +80,7 @@ class CreateMixin(CreateView):
             messages.warning(self.request, self.warning_message)
 
 
-class UpdateMixin(UpdateView):
+class UpdateMixin():
     detail_url_name = ''
     success_message = 'The changes have been successfully uploaded from UpdateMixin'
     error_message = ''
@@ -123,7 +123,7 @@ class UpdateMixin(UpdateView):
         if self.warning_message:
             messages.warning(self.request, self.warning_message)
 
-class DeleteMixin(DeleteView):
+class DeleteMixin():
     success_message = 'The item was successfully deleted.'
     error_message = 'This item cannot be deleted because it is protected and has associated records.'
 

@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from django.urls import reverse_lazy
 
@@ -55,7 +55,7 @@ class MaterialTypeDetailView(DetailView):
     context_object_name = 'material_type'
     success_url = reverse_lazy('materials_type_list')
 
-class MaterialTypeCreateView(LoginRequiredMixin,CreateMixin):
+class MaterialTypeCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     model = MaterialType
     form_class = MaterialTypeForm
     template_name = 'revision_form.html'
@@ -68,7 +68,7 @@ class MaterialTypeCreateView(LoginRequiredMixin,CreateMixin):
     #     # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
     #     return redirect(self.request.path)
 
-class MaterialTypeUpdateView(LoginRequiredMixin,UpdateMixin):
+class MaterialTypeUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = MaterialType
     form_class = MaterialTypeForm
     template_name = 'revision_form.html'
@@ -82,7 +82,7 @@ class MaterialTypeUpdateView(LoginRequiredMixin,UpdateMixin):
     #     messages.success(self.request, "The changes have been successfully saved")
     #     # Přesměruj uživatele na detailní zobrazení
     #     return redirect(detail_url)
-class MaterialTypeDeleteView(LoginRequiredMixin, DeleteMixin):
+class MaterialTypeDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
     model = MaterialType
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('materials_type_list')
@@ -114,7 +114,7 @@ class StandardPpeDetailView(DetailView):
     context_object_name = 'standard_ppe'
     success_url = reverse_lazy('standards_ppe_list')
 
-class StandardPpeCreateView(LoginRequiredMixin,CreateMixin):
+class StandardPpeCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
@@ -128,14 +128,14 @@ class StandardPpeCreateView(LoginRequiredMixin,CreateMixin):
     #     return redirect(self.request.path)
 
 
-class StandardPpeUpdateView(LoginRequiredMixin,UpdateMixin):
+class StandardPpeUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = StandardPpe
     form_class = StandardPpeForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('standards_ppe_list')
     detail_url_name = 'standard_ppe_detail'
 
-class StandardPpeDeleteView(LoginRequiredMixin,DeleteMixin):
+class StandardPpeDeleteView(LoginRequiredMixin,DeleteMixin, DeleteView):
     model = StandardPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('standards_ppe_list')
@@ -167,7 +167,7 @@ class ManufacturerDetailView(DetailView):
     context_object_name = 'manufacturer'
 
 
-class ManufacturerCreateView(LoginRequiredMixin,CreateMixin):
+class ManufacturerCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
@@ -181,7 +181,7 @@ class ManufacturerCreateView(LoginRequiredMixin,CreateMixin):
     #     return redirect(self.request.path)
 
 
-class ManufacturerUpdateView(LoginRequiredMixin,UpdateMixin):
+class ManufacturerUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = Manufacturer
     form_class = ManufacturerForm
     template_name = 'revision_form.html'
@@ -189,7 +189,7 @@ class ManufacturerUpdateView(LoginRequiredMixin,UpdateMixin):
     detail_url_name = 'manufacturer_detail'
 
 
-class ManufacturerDeleteView(LoginRequiredMixin, DeleteMixin):
+class ManufacturerDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
     model = Manufacturer
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('manufacturers_list')
@@ -222,7 +222,7 @@ class LifetimeOfPpeDetailView(DetailView):
     context_object_name = 'lifetime_of_ppe'
 
 
-class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateMixin):
+class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     model = LifetimeOfPpe
     form_class = LifetimeOfPpeForm
     template_name = 'revision_form.html'
@@ -236,7 +236,7 @@ class LifetimeOfPpeCreateView(LoginRequiredMixin,CreateMixin):
     #     return redirect(self.request.path)
 
 
-class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin):
+class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = LifetimeOfPpe
     form_class = LifetimeOfPpeForm
     template_name = 'revision_form.html'
@@ -244,7 +244,7 @@ class LifetimeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin):
     detail_url_name = 'lifetime_of_ppe_detail'
 
 
-class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin):
+class LifetimeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin, DeleteView):
     model = LifetimeOfPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('lifetimes_of_ppe_list')
@@ -271,7 +271,7 @@ class TypeOfPpeDetailView(DetailView):
     template_name = 'type_of_ppe_detail.html'
     context_object_name = 'type_of_ppe'
 
-class TypeOfPpeCreateView(LoginRequiredMixin,CreateMixin):
+class TypeOfPpeCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     model = TypeOfPpe
     form_class = TypeOfPpeForm
     template_name = 'revision_form.html'
@@ -284,14 +284,14 @@ class TypeOfPpeCreateView(LoginRequiredMixin,CreateMixin):
     #     # Zůstaňte na současné stránce, obnovením stejného formuláře (metoda GET)
     #     return redirect(self.request.path)
 
-class TypeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin):
+class TypeOfPpeUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = TypeOfPpe
     form_class = TypeOfPpeForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('types_of_ppe_list')
     detail_url_name = 'type_of_ppe_detail'
 
-class TypeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin):
+class TypeOfPpeDeleteView(LoginRequiredMixin,DeleteMixin, DeleteView):
     model = TypeOfPpe
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('types_of_ppe_list')
@@ -328,7 +328,7 @@ class RevisionDataDetailView(DetailView):
     context_object_name = 'revision_data'
 
 
-class RevisionDataCreateView(LoginRequiredMixin,CreateMixin):
+class RevisionDataCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
@@ -342,14 +342,14 @@ class RevisionDataCreateView(LoginRequiredMixin,CreateMixin):
     #     return redirect(self.request.path)
 
 
-class RevisionDataUpdateView(LoginRequiredMixin,UpdateMixin):
+class RevisionDataUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = RevisionData
     form_class = RevisionDataForm
     template_name = 'revision_form.html'
     success_url = reverse_lazy('revision_datas_list')
     detail_url_name = 'revision_data_detail'
 
-class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin):
+class RevisionDataDeleteView(LoginRequiredMixin,DeleteMixin, DeleteView):
     model = RevisionData
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_datas_list')
@@ -398,7 +398,7 @@ class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
 
 # TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
 
-class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin):
+class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     # FIXME Upravit zobrazovani chyb ve formulari
     # FIXME sort by created date
     model = RevisionRecord
@@ -419,7 +419,7 @@ class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin):
         return context
 
 
-class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin):
+class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = RevisionRecord
     form_class = RevisionRecordForm
     template_name = 'revision_form.html'
@@ -427,7 +427,7 @@ class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin):
     detail_url_name = 'revision_record_detail'
 
 
-class RevisionRecordDeleteView(LoginRequiredMixin,DeleteMixin):
+class RevisionRecordDeleteView(LoginRequiredMixin,DeleteMixin, DeleteView):
     model = RevisionRecord
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('revision_records_list')

@@ -1,4 +1,5 @@
-Dekorátory jsou v Pythonu funkce, které umožňují změnit chování jiné funkce nebo metody. Jsou velmi užitečné pro opakované vzory nebo pro přidání další funkcionality bez nutnosti upravovat původní kód.
+Dekorátory jsou v Pythonu funkce, které umožňují změnit chování jiné funkce nebo metody. Jsou velmi užitečné pro 
+opakované vzory nebo pro přidání další funkcionality bez nutnosti upravovat původní kód.
 
 #### Příklad použití dekorátoru pro `form_valid` a `form_invalid`
 

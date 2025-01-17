@@ -152,7 +152,7 @@ class CompanyUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Company was successfully updated.')
         return super().form_valid(form)
 
-class CompanyDeleteView(LoginRequiredMixin, DeleteMixin):
+class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
     model = Company
     template_name = 'account_delete.html'
     success_url = reverse_lazy('profile')
@@ -238,7 +238,7 @@ class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Item Group was successfully updated.')
         return super().form_valid(form)
 
-class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin):
+class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
     model = ItemGroup
     template_name = 'account_delete.html'
     success_url = reverse_lazy('item_group_list')
