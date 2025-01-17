@@ -35,18 +35,7 @@ class SearchSortMixin:
         order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
         return queryset.order_by(order_field)
 
-# class QuerysetFilterMixin(ListView):
-#     search_fields = []
-#
-#     def get_queryset(self):
-#         queryset = super().get_queryset()
-#         query = self.request.GET.get('q')
-#         if query:
-#             queries = Q()
-#             for field in self.search_fields:
-#                 queries |= Q(**{f'{field}__icontains': query})
-#             queryset = queryset.filter(queries).distinct()
-#         return queryset
+
 """- Buď si vědom, že použití `distinct()` může ovlivnit výkon, zvláště pokud máš rozsáhlé tabulky a komplexní vazby.
 
 - Pokud uvidíš problémy s výkonem nebo složitější chování z důvodu použití `ManyToManyField`, 
@@ -54,8 +43,10 @@ může být nutné optimalizovat databázové vztahy nebo přístup k datům jin
 
 Tento přístup ti umožní zpracovávat `ManyToManyField` v rámci vyhledávání bez opakování položek, 
 což by mělo řešit tvůj aktuální problém s duplicitními výsledky při filtrování."""
+
+
 # TODO po odladeni sprav po premeni spravi tady musim upravit spravi i v testech
-class CreateMixin():
+class CreateMixin:
     success_message = 'The item was successfully saved from CreateMixin'
     error_message = 'error message from CreateMixin'
     warning_message = 'warning message from CreateMixin'
@@ -80,7 +71,7 @@ class CreateMixin():
             messages.warning(self.request, self.warning_message)
 
 
-class UpdateMixin():
+class UpdateMixin:
     detail_url_name = ''
     success_message = 'The changes have been successfully uploaded from UpdateMixin'
     error_message = ''
@@ -123,7 +114,7 @@ class UpdateMixin():
         if self.warning_message:
             messages.warning(self.request, self.warning_message)
 
-class DeleteMixin():
+class DeleteMixin:
     success_message = 'The item was successfully deleted.'
     error_message = 'This item cannot be deleted because it is protected and has associated records.'
 

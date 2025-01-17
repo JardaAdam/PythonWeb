@@ -3,26 +3,50 @@ from unittest import skip
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from .forms import UserRegistrationForm
-from .models import CustomUser, Country, Company
+from accounts.forms import UserRegistrationForm
+from accounts.models import CustomUser, Country, Company
 
 
-class UserRegistrationFormTest(TestCase):
+class BaseTestSetup(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Nastavení společné pro všechny testovací třídy
 
-    def setUp(self):
-        # Vytvoření testovací instance Country
-        self.country = Country.objects.create(name="Testland",
-                                              postcode_validator=r"\d{5}",
-                                              phone_number_prefix="+420",
-                                              phone_number_validator=r"^(?:\+420)?\d{9}$",
-                                              business_id_validator=r"^\d{8}$",
-                                              tax_id_prefix="CZ",
-                                              tax_id_validator=r"\d{10}$"
-                                              )
+        cls.country = Country.objects.create(
+            name='Czech Republic',
+            postcode_validator=r"\d{5}",
+            phone_number_prefix="+420",
+            phone_number_validator=r"^(?:\+420)?\d{9}$",
+            business_id_validator=r"^\d{8}$",
+            tax_id_prefix="CZ",
+            tax_id_validator=r"\d{10}$"
+            )
 
+
+        cls.company = Company.objects.create(
+            name='ExampleCorp',
+            country=cls.country,
+            address='789 Example Road',
+            city='Ostrava',
+            postcode='70030',
+            phone_number='987654321',
+            business_id='87654321',
+            tax_id='CZ9876543210'
+        )
+
+        cls.username = 'testuser'
+        cls.password = 'SafePassword123'
+        cls.user = CustomUser.objects.create_user(
+            username=cls.username,
+            password=cls.password,
+            email='testuser@example.com'
+        )
+
+
+class UserRegistrationFormTest(BaseTestSetup):
     def test_valid_data(self):
         form = UserRegistrationForm(data={
-            'username': 'testuser',
+            'username': 'testuser2',
             'password1': 'strongpassword123',
             'password2': 'strongpassword123',
             'first_name': 'John',
@@ -37,8 +61,8 @@ class UserRegistrationFormTest(TestCase):
             'tax_id': '0123456789',
             'company': None,
         })
-
         self.assertTrue(form.is_valid())
+
 
     def test_mismatched_passwords(self):
         form = UserRegistrationForm(data={
@@ -166,33 +190,16 @@ class UserLoginTest(TestCase):
         self.assertRedirects(response, expected_redirect_url)
 
 
-class UserRegistrationTest(TestCase):
+class UserRegistrationTest(BaseTestSetup):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=False)
-        # Vytvoření potřebných objekty, jako je Country
-        self.country = Country.objects.create(
-            name='Czech Republic',
-            language_code='cs',
-            postcode_format=r'^\d{3}\s?\d{2}$',
-            phone_number_prefix='+420',
-            business_id_format=r'\d{8}',
-            tax_id_format=r'CZ\d{8,10}',
-        )
 
-        self.company = Company.objects.create(
-            name='ExampleCorp',
-            country=self.country,
-            address='789 Example Road',
-            city='Ostrava',
-            postcode='700 30',
-            phone_number='987654321',
-            business_id='87654321',
-            tax_id='CZ9876543210'
-        )
+
 
     def test_register_user_without_company(self):
+
         user_data = {
-            'username': 'testuser',
+            'username': 'testuser1',
             'password1': 'SafePassword123',
             'password2': 'SafePassword123',
             'first_name': 'jane',
@@ -201,10 +208,10 @@ class UserRegistrationTest(TestCase):
             'country': self.country.pk,
             'address': '456 Example Street',
             'city': 'Prague',
-            'postcode': '123 45',
+            'postcode': '12345',
             'phone_number': '123456789',
             'business_id': '12345678',
-            'tax_id': 'CZ12345678',}
+            'tax_id': 'CZ1234567890',}
 
         response = self.client.post(reverse('register'), user_data)
 
@@ -214,17 +221,17 @@ class UserRegistrationTest(TestCase):
         self.assertTrue(CustomUser.objects.filter(username='testuser').exists(), "User was not created.")
 
         # Ověření dat uživatele
-        user = CustomUser.objects.get(username='testuser')
+        user = CustomUser.objects.get(username='testuser1')
         self.assertEqual(user.first_name, 'Jane')  # Předpokládáme, že clean je formátuje
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.com')
         self.assertEqual(user.country, self.country)  # Porovnáváme FK objekty
         self.assertEqual(user.address, '456 Example Street')
         self.assertEqual(user.city, 'Prague')
-        self.assertEqual(user.postcode, '123 45')
+        self.assertEqual(user.postcode, '12345')
         self.assertEqual(user.phone_number, '+420123456789')
         self.assertEqual(user.business_id, '12345678')
-        self.assertEqual(user.tax_id, 'CZ12345678')
+        self.assertEqual(user.tax_id, 'CZ1234567890')
 
     def test_register_user_with_invalid_postcode(self):
         # Ukázkový test pro nesprávný formát PSČ
@@ -252,6 +259,7 @@ class UserRegistrationTest(TestCase):
 
 
     def test_register_user_with_existing_company(self):
+
         # Simulace dat pro nového uživatele, který se chce připojit k existující společnosti
         data = {
             'username': 'companyuser',
@@ -263,10 +271,10 @@ class UserRegistrationTest(TestCase):
             'country': self.country.pk,
             'address': '101 Example Avenue',
             'city': 'Brno',
-            'postcode': '608 00',
+            'postcode': '60800',
             'phone_number': '777123456',
             'business_id': '23456789',
-            'tax_id': 'CZ23456789',
+            'tax_id': 'CZ2345678901',
             'company': self.company.pk  # ID existující společnosti
         }
 
@@ -275,7 +283,7 @@ class UserRegistrationTest(TestCase):
         # Výpis chyb formuláře, pokud existují
         if response.status_code == 200:
             print(response.context['user_form'].errors)
-            print(response.context['company_form'].errors)
+            # print(response.context['company_form'].errors)
 
         # Ověření, že uživatel je úspěšně přesměrován (HTTP status 302) po úspěšné registraci
         self.assertEqual(response.status_code, 302)

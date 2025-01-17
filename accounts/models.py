@@ -11,7 +11,7 @@ from .validators import (
     validate_postcode,
 )
 
-
+# TODO tabulka ktera bude obsahovat informace o zmenach v jednotlivych zaznamech v databazi
 # TODO hodilo by se sem jeste dodat nejake image do modelu
 # TODO oddelit validatory
 class Country(Model):
@@ -42,6 +42,8 @@ class Country(Model):
 
 
 class Company(Model):
+    # TODO doplnit Created_by, Updated_by
+    # TODO doplnit Email?
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
     name = CharField(max_length=255, unique=True, blank=True, null=True)
@@ -115,6 +117,7 @@ class CustomUser(AbstractUser):
 
 
 class ItemGroup(Model):
+    # TODO Created_by, Updated_by
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden
         - CustomUser rozdelene polozky do vice skupin podle pouziti (rescue bag, working at heihgt equipments

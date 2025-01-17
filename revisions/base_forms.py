@@ -3,7 +3,7 @@ from django.forms import ModelForm
 
 
 
-class BaseFileRequirementForm(ModelForm):
+class BaseFileRequirementForm:
     image_field_name = None
     document_field_name = None
 

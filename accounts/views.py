@@ -1,15 +1,15 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth import login
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 
-from revisions.mixins import SearchSortMixin, DeleteMixin
-from .forms import UserRegistrationForm, CompanyForm, UserEditForm, ItemGroupForm
+from revisions.mixins import SearchSortMixin, DeleteMixin, UpdateMixin
+from .forms import UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
 
@@ -52,7 +52,7 @@ class CustomUserView(LoginRequiredMixin, TemplateView):
 class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
     """Edit user data"""
     model = CustomUser
-    form_class = UserEditForm
+    form_class = CustomUserUpdateForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
 
@@ -76,9 +76,10 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 """ Company """
-# FIXME omezit uzivateli aby mohl upravovat pouze company do ktere patri
+
 class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
     # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
+    # TODO kde se bude tato tabulka zobrazovat?
     model = Company
     template_name = 'company_list.html'
     context_object_name = 'companies'
@@ -100,6 +101,8 @@ class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
 
 
 class CompanyView(LoginRequiredMixin, TemplateView):
+    # TODO doresit tento pohled a co se v nem bude zobrazovat myslenka je takova ze tady bude mit uzivatel moznost
+    #  videt sve kolegi ve firme a item_group firmy
     """View solely for the user assigned to the company"""
     model = Company
     form_class = CompanyForm
@@ -114,7 +117,7 @@ class CompanyView(LoginRequiredMixin, TemplateView):
             context['no_company_message'] = "No company assigned."
         return context
 
-class CompanyDetailView(DetailView):
+class CompanyDetailView(LoginRequiredMixin, DetailView):
     model = Company
     template_name = 'company_detail.html'
     context_object_name = 'company'
@@ -136,21 +139,18 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, 'Company added successfully.')
         return response
 
-class CompanyUpdateView(LoginRequiredMixin, UpdateView):
+class CompanyUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
+    detail_url_name = 'company_detail'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['view_title'] = 'Edit Company'
         return context
 
-
-    def form_valid(self, form):
-        messages.success(self.request, 'Company was successfully updated.')
-        return super().form_valid(form)
 
 class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
     model = Company
@@ -223,6 +223,7 @@ class ItemGroupCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
+    # TODO uzivatel muze upravit pouze skupinu ktera patri jemu
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'

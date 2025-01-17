@@ -15,14 +15,14 @@ class MaterialTypeForm(ModelForm):
         fields = '__all__'
 
 
-class StandardPpeForm(BaseFileRequirementForm):
+class StandardPpeForm(BaseFileRequirementForm, ModelForm):
     image_field_name = 'image'
     class Meta:
         model = StandardPpe
         fields = '__all__'
 
 
-class ManufacturerForm(BaseFileRequirementForm):
+class ManufacturerForm(BaseFileRequirementForm, ModelForm):
     image_field_name = 'logo'
     class Meta:
         model = Manufacturer
@@ -45,7 +45,7 @@ class TypeOfPpeForm(ModelForm):
         fields = '__all__'
 
 
-class RevisionDataForm(BaseFileRequirementForm):
+class RevisionDataForm(BaseFileRequirementForm, ModelForm):
     image_field_name = 'image_items'
     class Meta:
         model = RevisionData

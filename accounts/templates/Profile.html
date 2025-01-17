@@ -63,6 +63,7 @@
 
     <!-- Edit and Add Buttons -->
     <a class="btn btn-warning" href="{% url 'edit_profile' %}"><i class="fas fa-edit"></i> Profile</a>
+    <a class="btn btn-warning" href="{% url 'company_view' %}"><i class="fas fa-edit"></i>My company</a>
     {% if not user.company %}
         <a class="btn btn-primary" href="{% url 'add_company' %}">Add Company</a>
     {% endif %}

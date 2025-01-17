@@ -2,13 +2,13 @@ from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.db.transaction import atomic
 
-from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput
+from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, IntegerField
 
 from .mixins import FormValidationMixin
 from .models import CustomUser, Company, ItemGroup, Country
 from .validators import validate_no_numbers
 
-class UserRegistrationForm(FormValidationMixin):
+class UserRegistrationForm(FormValidationMixin, ModelForm):
     password1 = CharField(widget=PasswordInput, label='Password')
     password2 = CharField(widget=PasswordInput, label='Confirm Password')
     first_name = CharField(max_length=40, required=True, validators=[validate_no_numbers])
@@ -83,7 +83,7 @@ class UserRegistrationForm(FormValidationMixin):
 
 
 
-class UserEditForm(FormValidationMixin):
+class CustomUserUpdateForm(FormValidationMixin, ModelForm):
     first_name = CharField(max_length=40, required=True, validators=[validate_no_numbers])
     last_name = CharField(max_length=40, required=True, validators=[validate_no_numbers])
     company = ModelChoiceField(queryset=Company.objects,
@@ -121,8 +121,15 @@ class UserEditForm(FormValidationMixin):
 
 
 
-class CompanyForm(FormValidationMixin):
-    # TODO nesmi se dat vytvorit prazdny zaznam povine pole podobne jako u UserView
+class CompanyForm(FormValidationMixin, ModelForm):
+    name = CharField(required=True, validators=[validate_no_numbers])
+    country = ModelChoiceField(required=True, queryset=Country.objects)
+    address = CharField(max_length=128, required=True)
+    city = CharField(max_length=32, required=True)
+    postcode = CharField(max_length=6, required=True)
+    phone_number = CharField(max_length=20, required=True)
+    business_id = CharField(required=True)
+    tax_id = CharField(required=True)
     class Meta:
         model = Company
         fields = [

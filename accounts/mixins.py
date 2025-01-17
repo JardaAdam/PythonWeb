@@ -1,6 +1,4 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
-
 
 from .validators import (
     validate_business_id,
@@ -9,7 +7,7 @@ from .validators import (
     validate_postcode,
 )
 
-class FormValidationMixin(ModelForm):
+class FormValidationMixin:
     """ This method validate address and Tax_id, Business ID"""
     def clean(self):
         cleaned_data = super().clean()
