@@ -22,11 +22,11 @@ def some_view(request):
 # TODO kontrola kam se ukladaji soubory
 # TODO do revision_form.html doplnit kolonku pro zobrazovani aktualniho pridavaneho form
 # TODO pokud to pujde tak pro jednoduzsi listy sjednotit Template do jednoho
-# TODO sjednotit guery sety a form_valid pokud to pujde
 # TODO ukladani dat je vporadku. doplnit informacni hlasku ze ulozeni probehlo vporadku nebo ze nebylo ulozeno protoze...
 # TODO osetrit vypisi v situacich kdy nemuze uzivatel udelat nejaky ukon. ProtectedError atd.
 # TODO doplnit listovani do vsech Template_list (paginate_by = 10), {% include "includes/pagination.html" %}
 # TODO doplnit pro create a update context_data pro view_title
+# TODO upravit kdy se uzivateli zobrazuje search field v revision_base.html pouze v ListView
 """ MaterialType """
 
 class MaterialTypeListView(SearchSortMixin,ListView):
