@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-12 col-md-6">
-            <a href="{% url 'add_item_group' %}" class="btn btn-primary mb-3">Add new group</a>
+            <a href="{% url 'add_item_group' %}" class="btn btn-primary mb-3">Add Item group</a>
         </div>
         <div class="col-12 col-md-6 text-center">
             <h2>List of Item Groups</h2>
@@ -18,9 +18,9 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">{% sort_link request 'name' 'Name' %}</th>
+                <th scope="col">{% sort_link request 'user__first_name' 'User' %}</th>
+                <th scope="col">{% sort_link request 'company__name' 'Company' %}</th>
                 {% if request.user.is_superuser %}
-                    <th scope="col">{% sort_link request 'user__first_name' 'User' %}</th>
-                    <th scope="col">{% sort_link request 'company__name' 'Company' %}</th>
                     <th scope="col">{% sort_link request 'created' 'Created' %}</th>
                     <th scope="col">{% sort_link request 'updated' 'Updated' %}</th>
                 {% endif %}
@@ -31,10 +31,10 @@
             {% for group in item_groups %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ group.name }}</td>
-                {% if request.user.is_superuser %}
-                    <td>{{ group.user.first_name }} {{ group.user.last_name }}</td>
+                    <td>{{ group.name }}</td>
+                    <td>{{ group.user.first_name }} {{ group.user.last_name }} </td>
                     <td>{{ group.company.name }}</td>
+                {% if request.user.is_superuser %}
                     <td>{{ group.created|date:"d.m.Y H:i" }}</td>
                     <td>{{ group.updated|date:"d.m.Y H:i" }}</td>
                 {% endif %}
@@ -51,6 +51,66 @@
             {% endfor %}
         </tbody>
     </table>
+    {% include "includes/pagination.html" %}
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3>Revision Records without Group</h3>
+            {% include 'includes/search_account_form.html' %}
+        </div>
+        <div class="col-12 col-md-6">
+            <a href="{% url 'add_revision_record' %}" class="btn btn-primary mb-3">Add Revision record</a>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">{% sort_link request 'revision_data__lifetime_of_ppe__manufacturer__name' 'Manufacturer' %}</th>
+                <th scope="col">{% sort_link request 'revision_data__type_of_ppe__group_type_ppe' 'Group Type' %}</th>
+                <th scope="col">{% sort_link request 'revision_data__name_ppe' 'Name PPE' %}</th>
+                <th scope="col">{% sort_link request 'serial_number' 'Serial Number' %}</th>
+                <th scope="col">{% sort_link request 'date_manufacture' 'Date of Manufacture' %}</th>
+                <th scope="col">{% sort_link request 'date_of_first_use' 'Date of First Use' %}</th>
+                <th scope="col">{% sort_link request 'date_of_revision' 'Date of Revision' %}</th>
+                <th scope="col">{% sort_link request 'date_of_next_revision' 'Date of Next Revision' %}</th>
+                <th scope="col">{% sort_link request 'verdict' 'Verdict' %}</th>
+                <th scope="col">{% sort_link request 'notes' 'Notes' %}</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in free_revision_records %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ record.revision_data.lifetime_of_ppe.manufacturer.name }}</td>
+                <td>{{ record.revision_data.type_of_ppe.group_type_ppe }}</td>
+                <td>{{ record.revision_data.name_ppe }}</td>
+                <td>{{ record.serial_number }}</td>
+                <td>{{ record.date_manufacture }}</td>
+                <td>{{ record.date_of_first_use }}</td>
+                <td>{{ record.date_of_revision }}</td>
+                <td>{{ record.date_of_next_revision }}</td>
+                <td>{{ record.get_verdict_display }}</td>
+                <td>{{ record.notes }}</td>
+                <td>
+                    <a href="{% url 'revision_record_detail' record.pk %}" class="btn btn-info btn-sm">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{% url 'edit_revision_record' record.pk %}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No records found in this group.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     {% include "includes/pagination.html" %}
 </div>
 {% endblock %}

@@ -27,7 +27,7 @@
         <dd class="col-sm-9 border-bottom pb-2">
             {% if user.company %}
                 {{ user.company.name }}
-                <a class="btn btn-info btn-sm" href="{% url 'company_detail' user.company.id %}">View Company</a>
+                <a class="btn btn-info" href="{% url 'company_view' %}"><i class="fas fa-eye"></i> Company</a>
             {% else %}
                 No Company
             {% endif %}
@@ -66,7 +66,6 @@
 
     <!-- Edit and Add Buttons -->
     <a class="btn btn-warning" href="{% url 'edit_profile' %}"><i class="fas fa-edit"></i> Profile</a>
-    <a class="btn btn-warning" href="{% url 'company_view' %}"><i class="fas fa-edit"></i>My company</a>
     {% if not user.company %}
         <a class="btn btn-primary" href="{% url 'add_company' %}">Add Company</a>
     {% endif %}

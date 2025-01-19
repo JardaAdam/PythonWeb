@@ -396,7 +396,6 @@ class RevisionRecordDetailView(LoginRequiredMixin,DetailView):
     context_object_name = 'revision_record'
 
 
-# TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
 
 class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin, CreateView):
     # FIXME Upravit zobrazovani chyb ve formulari
@@ -418,6 +417,10 @@ class RevisionRecordCreateView(LoginRequiredMixin,CreateMixin, CreateView):
         context['show_add_revision_data_button'] = True
         return context
 
+# TODO tato funkce bude slouzit pro uzivatele ktery bude moci pridat pouze novy vyrobek!!!
+class RevisionRecordCreateViewByOwner(LoginRequiredMixin,CreateMixin, CreateView):
+    # TODO pridat funkci pro pridavani zaznamu uzivatelem: automaticke nastaveni owner a zadani pouze new.
+    pass
 
 class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     model = RevisionRecord
@@ -425,6 +428,11 @@ class RevisionRecordUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
     template_name = 'revision_form.html'
     success_url = reverse_lazy('revision_records_list')
     detail_url_name = 'revision_record_detail'
+
+class RevisionRecordUpdateViewByOwner(LoginRequiredMixin,UpdateView):
+    #TODO pridat pohled pro pridani uzivatelem mozne upravi: zmena a pridani ItemGroup, pridani poznamky a foto_of_item
+    pass
+
 
 
 class RevisionRecordDeleteView(LoginRequiredMixin,DeleteMixin, DeleteView):

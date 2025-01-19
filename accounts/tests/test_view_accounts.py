@@ -12,12 +12,23 @@ class BaseTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Vytvoření testovacího uživatele a společnosti
-        cls.user = CustomUser.objects.create_user(username='testuser',
-                                                  password='testpassword',
-                                                  first_name='Testak',
-                                                  last_name='Testovic')
-        cls.company = Company.objects.create(name='Test Company')
+        cls.user = CustomUser.objects.create_user(
+            username='testuser',
+            password='testpassword',
+            first_name='Testak',
+            last_name='Testovic')
+        cls.company = Company.objects.create(
+            name='Test Company',
+            address='Test Address',
+            city='Test City',
+            postcode='12345',
+            phone_number='123456789',
+            business_id='12345678',
+            tax_id='123456789'
+        )
         cls.user.company = cls.company
+        cls.user.save()
+
         cls.country = Country.objects.create(
             name='Czech Republic',
             postcode_validator=r"\d{5}",
@@ -178,10 +189,17 @@ class CompanyCreateViewTest(BaseTestCase):
 
 class CompanyUpdateViewTest(BaseTestCase):
     def test_successful_company_update(self):
+        """ company record editing by a user belonging to this company """
         self.client.login(username='testuser', password='testpassword')
-        response = self.client.post(reverse('edit_company', args=[self.user.company.pk]), {
+        self.company = Company.objects.get(pk=self.company.pk)
+        # Nastavení URL pro úpravu společnosti s parametrem "next"
+        edit_url = reverse('edit_company', args=[self.user.company.pk])
+        previous_url  = reverse('company_view')
+        url_with_next = f"{edit_url}?next={previous_url}"
+
+        response = self.client.post(url_with_next, {
             'name': 'UpdatedCompanyName',
-            'country': self.country.pk,
+            'country': self.company.pk,
             'address': "Podebradova 712",
             'city': 'Praha',
             'postcode': '25082',
@@ -192,7 +210,7 @@ class CompanyUpdateViewTest(BaseTestCase):
         if response.status_code == 200:
             print(response.context['form'].errors)  # Přidej tento řádek pro výpis chyb
 
-        self.assertRedirects(response, reverse('company_detail', args=[self.user.company.pk]))
+        self.assertRedirects(response, previous_url)
         self.company.refresh_from_db()
         self.assertEqual(self.company.name, 'UpdatedCompanyName')
 
@@ -213,7 +231,7 @@ class ItemGroupTestCase(BaseTestCase):
             )
 
     def test_item_group_str(self):
-        self.assertEqual(str(self.item_group), 'Revize Test Group Company: Test Company User: Testak Testovic')
+        self.assertEqual(str(self.item_group), 'Test Group Company: Test Company User: Testak Testovic')
 
     # Testy pro CRUD operace nad pohledy
     def test_item_group_list_view(self):

@@ -56,6 +56,7 @@ class PasswordResetForm(Form):
         if password != confirm_password:
             self.add_error('confirm_password', "Passwords do not match!")
 
+
 """ USER """
 class UserRegistrationForm(FormValidationMixin, ModelForm):
     password1 = CharField(widget=PasswordInput, label='Password')
@@ -68,6 +69,7 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
     city = CharField(max_length=32, required=True)
     postcode = CharField(max_length=6, required=True)
     phone_number = CharField(max_length=20, required=True)
+    # FIXME upravyt zobrazeni firmy doplnit o City aby se upresnilo odkud firma je kdyby bylo vice firem se stejnym nazvem
     company = ModelChoiceField(queryset=Company.objects,
                                required=False,
                                empty_label="Enter company name",

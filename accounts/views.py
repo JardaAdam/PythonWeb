@@ -1,6 +1,8 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
+from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views import View
@@ -108,8 +110,10 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
 """ Company """
 
 class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
+    """ only for revision technician"""
     # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
     # TODO kde se bude tato tabulka zobrazovat?
+    # FIXME tato tabulka je pouze pro revision technic a admin
     model = Company
     template_name = 'company_list.html'
     context_object_name = 'companies'
@@ -129,7 +133,9 @@ class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
 
         return queryset
 
-
+# Fixme upravit podminky podle prav uzivatele. pro cesty
+#  company detail (pro revizni techniky)
+#  company view (pro uzivatele z firmy)
 class CompanyView(LoginRequiredMixin, TemplateView):
     # TODO doresit tento pohled a co se v nem bude zobrazovat myslenka je takova ze tady bude mit uzivatel moznost
     #  videt sve kolegi ve firme a item_group firmy
@@ -137,9 +143,11 @@ class CompanyView(LoginRequiredMixin, TemplateView):
     model = Company
     form_class = CompanyForm
     template_name = 'my_company.html'
+    success_url = reverse_lazy('my_company')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        """ nacita data o uzivatelove firme """
         if self.request.user.company:
             context['company'] = self.request.user.company
         else:
@@ -181,6 +189,17 @@ class CompanyUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
         context['view_title'] = 'Edit Company'
         return context
 
+    def get_success_url(self):
+        # Získání hodnoty next parametru z GET/POST požadavku
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        if next_url:
+            return next_url
+        return super().get_success_url()
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Vyzkoušej alternativní přesměrování na základě next parametru
+        return HttpResponseRedirect(self.get_success_url())
 
 class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
     model = Company
@@ -191,14 +210,18 @@ class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
 """ ItemGroup """
 
 class ItemGroupListView(LoginRequiredMixin, SearchSortMixin, ListView):
+    # FIXME upravit tak aby kazde searh pole hledalo ve sve casti Template.
+    # TODO pridat funkci ktera oznaci vice polozek revision record ktere nemaji ItemGroup a zmenim jejich umisteni do urcite ItemGroup
     model = ItemGroup
     template_name = 'item_group_list.html'
     context_object_name = 'item_groups'
     default_sort_field = 'name'
-    search_fields_by_view = ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated']
+    search_fields_by_view = ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated'
+                             ]
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        """ zobrazeni uzivatelovich item groups"""
 
         # Filtrujeme podle aktuálního uživatele, aby viděli pouze své ItemGroups
         queryset = queryset.filter(user=self.request.user)
@@ -208,10 +231,20 @@ class ItemGroupListView(LoginRequiredMixin, SearchSortMixin, ListView):
         queryset = self.sort_queryset(queryset)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        """ data pro zobrazeni revision record ktere nemaji ImemGroup """
+
+        # Přidání volných RevisionRecords do kontextu
+        free_revision_records = RevisionRecord.objects.filter(owner=self.request.user, item_group=None)
+
+        context['free_revision_records'] = free_revision_records
+        return context
+
 class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
     # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
     #  a formular v revisions nechat pouze pro revizni techniky?,
-    # TODO
+    # TODO doplnit vyhledavani podle : Date of Manufacture,Date of First Use, Date of Revision
     model = ItemGroup
     template_name = 'item_group_detail.html'
     context_object_name = 'item_group'
@@ -233,6 +266,9 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
             'user_full_name'] = f"{self.object.user.first_name} {self.object.user.last_name}" \
             if self.object.user else "Unknown user"
         return context
+
+
+
 
 class ItemGroupCreateView(LoginRequiredMixin, CreateView):
     # TODO pri vytvareni Itemgroup chci podminit podle uzivatelskeho opravneni ze
