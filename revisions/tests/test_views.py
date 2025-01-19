@@ -4,8 +4,6 @@ from datetime import date
 from unittest import skip
 import tempfile
 import shutil
-from django.core.files.base import ContentFile
-from django.db.models import ProtectedError
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile

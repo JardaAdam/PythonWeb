@@ -1,13 +1,62 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.db.transaction import atomic
 
-from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, IntegerField
+from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, Form
 
+from revisions.models import RevisionRecord
 from .mixins import FormValidationMixin
 from .models import CustomUser, Company, ItemGroup, Country
 from .validators import validate_no_numbers
 
+
+""" PASSWORD RESET """
+class SecurityQuestionForm(Form):
+    username = CharField(label="Username", max_length=150)
+    helmet_name = CharField(label="What is the name of your helmet?", max_length=255)
+    helmet_manufacturer = CharField(label="Who is the manufacturer of your helmet?", max_length=255)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get("username")
+        helmet_name = cleaned_data.get("helmet_name")
+        helmet_manufacturer = cleaned_data.get("helmet_manufacturer")
+
+        user = get_user_model()
+
+        try:
+            user = user.objects.get(username__iexact=username)
+        except user.DoesNotExist:
+            self.add_error('username', "User with this username does not exist.")
+            return cleaned_data
+
+        revision_records = RevisionRecord.objects.filter(owner=user)
+        helmet_name_match = revision_records.filter(revision_data__name_ppe__iexact=helmet_name).exists()
+        helmet_manufacturer_match = revision_records.filter(
+            revision_data__lifetime_of_ppe__manufacturer__name__iexact=helmet_manufacturer
+        ).exists()
+
+        if not helmet_name_match:
+            self.add_error('helmet_name', "Incorrect helmet name.")
+        if not helmet_manufacturer_match:
+            self.add_error('helmet_manufacturer', "Incorrect helmet manufacturer name.")
+
+        return cleaned_data
+
+class PasswordResetForm(Form):
+    new_password = CharField(widget=PasswordInput, label='New Password')
+    confirm_password = CharField(widget=PasswordInput, label='Confirm New Password')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
+            self.add_error('confirm_password', "Passwords do not match!")
+
+""" USER """
 class UserRegistrationForm(FormValidationMixin, ModelForm):
     password1 = CharField(widget=PasswordInput, label='Password')
     password2 = CharField(widget=PasswordInput, label='Confirm Password')
@@ -36,8 +85,6 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
         ]
         widgets = {'country': Select(attrs={'class': 'form-control select2'})}
 
-
-
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '')
         return first_name.strip().title()
@@ -45,7 +92,6 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name', '')
         return last_name.strip().title()
-
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -82,7 +128,6 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
         return user
 
 
-
 class CustomUserUpdateForm(FormValidationMixin, ModelForm):
     first_name = CharField(max_length=40, required=True, validators=[validate_no_numbers])
     last_name = CharField(max_length=40, required=True, validators=[validate_no_numbers])
@@ -93,12 +138,22 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
                                widget=Select(attrs={'class': 'form-control select2'}),
                                help_text="If you haven't found your company. Create a new one after successful registration"
                                )
+
     class Meta:
         model = CustomUser
         fields = [  # Vyberte pole, která uživatel může upravit
-            'first_name', 'last_name', 'email','company', 'country', 'address',
+            'first_name', 'last_name', 'email', 'company', 'country', 'address',
             'city', 'postcode', 'phone_number', 'business_id', 'tax_id'
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        try:
+            ''' Default set country Czech Republic'''
+            default_country = Country.objects.get(name='Czech Republic')
+            self.fields['country'].initial = default_country.id
+        except Country.DoesNotExist:
+            pass  # Pro případ, že CZ země neexistuje, tento krok by měl být promyšleně řešen v produkci
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '')
@@ -107,7 +162,6 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name', '')
         return last_name.strip().title()
-
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -119,8 +173,7 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
                 raise ValidationError(f"Please enter a valid email. Error: {str(e)}")
         return email
 
-
-
+""" COMPANY """
 class CompanyForm(FormValidationMixin, ModelForm):
     name = CharField(required=True, validators=[validate_no_numbers])
     country = ModelChoiceField(required=True, queryset=Country.objects)
@@ -130,6 +183,7 @@ class CompanyForm(FormValidationMixin, ModelForm):
     phone_number = CharField(max_length=20, required=True)
     business_id = CharField(required=True)
     tax_id = CharField(required=True)
+
     class Meta:
         model = Company
         fields = [
@@ -137,11 +191,21 @@ class CompanyForm(FormValidationMixin, ModelForm):
             'postcode', 'phone_number', 'business_id', 'tax_id'
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        try:
+            ''' Default set country Czech Republic'''
+            default_country = Country.objects.get(name='Czech Republic')
+            self.fields['country'].initial = default_country.id
+        except Country.DoesNotExist:
+            print("Default country does not exist in the database.")
+
     def clean(self):
         cleaned_data = super().clean()
         # Další validace, pokud je potřeba
         return cleaned_data
 
+""" ITEM GROUP """
 class ItemGroupForm(ModelForm):
     class Meta:
         model = ItemGroup
@@ -149,8 +213,6 @@ class ItemGroupForm(ModelForm):
         widgets = {'user': Select(attrs={'class': 'form-control select2'}),
                    'company': Select(attrs={'class': 'form-control select2'})
                    }
-
-
 
     def clean(self):
         cleaned_data = super().clean()
@@ -161,4 +223,3 @@ class ItemGroupForm(ModelForm):
             raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
 
         return cleaned_data
-

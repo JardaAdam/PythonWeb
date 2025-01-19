@@ -1,24 +1,40 @@
+from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
 
-from accounts.models import CustomUser, Company, Country
+from accounts.forms import CompanyForm
+from accounts.models import CustomUser, Company, Country, ItemGroup
+from accounts.tests.test_user import BaseViewsTestUser
+from revisions.models import RevisionRecord, RevisionData, Manufacturer
 
 
 class BaseTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Vytvoření testovacího uživatele a společnosti
-        cls.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
-        cls.company = Company.objects.create(name='TestCompany')
+        cls.user = CustomUser.objects.create_user(username='testuser',
+                                                  password='testpassword',
+                                                  first_name='Testak',
+                                                  last_name='Testovic')
+        cls.company = Company.objects.create(name='Test Company')
         cls.user.company = cls.company
         cls.country = Country.objects.create(
             name='Czech Republic',
             postcode_validator=r"\d{5}",
+            postcode_format='12345',
             phone_number_prefix="+420",
             phone_number_validator=r"^(?:\+420)?\d{9}$",
+            phone_number_format='123456789',
             business_id_validator=r"^\d{8}$",
+            business_id_format='12345678',
             tax_id_prefix="CZ",
-            tax_id_validator=r"\d{10}$"
+            tax_id_validator=r"\d{10}$",
+            tax_id_format='1234567890',
+        )
+        cls.item_group = ItemGroup.objects.create(
+            name='Test Group',
+            user=cls.user,
+            company=cls.company
         )
         cls.user.save()
 
@@ -74,6 +90,91 @@ class CompanyViewTest(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.company.name)
 
+class CompanyCreateViewTest(BaseTestCase):
+    def test_company_create_view_loads_correctly(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('add_company'))
+        self.assertEqual(response.status_code, 200)
+        # Ověří, že používáme správnou šablonu
+        self.assertTemplateUsed(response, 'account_form.html')
+
+    def test_company_create_success(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('add_company'), {
+            'name': 'New TestCompany',
+            'country': self.country.pk,
+            'address': '123 Test Address',
+            'city': 'Test City',
+            'postcode': '12345',
+            'phone_number': '123456789',
+            'business_id': '12345678',
+            'tax_id': '8765432101'
+        })
+        self.assertEqual(response.status_code, 302)  # Předpokládáme, že po úspěšném vytváření dojde k přesměrování
+        self.assertTrue(Company.objects.filter(name='New TestCompany').exists())
+
+    def test_company_create_success_message(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('add_company'), {
+            'name': 'New TestCompany',
+            'country': self.country.pk,
+            'address': '123 Test Address',
+            'city': 'Test City',
+            'postcode': '12345',
+            'phone_number': '123456789',
+            'business_id': '12345678',
+            'tax_id': '8765432121'
+        })
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(str(messages[0]), "Company added successfully.")
+
+    def test_company_create_invalid_data(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('add_company'), {
+            'name': '',
+            'country': self.country.pk,
+            'address': '',
+            'city': '',
+            'postcode': '150 23',
+            'phone_number': '123654',
+            'business_id': '2156',
+            'tax_id': '54948'
+        })
+        # Ujisti se, že se vrátí na formulářovou stránku
+        self.assertEqual(response.status_code, 200)
+
+        # Kontrola, zda form je v kontextu a obsahuje chyby
+        self.assertIn('form', response.context)
+        form = response.context['form']
+
+        # Potvrď chyby form
+        self.assertTrue(form.errors)
+
+        # Ruční kontrola chyb pro každé pole
+        self.assertIn('name', form.errors)
+        self.assertIn('This field is required.', form.errors['name'])
+
+        # self.assertIn('country', form.errors)
+        # self.assertIn('This field is required.', form.errors['country'])
+
+        self.assertIn('address', form.errors)
+        self.assertIn('This field is required.', form.errors['address'])
+
+        self.assertIn('city', form.errors)
+        self.assertIn('This field is required.', form.errors['city'])
+
+        self.assertIn('postcode', form.errors)
+        self.assertIn('The postcode does not match the format for the selected country Czech Republic. Expected format is: 12345.', form.errors['postcode'])
+
+        self.assertIn('phone_number', form.errors)
+        self.assertIn('The phone number does not match the format for the selected country Czech Republic. Expected format is: 123456789.', form.errors['phone_number'])
+
+        self.assertIn('business_id', form.errors)
+        self.assertIn('The Business ID does not match the format for the selected country Czech Republic. Expected format is: 12345678.', form.errors['business_id'])
+
+        self.assertIn('tax_id', form.errors)
+        self.assertIn('The Tax ID does not match the format for the selected country Czech Republic. Expected format is: 1234567890.', form.errors['tax_id'])
+
 
 class CompanyUpdateViewTest(BaseTestCase):
     def test_successful_company_update(self):
@@ -94,3 +195,108 @@ class CompanyUpdateViewTest(BaseTestCase):
         self.assertRedirects(response, reverse('company_detail', args=[self.user.company.pk]))
         self.company.refresh_from_db()
         self.assertEqual(self.company.name, 'UpdatedCompanyName')
+
+
+class ItemGroupTestCase(BaseTestCase):
+    def test_item_group_creation(self):
+        self.assertEqual(self.item_group.name, 'Test Group')
+        self.assertEqual(self.item_group.user, self.user)
+        self.assertEqual(self.item_group.company, self.company)
+
+    def test_unique_constraint(self):
+        # Zkusit vytvořit skupinu se stejným jménem od stejného uživatele a firmy
+        with self.assertRaises(Exception):
+            ItemGroup.objects.create(
+                name='Test Group',
+                user='testuser',
+                company=self.company
+            )
+
+    def test_item_group_str(self):
+        self.assertEqual(str(self.item_group), 'Revize Test Group Company: Test Company User: Testak Testovic')
+
+    # Testy pro CRUD operace nad pohledy
+    def test_item_group_list_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('item_group_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test Group')
+
+    def test_item_group_detail_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('item_group_detail', args=[self.item_group.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test Group')
+
+    def test_item_group_create_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('add_item_group'), {
+            'name': 'Another Group',
+            'user': self.user.pk,
+            'company': self.company.pk
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(ItemGroup.objects.filter(name='Another Group').exists())
+
+    def test_item_group_update_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('edit_item_group', args=[self.item_group.pk]), {
+            'name': 'Updated Group',
+            'user': self.user.pk,
+            'company': self.company.pk
+        })
+        self.assertRedirects(response, reverse('item_group_list'))
+        self.item_group.refresh_from_db()
+        self.assertEqual(self.item_group.name, 'Updated Group')
+
+    def test_item_group_delete_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('delete_item_group', args=[self.item_group.pk]))
+        self.assertRedirects(response, reverse('item_group_list'))
+        self.assertFalse(ItemGroup.objects.filter(pk=self.item_group.pk).exists())
+
+class CompanyTestCase(BaseTestCase):
+    def test_default_country_initialization(self):
+        form = CompanyForm()
+
+        # Zajistit, že `country` je nastaven na "Czech Republic"
+        czech_republic = Country.objects.get(name='Czech Republic')
+
+        # Ověř, že výchozí hodnota je nastavena na Czech Republic
+        self.assertEqual(form.fields['country'].initial, czech_republic.id,
+                         "Form's default country should be 'Czech Republic'.")
+
+
+
+class PasswordResetTest(BaseViewsTestUser):
+
+
+    def test_reset_password_successfully(self):
+        # Nejprve otestujte úspěšné ověření
+        self.client.post(reverse('forgot_password'), {
+            'username': 'testuser',
+            'helmet_name': 'Flash industry',
+            'helmet_manufacturer': 'Test Manufacturer',
+        })
+
+        # Poté zkuste resetovat heslo
+        response = self.client.post(reverse('password_reset', args=[self.user.id]), {
+            'new_password': 'newpass123',
+            'confirm_password': 'newpass123',
+        })
+
+        # Očekáváme přesměrování po úspěšném resetování hesla
+        self.assertRedirects(response, reverse('login'))
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password('newpass123'))
+
+    def test_reset_password_mismatch(self):
+        response = self.client.post(reverse('password_reset', args=[self.user.id]), {
+            'new_password': 'newpass123',
+            'confirm_password': 'wrongpass123',
+        })
+
+        # Očekáváme, že formulář obsahuje chybu
+        form = response.context['form']
+        self.assertIn('confirm_password', form.errors)
+        self.assertIn("Passwords do not match!", form.errors['confirm_password'])

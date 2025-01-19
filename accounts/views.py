@@ -1,7 +1,7 @@
 import logging
 from django.contrib import messages
-from django.contrib.auth import login
-from django.urls import reverse_lazy, reverse
+from django.contrib.auth import login, get_user_model
+from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, DeleteVie
 from django.shortcuts import render, redirect, get_object_or_404
 
 from revisions.mixins import SearchSortMixin, DeleteMixin, UpdateMixin
-from .forms import UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
+from .forms import  SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
 
@@ -18,6 +18,36 @@ logger = logging.getLogger(__name__)
 # TODO skontrolovat vsechny preklady do Aj !!
 # Create your views here.
 """ Custom User"""
+
+
+def forgot_password_view(request):
+    if request.method == "POST":
+        form = SecurityQuestionForm(request.POST)
+        if form.is_valid():
+            user = get_user_model()
+            username = form.cleaned_data['username']
+            user = user.objects.get(username__iexact=username)
+            return redirect('password_reset', user_id=user.id)
+    else:
+        form = SecurityQuestionForm()
+
+    return render(request, 'account_form.html', {'form': form})
+
+def password_reset_view(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+
+    if request.method == "POST":
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, "Password successfully reset. You can now login with your new password.")
+            return redirect('login')
+    else:
+        form = PasswordResetForm()
+
+    return render(request, 'account_form.html', {'form': form})
 class UserRegisterView(View):
     """User registration"""
     template_name = 'registration/register.html'
@@ -106,7 +136,7 @@ class CompanyView(LoginRequiredMixin, TemplateView):
     """View solely for the user assigned to the company"""
     model = Company
     form_class = CompanyForm
-    template_name = 'company.html'
+    template_name = 'my_company.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

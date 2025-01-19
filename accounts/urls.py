@@ -3,7 +3,8 @@ from django.contrib.auth import views as auth_views
 from .views import SubmittableLoginView, LoginSuccessView, UserRegisterView, CompanyCreateView, CustomUserView, \
     CustomUserUpdateView, CompanyUpdateView, CompanyDeleteView, ItemGroupListView, ItemGroupCreateView, \
     ItemGroupUpdateView, \
-    ItemGroupDeleteView, CompanyView, CompanyListView, CompanyDetailView, ItemGroupDetailView
+    ItemGroupDeleteView, CompanyView, CompanyListView, CompanyDetailView, ItemGroupDetailView, forgot_password_view, \
+    password_reset_view
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),  # defaultní cesty a views z Djanga
@@ -28,4 +29,10 @@ urlpatterns = [
     path('item_group/add/', ItemGroupCreateView.as_view(), name='add_item_group'),
     path('item_group/edit/<int:pk>/', ItemGroupUpdateView.as_view(), name='edit_item_group'),
     path('item_group/delete/<int:pk>/', ItemGroupDeleteView.as_view(), name='delete_item_group'),
+
+    path('password_change/', auth_views.PasswordChangeView.as_view ,name='password_change'),
+    path('password_change_done/', auth_views.PasswordChangeDoneView.as_view(template_name='profile.html'), name='password_change_done'),
+
+    path('forgot_password/', forgot_password_view, name='forgot_password'),
+    path('password_reset/<int:user_id>/', password_reset_view, name='password_reset'),
 ]

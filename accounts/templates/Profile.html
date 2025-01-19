@@ -3,6 +3,9 @@
 {% block title %}User Profile{% endblock %}
 
 {% block content %}
+        <div class="mt-3">
+            <a href="{% url 'password_change' %}">Change Password</a> <!-- Přidání odkazu pro změnu hesla -->
+        </div>
 <div class="container mt-5">
     <h2>User Profile: {{ user.username }}</h2>
     <dl class="row">

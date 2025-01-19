@@ -9,6 +9,9 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
+            <div class="mt-3">
+            <a href="{% url 'forgot_password' %}">Change Password</a> <!-- Přidání odkazu pro změnu hesla -->
+        </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>

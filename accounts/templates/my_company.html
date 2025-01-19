@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Moje Společnost{% endblock %}
+{% block title %}My company{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Moje Společnost</h2>
+    <h2>My company</h2>
     {% if company %}
         <dl class="row">
             <dt class="col-sm-3">Název:</dt>
@@ -30,10 +30,10 @@
             <dt class="col-sm-3">DIČ:</dt>
             <dd class="col-sm-9">{{ company.tax_id }}</dd>
         </dl>
-        <a class="btn btn-primary" href="{% url 'edit_company' company.pk %}">Upravit Společnost</a>
+        <a class="btn btn-warning" href="{% url 'edit_company' company.pk %}">Upravit Společnost</a>
     {% else %}
         <p>{{ no_company_message }}</p>
-        <a class="btn btn-secondary" href="{% url 'add_company' %}">Přidat Společnost</a>
+        <a class="btn btn-primary" href="{% url 'add_company' %}">Add company</a>
     {% endif %}
 </div>
 {% endblock %}
