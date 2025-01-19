@@ -4,8 +4,8 @@ from django.urls import reverse
 
 from accounts.forms import CompanyForm
 from accounts.models import CustomUser, Company, Country, ItemGroup
-from accounts.tests.test_user import BaseViewsTestUser
-from revisions.models import RevisionRecord, RevisionData, Manufacturer
+from config.test_base_view import BaseViewsTest
+
 
 
 class BaseTestCase(TestCase):
@@ -268,7 +268,8 @@ class CompanyTestCase(BaseTestCase):
 
 
 
-class PasswordResetTest(BaseViewsTestUser):
+
+class PasswordResetTest(BaseViewsTest):
 
 
     def test_reset_password_successfully(self):

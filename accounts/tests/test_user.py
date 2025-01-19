@@ -1,25 +1,17 @@
-import io
-from PIL import Image
 from datetime import date
-from unittest import skip
-import tempfile
-import shutil
 from unittest import skip
 
 from django.contrib.auth import get_user_model
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, Client
 from django.urls import reverse
 
-
 from accounts.forms import UserRegistrationForm
 from accounts.models import CustomUser, Country, Company
-from config import settings
-from revisions.models import RevisionData, StandardPpe, TypeOfPpe, LifetimeOfPpe, MaterialType, Manufacturer, \
-    RevisionRecord
-from revisions.tests.test_views import BaseViewsTest
+from config.test_base_view import BaseViewsTest
+from revisions.models import RevisionRecord
 
 User = get_user_model()
+
 
 class BaseTestSetup(TestCase):
     @classmethod
@@ -34,8 +26,7 @@ class BaseTestSetup(TestCase):
             business_id_validator=r"^\d{8}$",
             tax_id_prefix="CZ",
             tax_id_validator=r"\d{10}$"
-            )
-
+        )
 
         cls.company = Company.objects.create(
             name='ExampleCorp',
@@ -76,7 +67,6 @@ class UserRegistrationFormTest(BaseTestSetup):
             'company': None,
         })
         self.assertTrue(form.is_valid())
-
 
     def test_mismatched_passwords(self):
         form = UserRegistrationForm(data={
@@ -208,10 +198,7 @@ class UserRegistrationTest(BaseTestSetup):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=False)
 
-
-
     def test_register_user_without_company(self):
-
         user_data = {
             'username': 'testuser1',
             'password1': 'SafePassword123',
@@ -225,10 +212,9 @@ class UserRegistrationTest(BaseTestSetup):
             'postcode': '12345',
             'phone_number': '123456789',
             'business_id': '12345678',
-            'tax_id': 'CZ1234567890',}
+            'tax_id': 'CZ1234567890', }
 
         response = self.client.post(reverse('register'), user_data)
-
 
         # Ověření, že registrace proběhla úspěšně a uživatel byl vytvořen
         self.assertEqual(response.status_code, 302)  # Presmerovani po uspesne registraci
@@ -271,9 +257,7 @@ class UserRegistrationTest(BaseTestSetup):
         self.assertFalse(CustomUser.objects.filter(username='testuser2').exists(),
                          "User should not be created with invalid postcode.")
 
-
     def test_register_user_with_existing_company(self):
-
         # Simulace dat pro nového uživatele, který se chce připojit k existující společnosti
         data = {
             'username': 'companyuser',
@@ -339,87 +323,19 @@ class UserRegistrationTest(BaseTestSetup):
         self.assertEqual(response.status_code, 200)
         self.assertIn("A user with that username already exists.", str(response.content))
 
-class BaseViewsTestUser(TestCase):
-    @classmethod
-    # Create a new image with RGB mode and size 100x100
-    def create_test_image(cls):
-        file_obj = io.BytesIO()
-        image = Image.new('RGB', (100, 100), color='red')
-        image.save(file_obj, 'JPEG')
-        file_obj.seek(0)
-        return file_obj.getvalue()
 
-    @classmethod
-    def setUpTestData(cls):
-        # Nastavte dočasné úložiště pro testy
-        cls.temp_media = tempfile.mkdtemp()
-        settings.MEDIA_ROOT = cls.temp_media
-        cls.client = Client()
-        cls.user = User.objects.create_user(username='testuser', password='testpass')
-        cls.manufacturer = Manufacturer.objects.create(name='Test Manufacturer')
-        cls.material_type = MaterialType.objects.create(name='Test Material')
-        cls.lifetime_of_ppe = LifetimeOfPpe.objects.create(
-            manufacturer=cls.manufacturer,
-            material_type=cls.material_type,
-            lifetime_use_years=10,
-            lifetime_manufacture_years=15
-        )
-        cls.type_of_ppe = TypeOfPpe.objects.create(group_type_ppe='Test Group', price=100.00)
-        cls.standard_ppe = StandardPpe.objects.create(code='EN123', description='Test Standard')
-
-        # Vytvoření a uložení obrázku
-        cls.uploaded_image_content = cls.create_test_image()
-        cls.uploaded_image = SimpleUploadedFile(
-            "image.jpg", cls.uploaded_image_content, content_type='image/jpeg')
-
-        # Uložení dalších dat
-        cls.revision_data = RevisionData(
-            image_items=cls.uploaded_image,
-            lifetime_of_ppe=cls.lifetime_of_ppe,
-            type_of_ppe=cls.type_of_ppe,
-            name_ppe='Flash industry',
-            manual_for_revision=SimpleUploadedFile("manual.pdf", b"Dummy content")
-        )
-        cls.revision_data.save()
-        cls.revision_data.standard_ppe.add(cls.standard_ppe)
-        cls.revision_data.save()
-
-        cls.revision_record = RevisionRecord.objects.create(
-            revision_data=cls.revision_data,
+class PasswordResetTest(BaseViewsTest):
+    def setUp(self):
+        self.revision_record = RevisionRecord.objects.create(
+            revision_data=self.revision_data,
             serial_number='SN12345',
             date_manufacture=date.today(),
             date_of_first_use=date.today(),
-            owner=cls.user,
+            owner=self.user,
             verdict='fit',
-            created_by=cls.user)
+            created_by=self.user)
 
-
-        cls.revision_record.save()
-
-    @classmethod
-    def tearDownClass(cls):
-        # Odstraňte dočasné úložiště po ukončení testů
-        shutil.rmtree(cls.temp_media, ignore_errors=True)
-        super().tearDownClass()
-
-
-
-
-    def setUp(self):
-        self.client.login(username='testuser', password='testpass')
-
-    # Pomocná metoda pro kontrolu, že je formulář neplatny
-    def assert_form_invalid(self, url_name, data, expected_field_error, args=None):
-        url = reverse(url_name, args=args)
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 200)
-        form = response.context['form']
-        self.assertFalse(form.is_valid())
-        self.assertIn(expected_field_error, form.errors)
-
-
-class PasswordResetTest(BaseViewsTestUser):
-
+        self.revision_record.save()
 
     def test_password_reset_with_correct_security_questions(self):
         response = self.client.post(reverse('forgot_password'), {
