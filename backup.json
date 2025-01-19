@@ -1729,6 +1729,71 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 134,
+    "fields": {
+        "action_time": "2025-01-17T21:56:41.535Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "28",
+        "object_repr": "Testuji_jmeno",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 135,
+    "fields": {
+        "action_time": "2025-01-17T22:56:05.251Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode validator\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 136,
+    "fields": {
+        "action_time": "2025-01-17T22:56:39.387Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode format\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 137,
+    "fields": {
+        "action_time": "2025-01-17T22:57:27.511Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Česká republika",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Postcode validator\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 138,
+    "fields": {
+        "action_time": "2025-01-18T20:37:31.364Z",
+        "user": 1,
+        "content_type": 6,
+        "object_id": "1",
+        "object_repr": "Czech Republic",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -2555,10 +2620,10 @@
 },
 {
     "model": "sessions.session",
-    "pk": "8wlr3qektj6c6w359mqwm8aoowv1ick2",
+    "pk": "agpltit8xer8iquoaqrszrb6iw0c5m89",
     "fields": {
-        "session_data": ".eJxVjEEOwiAQRe_C2pCpFCgu3fcMZJgZpGpoUtqV8e7apAvd_vfef6mI21ri1mSJE6uLMur0uyWkh9Qd8B3rbdY013WZkt4VfdCmx5nleT3cv4OCrXzrzhEz2GS63jiL2RB6dGS9dYO4ECQDW4MGxPEZ0pBSzgIEHrj3gbJ6fwDqQDhf:1tY6JQ:kLJM_IDINUqSYCX-bTbfxPO2A_VsaEqN6dK3l5FmdQ0",
-        "expire_date": "2025-01-29T16:32:12.709Z"
+        "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tYsqS:tpH3EocUjQy_SL5yHCrZ75HVCvTHJRkcTo1RDNP-Vd0",
+        "expire_date": "2025-01-31T20:21:32.718Z"
     }
 },
 {
@@ -2603,6 +2668,14 @@
 },
 {
     "model": "sessions.session",
+    "pk": "t07zt5ut2mdx0m4766zo0bgz0v2u77i2",
+    "fields": {
+        "session_data": ".eJxVjEEOwiAQRe_C2pAppQy4dO8ZyMCAVA0kpV0Z765NutDtf-_9l_C0rcVvPS1-ZnEWSpx-t0DxkeoO-E711mRsdV3mIHdFHrTLa-P0vBzu30GhXr41RKSYLQXt4gBBgeGRp6QdarSYtNKYGTAOwdIYsqHJIJDjlAGcUqN4fwDsJDfO:1tZJEz:P4obH-8n3_wlrmzqEA9IhaTm1jL4ZdhCFvkM5dbugsk",
+        "expire_date": "2025-02-02T00:32:37.830Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "vazz75u6mwiezdoixj2se4nowsmrp80h",
     "fields": {
         "session_data": ".eJxVjEsOwiAUAO_C2hA-hQcu3fcMBN4DqRqalHZlvLsh6UK3M5N5sxCPvYaj5y0sxK5MsssvSxGfuQ1Bj9juK8e17duS-Ej4aTufV8qv29n-DWrsdWyFRYSiZNGGZKFCXhs_ISiF6KPJRMJ5UEmjKgmAlMjWT2CkTTo7xz5f7fQ35A:1tTqQR:bZqnsQwVXicg5LmiTDted0XV0dHbUYLE1tbkHe7mmVM",
@@ -2621,10 +2694,10 @@
     "model": "accounts.country",
     "pk": 1,
     "fields": {
-        "name": "Česká republika",
+        "name": "Czech Republic",
         "language_code": "CZ",
-        "postcode_validator": "^\\d{3}\\s\\d{2}$",
-        "postcode_format": "123 45",
+        "postcode_validator": "\\d{5}",
+        "postcode_format": "12345",
         "phone_number_prefix": "+420",
         "phone_number_validator": "^(?:\\+420)?\\d{9}$",
         "phone_number_format": "123456789",
@@ -2647,9 +2720,9 @@
         "postcode": "25082",
         "phone_number": "+420605728384",
         "business_id": "03368351",
-        "tax_id": "CZ9303030708",
+        "tax_id": "CZ9303070832",
         "date_joined": "2024-12-14T01:15:32.390Z",
-        "last_updated": "2025-01-14T20:55:53.825Z"
+        "last_updated": "2025-01-17T23:30:43.076Z"
     }
 },
 {
@@ -2678,12 +2751,29 @@
         "country": 1,
         "address": "Normalni 100",
         "city": "Praha",
-        "postcode": "10800",
+        "postcode": "108 00",
         "phone_number": "+420111222333",
         "business_id": "12345678",
         "tax_id": "CZ9876543210",
         "date_joined": "2025-01-14T15:36:15.750Z",
-        "last_updated": "2025-01-14T16:47:40.555Z"
+        "last_updated": "2025-01-16T00:43:51.678Z"
+    }
+},
+{
+    "model": "accounts.company",
+    "pk": 8,
+    "fields": {
+        "logo": "",
+        "name": "Testovaci firma",
+        "country": 1,
+        "address": "Prostredni 102",
+        "city": "Horoušánky",
+        "postcode": "25082",
+        "phone_number": "+420666777888",
+        "business_id": "12345666",
+        "tax_id": "CZ1234567890",
+        "date_joined": "2025-01-18T19:31:27.227Z",
+        "last_updated": "2025-01-18T19:31:27.227Z"
     }
 },
 {
@@ -2691,7 +2781,7 @@
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$870000$3CWajtWvzbjNkyw5d4VF8v$ucRWdehadWqBQOG/6669XvGbX6chnZil6P8/uRqcbHI=",
-        "last_login": "2025-01-15T15:11:02.727Z",
+        "last_login": "2025-01-18T21:45:05.866Z",
         "is_superuser": true,
         "username": "Admin-oopp",
         "first_name": "Jaroslav",
@@ -2705,11 +2795,11 @@
         "country": 1,
         "address": "Poděbradova 712",
         "city": "Úvaly",
-        "postcode": "250 82",
+        "postcode": "25082",
         "phone_number": "+420605728384",
-        "business_id": "03368351",
-        "tax_id": "CZ9303070832",
-        "last_updated": "2025-01-15T21:44:33.557Z",
+        "business_id": "03368051",
+        "tax_id": "CZ9303070032",
+        "last_updated": "2025-01-18T20:28:42.570Z",
         "groups": [],
         "user_permissions": []
     }
@@ -2718,8 +2808,8 @@
     "model": "accounts.customuser",
     "pk": 2,
     "fields": {
-        "password": "pbkdf2_sha256$870000$74Xkb7xr6nhT4pwsZnwlCz$Oav7GF93CHodyejrLZiJYS4/1bg4yw7EU8zbLyD91e0=",
-        "last_login": "2024-12-14T01:15:33Z",
+        "password": "pbkdf2_sha256$870000$pFFsbFUHY5vPI3kLkF6XyG$PxHz5mPLEOuegTCFR4pElrouyu3y5+5CxjK+94sLZUw=",
+        "last_login": "2025-01-19T00:07:16.181Z",
         "is_superuser": false,
         "username": "user_revision",
         "first_name": "Revizni",
@@ -2733,11 +2823,11 @@
         "country": 1,
         "address": "Poděbradova 712",
         "city": "Úvaly",
-        "postcode": "250 82",
-        "phone_number": "+420420605728384",
+        "postcode": "25082",
+        "phone_number": "+420605728384",
         "business_id": "03368351",
         "tax_id": "CZ9303030708",
-        "last_updated": "2025-01-04T01:48:10.069Z",
+        "last_updated": "2025-01-19T00:34:20.979Z",
         "groups": [],
         "user_permissions": []
     }
@@ -2877,7 +2967,7 @@
         "user": 3,
         "company": 5,
         "created": "2025-01-13T19:54:07.251Z",
-        "updated": "2025-01-14T16:47:07.555Z"
+        "updated": "2025-01-16T00:44:15.834Z"
     }
 },
 {
@@ -2926,6 +3016,18 @@
         "company": null,
         "created": "2025-01-15T21:35:10.049Z",
         "updated": "2025-01-15T21:35:10.049Z"
+    }
+},
+{
+    "model": "accounts.itemgroup",
+    "pk": 12,
+    "fields": {
+        "photo": "",
+        "name": "rescue batoh",
+        "user": 1,
+        "company": 2,
+        "created": "2025-01-18T19:35:52.536Z",
+        "updated": "2025-01-18T19:37:29.035Z"
     }
 },
 {
@@ -3962,6 +4064,26 @@
         "created_by": 1,
         "created": "2025-01-15T22:35:46.903Z",
         "updated": "2025-01-16T00:01:19.436Z"
+    }
+},
+{
+    "model": "revisions.revisionrecord",
+    "pk": 11,
+    "fields": {
+        "photo_of_item": "",
+        "revision_data": 3,
+        "serial_number": "0480",
+        "date_manufacture": "2023-01-02",
+        "date_of_first_use": "2024-04-02",
+        "date_of_revision": "2025-01-18",
+        "date_of_next_revision": "2026-01-18",
+        "item_group": null,
+        "owner": 2,
+        "verdict": "fit",
+        "notes": "",
+        "created_by": 1,
+        "created": "2025-01-18T21:52:21.332Z",
+        "updated": "2025-01-18T21:52:21.332Z"
     }
 }
 ]
