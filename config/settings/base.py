@@ -13,7 +13,7 @@ import logging
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-# TODO udělat reset hesel
+
 # TODO da se provest regex nad databazi v Django?
 
 # Nastavení základní cesty projektu: BASE_DIR / 'subdir'.

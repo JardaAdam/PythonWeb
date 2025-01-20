@@ -104,6 +104,11 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
             except ValidationError as e:
                 raise ValidationError(f"Please enter a valid email. Error: {str(e)}")
         return email
+    # TODO def clean_address(self): adresaa musi obsahovat i cisla domu
+
+
+    # TODO def clean_city(self): zvetsit prvni pismeno, pouze pismena
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -201,6 +206,13 @@ class CompanyForm(FormValidationMixin, ModelForm):
             self.fields['country'].initial = default_country.id
         except Country.DoesNotExist:
             print("Default country does not exist in the database.")
+    # TODO def clean_name(self): zvetsit prvni pismeno
+
+    # TODO def clean_address(self): adresaa musi obsahovat i cisla domu
+
+    # TODO def clean_city(self): zvetsit prvni pismeno, pouze pismena
+
+
 
     def clean(self):
         cleaned_data = super().clean()

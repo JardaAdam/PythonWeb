@@ -16,7 +16,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-def some_view(request):
+def revision_home(request):
     return render(request, 'revision_home.html')
 # TODO doplnit do templates rozkliknuti fotek
 # TODO kontrola kam se ukladaji soubory

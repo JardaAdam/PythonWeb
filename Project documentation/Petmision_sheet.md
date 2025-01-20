@@ -22,16 +22,27 @@ Tento dokument popisuje strukturu a požadavky pro řízení přístupových pr�
 - [ ] Může měnit informace pro svoji firmu ve `Company View` pomocí Edit.
 - [ ] Může editovat jednotlivé zaměstnance.
 - [ ] Může přidávat `ItemGroup` pro svoji firmu, nově vytvořené `ItemGroup` jsou automaticky přiřazeny jeho firmě.
-- [ ] Může upravovat `revisionRecord`, kterých je vlastníkem.
-- [ ] Může upravovat `ItemGroup` a přidávat nový výrobek s nastavením na `NEW` a datem přidání jako `first_use`.
+- [ ] Může upravovat `ItemGroup`, kterých je vlastníkem.
+- [ ] Může upravovat `revisionRecord` a to pridanim forky, zapisem `retire` + v budoucnu pridat komentář s 
+      mimořádné události (pád z větší výšky, poškození, drobné závady)
+- [ ] Může přidávat nový výrobek `revisionRecord` s nastavením na `NEW` a datem přidání jako `first_use` pri tomto 
+      zapisu je vyzadovana fotka polozky a nastaven `checked_record=False`
+
 
 ### Company User
 - [ ] Vidí svoji firmu, ale nemůže ji upravovat.
 - [ ] Vidí `ItemGroup`, které patří jeho firmě.
 - [ ] Může upravovat pozici jednotlivých `revisionRecord` v `ItemGroup`, kde je jako `user`.
+- [ ] Může přidat komentář (`Content Type`) ohledne mimořádných událostí ohledne jednotlivich položek součástí může být i fotka
 - [ ] Může vyjmout záznam z `ItemGroup` a přesunout ho do `free_revision_records`.
 - [ ] Může přidat záznam z `free_revision_records` do své `ItemGroup`.
 
+
+### SafetyCheck
+- prava pro Bezpečnostní kontrolu prováděnou při výkonu práce oprávněnou osobou pro kontrolu `RevisionRecords` jednotlivich `CustomUser`
+- tato osoba dostane pomoci `QR codu` pristup k `RevisionRecord` kontrolovaného `CustomUser` ktery ve své strance požádá a vigeneruje `QR cod` pro pristup k funkcionalite (API)
+kde bude jednoduse moci spontrolovat všechny zaznamy tohoto uživatele a udělat zapis o provedení teto kontroly a exportovat si data. 
+- Přístup pouze k zaznamum určitého `CustomUser`/`Company` a jejich `ItemGroup`
 
 ## Implementace práv v Django
 

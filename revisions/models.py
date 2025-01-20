@@ -128,6 +128,7 @@ class TypeOfPpe(Model):
         super().delete(*args, **kwargs)
 
 class RevisionData(Model):
+    # TODO pridat checked_data BooleanField ktery se v pripade pridani noveho zaznamu nekym jinym nez SuperUserem nastavi na False
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
     image_items = ImageField(upload_to="static/image/revision_data/", default=None)
     lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_datas')
@@ -164,6 +165,7 @@ class RevisionData(Model):
 
 
 class RevisionRecord(Model):
+    # TODO pridat checked record BooleanField v pripade ze uzivatel zadal novy zaznam default = False
     """ uchovava informace o revizi jednotlivich polozek a ma informace potrebne k upozornovani na
         - konec platnosti revize
         - konec zivotnosti

@@ -18,6 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from accounts.views import ContactView
 from revisions.views import home
 
 urlpatterns = [
@@ -26,6 +27,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     # path('calculator/', include('calculator.urls')),
     path('revisions/', include('revisions.urls')),
+
+    path('contact/', ContactView.as_view(), name='contact'),
 ]
 
 # Přidání statických a mediálních cest

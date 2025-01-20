@@ -42,7 +42,7 @@ class Country(Model):
 
 
 class Company(Model):
-    # TODO doplnit Created_by, Updated_by
+    # TODO doplnit Created_by, Updated_by ktere uvidi Users Company Supervisor kteří můžou tento yaynam menit
     # TODO doplnit Email?
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
@@ -85,6 +85,8 @@ class Company(Model):
 
 
 class CustomUser(AbstractUser):
+    # TODO pridat is_verified BooleanField pro udrzeni prehledu ktery uzivatel po registraci jiz byl
+    #  kontolovan a byla mu pridelena Group a permissions
     photo = ImageField(upload_to="media/user/", null=True, blank=True)
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='country_users')

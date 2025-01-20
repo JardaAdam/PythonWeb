@@ -16,10 +16,13 @@ from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
 
 logger = logging.getLogger(__name__)
-# TODO nastavit resset hesla
+
 # TODO skontrolovat vsechny preklady do Aj !!
 # Create your views here.
 """ Custom User"""
+
+class ContactView(TemplateView):
+    template_name = 'contact.html'
 
 
 def forgot_password_view(request):
@@ -134,11 +137,12 @@ class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
         return queryset
 
 # Fixme upravit podminky podle prav uzivatele. pro cesty
-#  company detail (pro revizni techniky)
-#  company view (pro uzivatele z firmy)
+
+
 class CompanyView(LoginRequiredMixin, TemplateView):
     # TODO doresit tento pohled a co se v nem bude zobrazovat myslenka je takova ze tady bude mit uzivatel moznost
     #  videt sve kolegi ve firme a item_group firmy
+    #  company view (pro uzivatele z firmy)
     """View solely for the user assigned to the company"""
     model = Company
     form_class = CompanyForm
@@ -156,6 +160,7 @@ class CompanyView(LoginRequiredMixin, TemplateView):
         return context
 
 class CompanyDetailView(LoginRequiredMixin, DetailView):
+    # TODO company detail (pro revizni techniky)
     model = Company
     template_name = 'company_detail.html'
     context_object_name = 'company'
@@ -197,6 +202,7 @@ class CompanyUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
         return super().get_success_url()
 
     def form_valid(self, form):
+        # FIXME co tady s tim response?
         response = super().form_valid(form)
         # Vyzkoušej alternativní přesměrování na základě next parametru
         return HttpResponseRedirect(self.get_success_url())
@@ -210,6 +216,7 @@ class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
 """ ItemGroup """
 
 class ItemGroupListView(LoginRequiredMixin, SearchSortMixin, ListView):
+    # FIXME pro revisionTechnician a SuperUser chci videt vsechny ItemGroups, vsechny free_revision_records
     # FIXME upravit tak aby kazde searh pole hledalo ve sve casti Template.
     # TODO pridat funkci ktera oznaci vice polozek revision record ktere nemaji ItemGroup a zmenim jejich umisteni do urcite ItemGroup
     model = ItemGroup
@@ -242,6 +249,7 @@ class ItemGroupListView(LoginRequiredMixin, SearchSortMixin, ListView):
         return context
 
 class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
+
     # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
     #  a formular v revisions nechat pouze pro revizni techniky?,
     # TODO doplnit vyhledavani podle : Date of Manufacture,Date of First Use, Date of Revision
