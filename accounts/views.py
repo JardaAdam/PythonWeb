@@ -6,16 +6,17 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 
-from revisions.mixins import SearchSortMixin, DeleteMixin, UpdateMixin
+from accounts.mixins import LoggerMixin
+from revisions.mixins import SearchSortMixin, DeleteMixin, UpdateMixin, CreateMixin
 from .forms import  SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 # TODO skontrolovat vsechny preklady do Aj !!
 # Create your views here.
@@ -54,6 +55,7 @@ def password_reset_view(request, user_id):
 
     return render(request, 'account_form.html', {'form': form})
 class UserRegisterView(View):
+    # TODO nastavit vychozi hodnotu pro Groups permision
     """User registration"""
     template_name = 'registration/register.html'
 
@@ -85,6 +87,7 @@ class CustomUserView(LoginRequiredMixin, TemplateView):
         return context
 
 class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
+    # FIXME Busines ID a Tax id upravit hodnotu prazdneho zapisu na jinou nez None
     """Edit user data"""
     model = CustomUser
     form_class = CustomUserUpdateForm
@@ -151,9 +154,9 @@ class CompanyView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        """ nacita data o uzivatelove firme """
         if self.request.user.company:
             context['company'] = self.request.user.company
+            context['can_edit'] = self.request.user.groups.filter(name='CompanySupervisor').exists()
         else:
             context['company'] = None
             context['no_company_message'] = "No company assigned."
@@ -161,15 +164,21 @@ class CompanyView(LoginRequiredMixin, TemplateView):
 
 class CompanyDetailView(LoginRequiredMixin, DetailView):
     # TODO company detail (pro revizni techniky)
+    # TODO doplnit do template created_by a Updated By
     model = Company
     template_name = 'company_detail.html'
     context_object_name = 'company'
 
-class CompanyCreateView(LoginRequiredMixin, CreateView):
+class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
+    # TODO muze vytvaret uzivatel Company Supervisor
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
+
+    def test_func(self):
+        # Zkontroluje, zda je uživatel ve skupině 'Company Supervisor'
+        return self.request.user.groups.filter(name='CompanySupervisor').exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -178,16 +187,29 @@ class CompanyCreateView(LoginRequiredMixin, CreateView):
 
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, 'Company added successfully.')
-        return response
+        # Uložíme společnost bez commitu, abychom mohli přidat uživatele
+        company = form.save(commit=False)
+        company.created_by = self.request.user  # Můžeš upravit podle potřeby (pokud máš např. pole manager)
+        company.save()
 
-class CompanyUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
+        # Aktualizujeme uživatele, aby se přidělil k nově vytvořené společnosti
+        self.request.user.company = company
+        self.request.user.save()
+
+        messages.success(self.request, 'Company added successfully and you have been assigned to it.')
+        return super().form_valid(form)
+
+class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
+    # TODO muze vytvaret uzivatel Company Supervisor
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
-    success_url = reverse_lazy('profile')
-    detail_url_name = 'company_detail'
+    success_url = reverse_lazy('my_company')
+
+
+    def test_func(self):
+        # Zkontroluje, zda je uživatel ve skupině 'Company Supervisor'
+        return self.request.user.groups.filter(name='CompanySupervisor').exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -202,12 +224,21 @@ class CompanyUpdateView(LoginRequiredMixin,UpdateMixin, UpdateView):
         return super().get_success_url()
 
     def form_valid(self, form):
-        # FIXME co tady s tim response?
+        # Zaznamená aktuálního uživatele jako toho, kdo aktualizoval záznam
+        company = form.save(commit=False)
+        company.updated_by = self.request.user
+        company.save()
+
+        messages.success(self.request, 'Company updated successfully.')
         response = super().form_valid(form)
-        # Vyzkoušej alternativní přesměrování na základě next parametru
-        return HttpResponseRedirect(self.get_success_url())
+        return response
+
+    def handle_no_permission(self):
+        self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
+        return super().handle_no_permission()
 
 class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
+    # TODO muze pouze Admin (Superuser)
     model = Company
     template_name = 'account_delete.html'
     success_url = reverse_lazy('profile')

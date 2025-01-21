@@ -1,3 +1,4 @@
+import logging
 from django.core.exceptions import ValidationError
 
 from .validators import (
@@ -45,3 +46,23 @@ class FormValidationMixin:
                 self.add_error('tax_id', e.message)
 
         return cleaned_data
+
+
+class LoggerMixin:
+    """
+    Mixin pro poskytnutí základní funkcionality pro logování v rámci tříd.
+    """
+    @property
+    def logger(self):
+        # Vytvoří logger specifický pro tuto třídu
+        logger_name = f"{self.__class__.__module__}.{self.__class__.__name__}"
+        return logging.getLogger(logger_name)
+
+    def log_info(self, message):
+        self.logger.info(message)
+
+    def log_warning(self, message):
+        self.logger.warning(message)
+
+    def log_error(self, message):
+        self.logger.error(message)

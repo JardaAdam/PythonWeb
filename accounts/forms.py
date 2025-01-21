@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+from django.db.models import ImageField
 from django.db.transaction import atomic
 
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, Form
+from django.template.defaultfilters import default
 
 from revisions.models import RevisionRecord
 from .mixins import FormValidationMixin
@@ -86,6 +88,15 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
             'phone_number', 'business_id', 'tax_id', 'company'
         ]
         widgets = {'country': Select(attrs={'class': 'form-control select2'})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        try:
+            ''' Default set country Czech Republic'''
+            default_country = Country.objects.get(name='Czech Republic')
+            self.fields['country'].initial = default_country.id
+        except Country.DoesNotExist:
+            pass  # Pro případ, že CZ země neexistuje, tento krok by měl být promyšleně řešen v produkci
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name', '')
@@ -182,6 +193,7 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
 
 """ COMPANY """
 class CompanyForm(FormValidationMixin, ModelForm):
+    logo = ImageField()
     name = CharField(required=True, validators=[validate_no_numbers])
     country = ModelChoiceField(required=True, queryset=Country.objects)
     address = CharField(max_length=128, required=True)
@@ -194,7 +206,7 @@ class CompanyForm(FormValidationMixin, ModelForm):
     class Meta:
         model = Company
         fields = [
-            'name', 'country', 'address', 'city',
+            'logo', 'name', 'country', 'address', 'city',
             'postcode', 'phone_number', 'business_id', 'tax_id'
         ]
 

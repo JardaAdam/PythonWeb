@@ -30,13 +30,17 @@ Tento dokument popisuje strukturu a požadavky pro řízení přístupových pr�
 
 
 ### Company User
+#### app accounts
+- [ ] Vidí svůj profil a může jej upravovat
 - [ ] Vidí svoji firmu, ale nemůže ji upravovat.
 - [ ] Vidí `ItemGroup`, které patří jeho firmě.
 - [ ] Může upravovat pozici jednotlivých `revisionRecord` v `ItemGroup`, kde je jako `user`.
-- [ ] Může přidat komentář (`Content Type`) ohledne mimořádných událostí ohledne jednotlivich položek součástí může být i fotka
 - [ ] Může vyjmout záznam z `ItemGroup` a přesunout ho do `free_revision_records`.
 - [ ] Může přidat záznam z `free_revision_records` do své `ItemGroup`.
-
+- [ ] Může přidat komentář (`Content Type`) ohledne mimořádných událostí ohledne jednotlivich položek součástí může být i fotka
+#### app Revisions
+- [ ] Vidi všechny zaznamy a `revisionrecords` sve firmy ve kterych muze pouze hledat a koukat na detaily.
+- [ ] nemuze zde editovat ani mazat. 
 
 ### SafetyCheck
 - prava pro Bezpečnostní kontrolu prováděnou při výkonu práce oprávněnou osobou pro kontrolu `RevisionRecords` jednotlivich `CustomUser`

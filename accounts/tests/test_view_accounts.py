@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
@@ -17,6 +18,9 @@ class BaseTestCase(TestCase):
             password='testpassword',
             first_name='Testak',
             last_name='Testovic')
+        supervisor_group, created = Group.objects.get_or_create(name='CompanySupervisor')
+        cls.user.groups.add(supervisor_group)
+
         cls.company = Company.objects.create(
             name='Test Company',
             address='Test Address',
@@ -104,6 +108,7 @@ class CompanyViewTest(BaseTestCase):
 class CompanyCreateViewTest(BaseTestCase):
     def test_company_create_view_loads_correctly(self):
         self.client.login(username='testuser', password='testpassword')
+        supervisor_group, created = Group.objects.get_or_create(name='CompanySupervisor')
         response = self.client.get(reverse('add_company'))
         self.assertEqual(response.status_code, 200)
         # Ověří, že používáme správnou šablonu
@@ -137,7 +142,7 @@ class CompanyCreateViewTest(BaseTestCase):
             'tax_id': '8765432121'
         })
         messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(str(messages[0]), "Company added successfully.")
+        self.assertEqual(str(messages[0]), "Company added successfully and you have been assigned to it.")
 
     def test_company_create_invalid_data(self):
         self.client.login(username='testuser', password='testpassword')
