@@ -1,7 +1,8 @@
 import os
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint, ImageField
+from django.db.models import CharField, Model, ForeignKey, SET_NULL, DateTimeField, UniqueConstraint, ImageField, \
+    BooleanField, EmailField
 
 from django.conf import settings
 from .validators import (
@@ -12,8 +13,7 @@ from .validators import (
 )
 
 # TODO tabulka ktera bude obsahovat informace o zmenach v jednotlivych zaznamech v databazi
-# TODO hodilo by se sem jeste dodat nejake image do modelu
-# TODO oddelit validatory
+
 class Country(Model):
     """ Facilitates easier user registration by setting format for individual fields """
     name = CharField(max_length=32, unique=True)
@@ -42,7 +42,7 @@ class Country(Model):
 
 
 class Company(Model):
-    # TODO doplnit Created_by, Updated_by ktere uvidi Users Company Supervisor kteří můžou tento yaynam menit
+    # TODO  Created_by, Updated_by uvidi Users CompanySupervisor kteří můžou tento zaznam menit
     # TODO doplnit Email?
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
@@ -52,9 +52,12 @@ class Company(Model):
     city = CharField(max_length=32, null=True, blank=True)
     postcode = CharField(max_length=6, null=True, blank=True)
     phone_number = CharField(max_length=20, null=True, blank=True)
+    company_email = EmailField(max_length=254, null=True, blank=True)
     business_id = CharField(max_length=10, null=True, blank=True, verbose_name="Business ID")
     tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
+    created_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='created_companies')
     date_joined = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='updated_companies')
     last_updated = DateTimeField(auto_now=True)
 
     class Meta:
@@ -85,8 +88,6 @@ class Company(Model):
 
 
 class CustomUser(AbstractUser):
-    # TODO pridat is_verified BooleanField pro udrzeni prehledu ktery uzivatel po registraci jiz byl
-    #  kontolovan a byla mu pridelena Group a permissions
     photo = ImageField(upload_to="media/user/", null=True, blank=True)
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_users')
     country = ForeignKey(Country, null=True, blank=True, on_delete=SET_NULL, related_name='country_users')
@@ -96,7 +97,10 @@ class CustomUser(AbstractUser):
     phone_number = CharField(max_length=20, blank=True, null=True)
     business_id = CharField(max_length=10, null=True, blank=True, verbose_name="Business ID")
     tax_id = CharField(max_length=12, null=True, blank=True, verbose_name="Tax ID")
+    created_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='created_users')
     last_updated = DateTimeField(auto_now=True)
+    updated_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='updated_users')
+    is_verified = BooleanField(default=False) # controla zda byl uzivatel zkontrolovan po registraci
 
     class Meta:
         ordering = ['username']
@@ -109,6 +113,7 @@ class CustomUser(AbstractUser):
 
     def clean(self):
         super().clean()
+
         if self.country:
             validate_postcode(self.postcode, self.country)
             validate_phone_number(self.phone_number, self.country)
@@ -119,7 +124,6 @@ class CustomUser(AbstractUser):
 
 
 class ItemGroup(Model):
-    # TODO Created_by, Updated_by
     """ zdruzuje polozky z revision/models.py - RevisionRecord do skupiny
     diky tomu muze mit jeden
         - CustomUser rozdelene polozky do vice skupin podle pouziti (rescue bag, working at heihgt equipments
@@ -128,7 +132,9 @@ class ItemGroup(Model):
     name = CharField(max_length=64)
     user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='user_item_groups')
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_item_groups')
+    created_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='created_item_groups')
     created = DateTimeField(auto_now_add=True)
+    updated_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='updated_item_groups')
     updated = DateTimeField(auto_now=True)
 
     class Meta:
@@ -148,6 +154,8 @@ class ItemGroup(Model):
     def clean(self):
         if not self.user and not self.company:
             raise ValidationError('At least one of the user or company fields must be filled in.')
+
+    # TODO pridat def uprate pro vymazavani souboru ktere byli prepsany
 
     def delete(self, *args, **kwargs):
 
