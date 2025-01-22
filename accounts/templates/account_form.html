@@ -11,6 +11,18 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <table class="table">
+                {% if form.non_field_errors %}
+                    <tr>
+                        <td colspan="2">
+                            <div class="text-danger">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            
                 {% for field in form %}
                 <tr>
                     <th class="font-weight-bold">{{ field.label_tag }}</th>

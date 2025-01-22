@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     # hlavni app
     'config',
     # Vlastní aplikace
-    'accounts',
+    'accounts.apps.AccountsConfig',
     'calculator',
     'revisions',
 ]

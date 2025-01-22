@@ -18,9 +18,7 @@
 
         <dt class="col-sm-3">Last Name:</dt>
         <dd class="col-sm-9 border-bottom pb-2">{{ user.last_name }}</dd>
-
-        <dt class="col-sm-3">Email:</dt>
-        <dd class="col-sm-9 border-bottom pb-2">{{ user.email }}</dd>
+    
 
         <!-- Additional Information from CustomUser Model -->
         <dt class="col-sm-3">Company:</dt>
@@ -53,6 +51,9 @@
 
         <dt class="col-sm-3">Phone Number:</dt>
         <dd class="col-sm-9 border-bottom pb-2">{{ user.phone_number }}</dd>
+    
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9 border-bottom pb-2">{{ user.email }}</dd>
 
         <dt class="col-sm-3">Business ID:</dt>
         <dd class="col-sm-9 border-bottom pb-2">{{ user.business_id }}</dd>
@@ -69,6 +70,6 @@
     {% if not user.company %}
         <a class="btn btn-primary" href="{% url 'add_company' %}">Add Company</a>
     {% endif %}
-    <a class="btn btn-info" href="{% url 'item_group_list' %}"><i class="fas fa-eye"></i> Item Groups</a>
+    <a class="btn btn-info" href="{% url 'item_group_company_list' %}"><i class="fas fa-eye"></i> Item Groups</a>
 </div>
 {% endblock %}

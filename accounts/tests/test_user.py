@@ -2,6 +2,7 @@ from datetime import date
 from unittest import skip
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -17,7 +18,8 @@ class BaseTestSetup(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Nastavení společné pro všechny testovací třídy
-
+        # Vytváří skupinu `Company Supervisor` pro testování
+        cls.company_supervisor_group, created = Group.objects.get_or_create(name='CompanySupervisor')
         cls.country = Country.objects.create(
             name='Czech Republic',
             postcode_validator=r"\d{5}",
@@ -233,6 +235,27 @@ class UserRegistrationTest(BaseTestSetup):
         self.assertEqual(user.business_id, '12345678')
         self.assertEqual(user.tax_id, 'CZ1234567890')
 
+    def test_signal_assigns_company_supervisor_group(self):
+        # Zajistí, že nový uživatel bez přiřazené společnosti získá skupinu `Company Supervisor`
+        user = CustomUser.objects.create_user(
+            username='testuser_no_company',
+            password='SafePassword123',
+            email='testuser_no_company@example.com',
+            first_name='Signal',
+            last_name='Signalovic',
+            country=self.country,
+            address='123 Test Street',
+            city='Test City',
+            postcode='12345',
+            phone_number='+420123456789',
+            business_id='12345678',
+            tax_id='CZ1234567890',
+            company=None  # Žádná společnost, takže signál by měl skupinu přiřadit
+        )
+
+        # Ověření, že uživatelská skupina je správně aplikována
+        self.assertIn(self.company_supervisor_group, user.groups.all())
+
     def test_register_user_with_invalid_postcode(self):
         # Ukázkový test pro nesprávný formát PSČ
         user_data = {
@@ -290,6 +313,38 @@ class UserRegistrationTest(BaseTestSetup):
         user = CustomUser.objects.get(username='companyuser')
         self.assertIsNotNone(user)
         self.assertEqual(user.company, self.company)
+
+    def test_register_user_with_existing_company_assigned_company_user_group(self):
+        # Data pro uživatele, který se připojí k existující společnosti
+        data = {
+            'username': 'existingcompanyuser',
+            'password1': 'SecurePassword44',
+            'password2': 'SecurePassword44',
+            'first_name': 'Bob',
+            'last_name': 'Johnson',
+            'email': 'bob@example.com',
+            'country': self.country.pk,
+            'address': '123 Existing Way',
+            'city': 'Existing City',
+            'postcode': '60606',
+            'phone_number': '987654321',
+            'business_id': '87654321',
+            'tax_id': 'CZ8765432145',
+            'company': self.company.pk  # ID existující společnosti
+        }
+
+        response = self.client.post(reverse('register'), data)
+
+        # Zkontroluj, že registrace je úspěšná (302 Redirection)
+        self.assertEqual(response.status_code, 302)
+
+        # Ověření, že uživatel byl vytvořen
+        user = CustomUser.objects.get(username='existingcompanyuser')
+        self.assertEqual(user.company, self.company)
+
+        # Připravení a ověření, že uživatel je ve skupině CompanyUser
+        company_user_group, _ = Group.objects.get_or_create(name='CompanyUser')
+        self.assertIn(company_user_group, user.groups.all())
 
     def test_register_user_with_conflicting_data(self):
         # Tento test simuluje scénář, kdy dojde k konfliktu při tvorbě uživatele
@@ -370,3 +425,44 @@ class PasswordResetTest(BaseViewsTest):
         form = response.context['form']
         self.assertIn('username', form.errors)
         self.assertIn("User with this username does not exist.", form.errors['username'])
+
+
+class CompanyUserPermissionTest(TestCase):
+    def setUp(self):
+        # Příprava prostředí testu
+        self.client = Client()
+
+        # Vytvoření skupiny CompanyUser pro testování
+        self.company_user_group, _ = Group.objects.get_or_create(name='CompanyUser')
+
+        self.country = Country.objects.create(name='Testland')
+        self.company = Company.objects.create(name='TestCorp', country=self.country)
+
+        # Vytvoření uživatele s rolí CompanyUser
+        self.user = CustomUser.objects.create_user(
+            username='testuser',
+            password='password123',
+            email='testuser@example.com',
+            company=self.company
+        )
+        self.user.groups.add(self.company_user_group)
+
+    def test_company_user_cannot_edit_company(self):
+        self.client.login(username='testuser', password='password123')
+
+        response = self.client.get(reverse('edit_company', args=[self.company.pk]))
+
+        # Ověření, že uživatel obdrží 403 Forbidden při pokusu o úpravu
+        self.assertEqual(response.status_code, 403)
+
+    def test_company_user_can_see_their_companies_item_groups(self):
+        # Přihlášení uživatele
+        self.client.login(username='testuser', password='password123')
+
+        # Simulace zobrazení ItemGroups, které patří k jeho společnosti
+        response = self.client.get(reverse('item_group_company_list'))
+
+        # Ověření, že uživatel může vidět ItemGroups své společnosti
+        self.assertEqual(response.status_code, 200)
+        # Zkontroluj, že v šabloně jsou správné data (můžeš přizpůsobit podle potřeby)
+        # self.assertContains(response, "Item Group 1")

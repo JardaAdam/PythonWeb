@@ -160,8 +160,8 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
     class Meta:
         model = CustomUser
         fields = [  # Vyberte pole, která uživatel může upravit
-            'first_name', 'last_name', 'email', 'company', 'country', 'address',
-            'city', 'postcode', 'phone_number', 'business_id', 'tax_id'
+            'first_name', 'last_name', 'company', 'country', 'address',
+            'city', 'postcode', 'phone_number', 'email', 'business_id', 'tax_id'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -200,6 +200,7 @@ class CompanyForm(FormValidationMixin, ModelForm):
     city = CharField(max_length=32, required=True)
     postcode = CharField(max_length=6, required=True)
     phone_number = CharField(max_length=20, required=True)
+    company_email = CharField(widget=EmailInput, label='Company Email')
     business_id = CharField(required=True)
     tax_id = CharField(required=True)
 
@@ -207,7 +208,7 @@ class CompanyForm(FormValidationMixin, ModelForm):
         model = Company
         fields = [
             'logo', 'name', 'country', 'address', 'city',
-            'postcode', 'phone_number', 'business_id', 'tax_id'
+            'postcode', 'phone_number','company_email', 'business_id', 'tax_id'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -240,12 +241,4 @@ class ItemGroupForm(ModelForm):
                    'company': Select(attrs={'class': 'form-control select2'})
                    }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        user = cleaned_data.get("user")
-        company = cleaned_data.get("company")
 
-        if not user and not company:
-            raise ValidationError('Alespoň jedno z pole user nebo company musí být vyplněné.')
-
-        return cleaned_data

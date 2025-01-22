@@ -1,23 +1,23 @@
-import logging
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
-from django.db.models import Q
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView
+
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.mixins import LoggerMixin
-from revisions.mixins import SearchSortMixin, DeleteMixin, UpdateMixin, CreateMixin
+from revisions.mixins import SearchSortMixin, DeleteMixin
 from .forms import  SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
 
-# logger = logging.getLogger(__name__)
 
+User = get_user_model()
 # TODO skontrolovat vsechny preklady do Aj !!
 # Create your views here.
 """ Custom User"""
@@ -146,6 +146,7 @@ class CompanyView(LoginRequiredMixin, TemplateView):
     # TODO doresit tento pohled a co se v nem bude zobrazovat myslenka je takova ze tady bude mit uzivatel moznost
     #  videt sve kolegi ve firme a item_group firmy
     #  company view (pro uzivatele z firmy)
+    # FIXME nezobrazuje se Last update
     """View solely for the user assigned to the company"""
     model = Company
     form_class = CompanyForm
@@ -247,38 +248,56 @@ class CompanyDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
 """ ItemGroup """
 
 class ItemGroupListView(LoginRequiredMixin, SearchSortMixin, ListView):
+    """ zobrazeni item groups Revision Technician a SuperUser"""
     # FIXME pro revisionTechnician a SuperUser chci videt vsechny ItemGroups, vsechny free_revision_records
     # FIXME upravit tak aby kazde searh pole hledalo ve sve casti Template.
     # TODO pridat funkci ktera oznaci vice polozek revision record ktere nemaji ItemGroup a zmenim jejich umisteni do urcite ItemGroup
     model = ItemGroup
     template_name = 'item_group_list.html'
-    context_object_name = 'item_groups'
+    context_object_name = 'all_item_groups'
     default_sort_field = 'name'
     search_fields_by_view = ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated'
                              ]
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        """ zobrazeni uzivatelovich item groups"""
 
-        # Filtrujeme podle aktuálního uživatele, aby viděli pouze své ItemGroups
-        queryset = queryset.filter(user=self.request.user)
-
-        # Použití zbytku logiky pro filtrování a řazení pomocí mixinu
-        queryset = self.filter_queryset(queryset)
-        queryset = self.sort_queryset(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         """ data pro zobrazeni revision record ktere nemaji ImemGroup """
-
-        # Přidání volných RevisionRecords do kontextu
-        free_revision_records = RevisionRecord.objects.filter(owner=self.request.user, item_group=None)
-
-        context['free_revision_records'] = free_revision_records
+        context['title'] = 'All Item Groups'
+        context['free_revision_records'] = RevisionRecord.objects.filter(item_group=None)
         return context
 
+class ItemGroupCompanyListView(LoginRequiredMixin, ListView):
+    """View pro firemni uceli"""
+    model = ItemGroup
+    template_name = 'company_item_group_list.html'
+    context_object_name = 'company_item_groups'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Filtruje ItemGroups podle společnosti uživatele
+        if self.request.user.company:
+            queryset = queryset.filter(company=self.request.user.company)
+        else:
+            queryset = queryset.none()  # Žádné záznamy, pokud uživatel nemá společnost
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Company Item Groups'
+        if self.request.user.company:
+            # Získání uživatelů patřících do stejné firmy
+            company_users = User.objects.filter(company=self.request.user.company)
+            # Filtruje volné RevisionRecords podle uživatelů ve stejné firmě
+            free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
+            context['free_revision_records'] = free_revision_records
+        else:
+            context['free_revision_records'] = RevisionRecord.objects.none()  # Prázdný queryset
+        return context
 class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 
     # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
@@ -317,15 +336,37 @@ class ItemGroupCreateView(LoginRequiredMixin, CreateView):
     template_name = 'account_form.html'
     success_url = reverse_lazy('item_group_list')
 
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        # Dynamicky vyloučení polí při aktualizaci
+        form.fields.pop('created_by', None)
+        form.fields.pop('updated_by', None)
+        if self.request.user.groups.filter(name='CompanyUser').exists():
+            # Automatické nastavení polí pro CompanyUser ještě před form validací
+            form.instance.user = self.request.user
+            form.instance.company = self.request.user.company
+            # Pokud je uživatel CompanyUser, pole se odstraní z formuláře
+            form.fields.pop('user', None)
+            form.fields.pop('company', None)
+        return form
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['view_title'] = 'Add PPE Group'
+        context['view_title'] = 'Add Item Group'
         return context
 
-
     def form_valid(self, form):
+        item_group = form.save(commit=False)
+        item_group.created_by = self.request.user
+        item_group.save()
+
         messages.success(self.request, 'Item Group was successfully created.')
-        return super().form_valid(form)
+
+        # Rozpoznání a přesměrování na předchozí URL
+        next_url = self.request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
+        return redirect(self.success_url)
 
 class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
     # TODO uzivatel muze upravit pouze skupinu ktera patri jemu
@@ -333,6 +374,13 @@ class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ItemGroupForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('item_group_list')
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        # Dynamicky vyloučení polí při aktualizaci
+        form.fields.pop('created_by', None)
+        form.fields.pop('updated_by', None)
+        return form
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -345,6 +393,7 @@ class ItemGroupUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView):
+    # FIXME presmerovat podle stranky ze ktere jsem prisel.
     model = ItemGroup
     template_name = 'account_delete.html'
     success_url = reverse_lazy('item_group_list')

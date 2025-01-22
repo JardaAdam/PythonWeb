@@ -123,6 +123,7 @@ class CompanyCreateViewTest(BaseTestCase):
             'city': 'Test City',
             'postcode': '12345',
             'phone_number': '123456789',
+            'company_email': 'test@email.com',
             'business_id': '12345678',
             'tax_id': '8765432101'
         })
@@ -138,6 +139,7 @@ class CompanyCreateViewTest(BaseTestCase):
             'city': 'Test City',
             'postcode': '12345',
             'phone_number': '123456789',
+            'company_email': 'test@email.com',
             'business_id': '12345678',
             'tax_id': '8765432121'
         })
@@ -209,6 +211,7 @@ class CompanyUpdateViewTest(BaseTestCase):
             'city': 'Praha',
             'postcode': '25082',
             'phone_number': '666555888',
+            'company_email': 'test@email.com',
             'business_id': '12345678',
             'tax_id': '1234567898'
         })
@@ -241,7 +244,7 @@ class ItemGroupTestCase(BaseTestCase):
     # Testy pro CRUD operace nad pohledy
     def test_item_group_list_view(self):
         self.client.login(username='testuser', password='testpassword')
-        response = self.client.get(reverse('item_group_list'))
+        response = self.client.get(reverse('item_group_company_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Test Group')
 
@@ -268,14 +271,14 @@ class ItemGroupTestCase(BaseTestCase):
             'user': self.user.pk,
             'company': self.company.pk
         })
-        self.assertRedirects(response, reverse('item_group_list'))
+        self.assertRedirects(response, reverse('item_group_company_list'))
         self.item_group.refresh_from_db()
         self.assertEqual(self.item_group.name, 'Updated Group')
 
     def test_item_group_delete_view(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.post(reverse('delete_item_group', args=[self.item_group.pk]))
-        self.assertRedirects(response, reverse('item_group_list'))
+        self.assertRedirects(response, reverse('company_item_group'))
         self.assertFalse(ItemGroup.objects.filter(pk=self.item_group.pk).exists())
 
 class CompanyTestCase(BaseTestCase):

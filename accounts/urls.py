@@ -4,7 +4,7 @@ from .views import SubmittableLoginView, LoginSuccessView, UserRegisterView, Com
     CustomUserUpdateView, CompanyUpdateView, CompanyDeleteView, ItemGroupListView, ItemGroupCreateView, \
     ItemGroupUpdateView, \
     ItemGroupDeleteView, CompanyView, CompanyListView, CompanyDetailView, ItemGroupDetailView, forgot_password_view, \
-    password_reset_view
+    password_reset_view, ItemGroupCompanyListView
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),  # defaultní cesty a views z Djanga
@@ -24,7 +24,8 @@ urlpatterns = [
     path('company/edit/<int:pk>/', CompanyUpdateView.as_view(), name='edit_company'),
     path('company/delete/<int:pk>/', CompanyDeleteView.as_view(), name='delete_company'),
 
-    path('item_groups/', ItemGroupListView.as_view(), name='item_group_list'),
+    path('item_groups/all/', ItemGroupListView.as_view(), name='item_group_list'),
+    path('item_groups/company/', ItemGroupCompanyListView.as_view(), name='item_group_company_list'),
     path('item_group/<int:pk>/', ItemGroupDetailView.as_view(), name='item_group_detail'),
     path('item_group/add/', ItemGroupCreateView.as_view(), name='add_item_group'),
     path('item_group/edit/<int:pk>/', ItemGroupUpdateView.as_view(), name='edit_item_group'),
