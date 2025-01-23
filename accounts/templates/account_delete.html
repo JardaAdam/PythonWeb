@@ -4,17 +4,17 @@
 {% block content %}
     <form method="post">
        {% csrf_token %}
-       
+
        <!-- Zobrazí chybovou zprávu, pokud existuje -->
        {% if error %}
            <div class="alert alert-danger" role="alert">
                {{ error }}
            </div>
        {% endif %}
-       
-       <p>Are you sure you want to delete "{{ object }}"?</p>
-       
-       <button type="button" class="btn btn-secondary" onclick="history.back()">
+
+       <p style="font-size: 1.5em;">Are you sure you want to delete "<strong>{{ object }}</strong>"?</p>
+
+       <button type="button" class="btn btn-secondary" onclick="window.close()">
            <i class="fas fa-arrow-left"></i> Back</button>
        <button type="submit" class="btn btn-danger">
            <i class="fas fa-trash-alt"></i> Delete</button>

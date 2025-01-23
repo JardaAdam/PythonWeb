@@ -32,7 +32,7 @@ Tento dokument popisuje strukturu a požadavky pro řízení přístupových pr�
 ### Company User
 #### app accounts
 - [x] Vidí svůj profil a může jej upravovat. 
-  - [ ] nesmi videt a moct upravit existing company
+  - [x] nesmi videt a moct upravit existing company
 - [x] Vidí svoji firmu, ale nemůže ji upravovat.
 - [x] Vidí `ItemGroup`, které patří jeho firmě.
 - [ ] Může upravovat pozici jednotlivých `revisionRecord` v `ItemGroup`, kde je jako `user`.

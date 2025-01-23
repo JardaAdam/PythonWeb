@@ -146,7 +146,7 @@ class ItemGroup(Model):
     def __str__(self):
         user_name = f"{self.user.first_name} {self.user.last_name}" if self.user else "unknown user"
         company_name = self.company.name if self.company else "unknown company"
-        return f"{self.name} Company: {company_name} User: {user_name}"
+        return f"Item group: {self.name} | User: {user_name} | Company: {company_name}"
 
     def __repr__(self):
         return f"ItemGroup(name={self.name}, user={self.user}, company={self.company})"

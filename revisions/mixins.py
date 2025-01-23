@@ -148,9 +148,9 @@ class DeleteMixin:
         try:
             self.object.delete()
             messages.success(self.request, self.success_message)
+            return HttpResponseRedirect(success_url)
         except ProtectedError:
-            messages.warning(self.request, self.error_message)
-        return HttpResponseRedirect(success_url)
+            return self.render_to_response(self.get_context_data(error=self.error_message))  # Předání chybové zprávy
 
 
 

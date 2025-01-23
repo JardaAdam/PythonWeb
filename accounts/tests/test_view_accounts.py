@@ -282,7 +282,7 @@ class ItemGroupTestCase(BaseTestCase):
             )
 
     def test_item_group_str(self):
-        self.assertEqual(str(self.item_group), 'Test Group Company: Test Company User: Testak Testovic')
+        self.assertEqual(str(self.item_group),'Item group: Test Group | User: Testak Testovic | Company: Test Company')
 
     # Testy pro CRUD operace nad pohledy
     def test_item_group_list_view(self):

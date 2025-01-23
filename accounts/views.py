@@ -434,7 +434,7 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         item_group.created_by = self.request.user
 
         item_group.save()
-        messages.success(self.request, 'Item Group was successfully created.')
+        messages.success(self.request, 'Item Group was successfully created CreatView.')
         return super().form_valid(form)
 
 
