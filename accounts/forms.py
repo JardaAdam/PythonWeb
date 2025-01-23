@@ -1,3 +1,4 @@
+import re
 from django.contrib.auth import get_user_model
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
@@ -5,7 +6,6 @@ from django.db.models import ImageField
 from django.db.transaction import atomic
 
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, Form
-
 
 from revisions.models import RevisionRecord
 from .mixins import FormValidationMixin
@@ -71,7 +71,6 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
     city = CharField(max_length=32, required=True)
     postcode = CharField(max_length=6, required=True)
     phone_number = CharField(max_length=20, required=True)
-    # FIXME upravyt zobrazeni firmy doplnit o City aby se upresnilo odkud firma je kdyby bylo vice firem se stejnym nazvem
     company = ModelChoiceField(queryset=Company.objects,
                                required=False,
                                empty_label="Enter company name",
@@ -115,10 +114,10 @@ class UserRegistrationForm(FormValidationMixin, ModelForm):
             except ValidationError as e:
                 raise ValidationError(f"Please enter a valid email. Error: {str(e)}")
         return email
-    # TODO def clean_address(self): adresaa musi obsahovat i cisla domu
 
-
-    # TODO def clean_city(self): zvetsit prvni pismeno, pouze pismena
+    def clean_city(self):
+        city = self.cleaned_data.get('city', '')
+        return city.strip().capitalize()
 
 
     def clean(self):
@@ -191,6 +190,16 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
                 raise ValidationError(f"Please enter a valid email. Error: {str(e)}")
         return email
 
+    def clean_city(self):
+        """Clean and capitalize the city name."""
+        city = self.cleaned_data.get('city', '')
+
+        if city:
+            # Trim whitespace and capitalize the first letter if city is not None or an empty string
+            return city.strip().capitalize()
+
+        return city  # Vrátí původní hodnotu None, pokud `city` bylo None
+
 """ COMPANY """
 class CompanyForm(FormValidationMixin, ModelForm):
     logo = ImageField()
@@ -219,13 +228,12 @@ class CompanyForm(FormValidationMixin, ModelForm):
             self.fields['country'].initial = default_country.id
         except Country.DoesNotExist:
             print("Default country does not exist in the database.")
-    # TODO def clean_name(self): zvetsit prvni pismeno
-
-    # TODO def clean_address(self): adresaa musi obsahovat i cisla domu
-
-    # TODO def clean_city(self): zvetsit prvni pismeno, pouze pismena
 
 
+
+    def clean_city(self):
+        city = self.cleaned_data.get('city', '')
+        return city.strip().capitalize()
 
     def clean(self):
         cleaned_data = super().clean()
@@ -246,8 +254,9 @@ class ItemGroupForm(ModelForm):
         self.company = kwargs.pop('company', None)
         super(ItemGroupForm, self).__init__(*args, **kwargs)
 
-
-
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        return name.strip().capitalize()
 
     def clean(self):
         cleaned_data = super().clean()

@@ -6,22 +6,35 @@ from django.shortcuts import redirect
 from django.core.exceptions import ValidationError
 
 from .validators import (
+    validate_address,
+    validate_postcode,
+    validate_phone_number,
     validate_business_id,
     validate_tax_id,
-    validate_phone_number,
-    validate_postcode,
+
+
 )
 
+
 class FormValidationMixin:
-    """ This method validate address and Tax_id, Business ID"""
+    """This method validates address, postcode, phone number, business ID, and tax ID."""
+
     def clean(self):
         cleaned_data = super().clean()
 
         country = cleaned_data.get('country')
+        address = cleaned_data.get('address')
         postcode = cleaned_data.get('postcode')
         phone_number = cleaned_data.get('phone_number')
         business_id = cleaned_data.get('business_id')
         tax_id = cleaned_data.get('tax_id')
+
+        # Validace address
+        try:
+            validated_address = validate_address(address)
+            cleaned_data['address'] = validated_address
+        except ValidationError as e:
+            self.add_error('address', e.message)
 
         if country:
             # Validace postcode
@@ -29,13 +42,15 @@ class FormValidationMixin:
                 validate_postcode(postcode, country)
             except ValidationError as e:
                 self.add_error('postcode', e.message)
-                # Validace phone number
+
+            # Validace phone number
             try:
                 updated_phone_number = validate_phone_number(phone_number, country)
                 if updated_phone_number != phone_number:
                     cleaned_data['phone_number'] = updated_phone_number
             except ValidationError as e:
                 self.add_error('phone_number', e.message)
+
             # Validace business ID
             try:
                 validate_business_id(business_id, country)
@@ -45,7 +60,7 @@ class FormValidationMixin:
             # Validace tax ID
             try:
                 updated_tax_id = validate_tax_id(tax_id, country)
-                cleaned_data['tax_id'] = updated_tax_id  # Uložení aktualizovaného tax_id do cleaned_data
+                cleaned_data['tax_id'] = updated_tax_id
             except ValidationError as e:
                 self.add_error('tax_id', e.message)
 

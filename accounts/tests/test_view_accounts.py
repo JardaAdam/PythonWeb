@@ -17,7 +17,9 @@ class BaseTestCase(TestCase):
             username='testuser',
             password='testpassword',
             first_name='Testak',
-            last_name='Testovic')
+            last_name='Testovic',
+            address='Nova 102',
+            city='Nova')
         supervisor_group, created = Group.objects.get_or_create(name='CompanySupervisor')
         cls.user.groups.add(supervisor_group)
 
@@ -47,7 +49,7 @@ class BaseTestCase(TestCase):
             tax_id_format='1234567890',
         )
         cls.item_group = ItemGroup.objects.create(
-            name='Test Group',
+            name='Test group',
             user=cls.user,
             company=cls.company
         )
@@ -74,7 +76,7 @@ class BaseTestCase(TestCase):
         cls.second_user.save()
 
         cls.second_item_group = ItemGroup.objects.create(
-            name='CompanyUserGroup',
+            name='Companyusergroup',
             user=cls.second_user,
             company=cls.company
         )
@@ -115,10 +117,18 @@ class CustomUserUpdateViewTest(BaseTestCase):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.post(reverse('edit_profile'), {
             'first_name': 'Updatedname',
-            'last_name': 'UpdatedLastname',
-            'email': self.user.email
+            'last_name': 'Updatedlastname',
+            'email': self.user.email,
+            'address': 'Pondelni 100'
         })
+        # Zkontrolujeme přítomnost chyb a jejich výpis
+        if 'form' in response.context:
+            print(response.context['form'].errors)
+
+        # Zkontrolujeme, zda došlo k přesměrování
         self.assertRedirects(response, reverse('profile'))
+
+        # Refresh instance uživatele a zkontrolujte změny
         self.user.refresh_from_db()
         self.assertEqual(self.user.first_name, 'Updatedname')
 
@@ -268,7 +278,7 @@ class CompanyUpdateViewTest(BaseTestCase):
 
 class ItemGroupTestCase(BaseTestCase):
     def test_item_group_creation(self):
-        self.assertEqual(self.item_group.name, 'Test Group')
+        self.assertEqual(self.item_group.name, 'Test group')
         self.assertEqual(self.item_group.user, self.user)
         self.assertEqual(self.item_group.company, self.company)
 
@@ -276,26 +286,26 @@ class ItemGroupTestCase(BaseTestCase):
         # Zkusit vytvořit skupinu se stejným jménem od stejného uživatele a firmy
         with self.assertRaises(Exception):
             ItemGroup.objects.create(
-                name='Test Group',
+                name='Test group',
                 user='testuser',
                 company=self.company
             )
 
     def test_item_group_str(self):
-        self.assertEqual(str(self.item_group),'Item group: Test Group | User: Testak Testovic | Company: Test Company')
+        self.assertEqual(str(self.item_group),'Item group: Test group | User: Testak Testovic | Company: Test Company')
 
     # Testy pro CRUD operace nad pohledy
     def test_item_group_list_view(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('item_group_company_list'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Test Group')
+        self.assertContains(response, 'Test group')
 
     def test_item_group_detail_view(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('item_group_detail', args=[self.item_group.pk]))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Test Group')
+        self.assertContains(response, 'Test group')
 
     def test_item_group_create_view(self):
         self.client.login(username='testuser', password='testpassword')
@@ -305,7 +315,7 @@ class ItemGroupTestCase(BaseTestCase):
             'company': self.company.pk
         })
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(ItemGroup.objects.filter(name='Another Group').exists())
+        self.assertTrue(ItemGroup.objects.filter(name='Another group').exists())
 
     def test_item_group_create_by_companyuser_view(self):
         self.client.login(username='companyuser', password='securepassword')
@@ -315,14 +325,14 @@ class ItemGroupTestCase(BaseTestCase):
             'company': self.company.pk
         })
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(ItemGroup.objects.filter(name='Another Group').exists())
+        self.assertTrue(ItemGroup.objects.filter(name='Another group').exists())
 
     def test_duplicate_item_group_creation_by_company_user(self):
         self.client.login(username='companyuser', password='securepassword')
         user_id = CustomUser.objects.get(username='companyuser').id
         # Pokus o vytvoření duplicity
         response = self.client.post(reverse('add_item_group'), {
-            'name': 'CompanyUserGroup',
+            'name': 'Companyusergroup',
             'user': user_id,
             'company': self.company.pk
         })
@@ -339,7 +349,7 @@ class ItemGroupTestCase(BaseTestCase):
         user_id = CustomUser.objects.get(username='testuser').id
         # Simulujte vytvoření duplicity
         response = self.client.post(reverse('add_item_group'), {
-            'name': 'Test Group',
+            'name': 'Test group',
             'user': user_id,
             'company': self.company.pk
         })
@@ -366,7 +376,7 @@ class ItemGroupTestCase(BaseTestCase):
 
         # Aktualizace objektu z databáze a kontrola, že jméno bylo správně aktualizováno
         self.item_group.refresh_from_db()
-        self.assertEqual(self.item_group.name, 'Updated Group')
+        self.assertEqual(self.item_group.name, 'Updated group')
 
     def test_item_group_update_by_companyuser_view(self):
         self.client.login(username='companyuser', password='securepassword')
@@ -383,17 +393,17 @@ class ItemGroupTestCase(BaseTestCase):
 
         # Aktualizace objektu z databáze a kontrola, že jméno bylo správně aktualizováno
         self.item_group.refresh_from_db()
-        self.assertEqual(self.item_group.name, 'Updated Group')
+        self.assertEqual(self.item_group.name, 'Updated group')
 
     def test_duplicate_item_group_update_by_company_user(self):
         self.client.login(username='companyuser', password='securepassword')
         user_id = CustomUser.objects.get(username='companyuser').id
         # Vytvoření jiného skupinového záznamu pro sestavení scénáře testu
-        duplicate_group = ItemGroup.objects.create(name='Duplicate Group', user=self.second_user, company=self.company)
+        duplicate_group = ItemGroup.objects.create(name='Duplicate group', user=self.second_user, company=self.company)
 
         # Pokus o aktualizaci na duplicitní záznam
         response = self.client.post(reverse('edit_item_group', args=[duplicate_group.pk]), {
-            'name': 'CompanyUserGroup',
+            'name': 'Companyusergroup',
             'user': user_id,
             'company': self.company.pk
         })
@@ -416,7 +426,7 @@ class ItemGroupTestCase(BaseTestCase):
 
         # Pokus o aktualizaci na duplicitní záznam
         response = self.client.post(reverse('edit_item_group', args=[duplicate_group.pk]), {
-            'name': 'Test Group',
+            'name': 'Test group',
             'user': user_id,
             'company': self.company.pk
         })

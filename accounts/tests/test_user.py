@@ -209,7 +209,7 @@ class UserRegistrationTest(BaseTestSetup):
             'last_name': 'doe',
             'email': 'janedoe@example.com',
             'country': self.country.pk,
-            'address': '456 Example Street',
+            'address': 'Example Street 456',
             'city': 'Prague',
             'postcode': '12345',
             'phone_number': '123456789',
@@ -228,7 +228,7 @@ class UserRegistrationTest(BaseTestSetup):
         self.assertEqual(user.last_name, 'Doe')
         self.assertEqual(user.email, 'janedoe@example.com')
         self.assertEqual(user.country, self.country)  # Porovnáváme FK objekty
-        self.assertEqual(user.address, '456 Example Street')
+        self.assertEqual(user.address, 'Example street 456')
         self.assertEqual(user.city, 'Prague')
         self.assertEqual(user.postcode, '12345')
         self.assertEqual(user.phone_number, '+420123456789')

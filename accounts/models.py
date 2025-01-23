@@ -65,7 +65,13 @@ class Company(Model):
         verbose_name_plural = "Companies"
 
     def __str__(self):
-        return self.name if self.name else 'Unknown company'
+        # Zkontroluje, zda jsou pole name, city a address nespecifikována
+        name = self.name if self.name else 'Unknown company'
+        city = self.city if self.city else 'Unknown city'
+        address = self.address if self.address else 'Unknown address'
+
+        # Vrátí formátovaný řetězec s těmito hodnotami
+        return f"{name}, {address}, {city}"
 
     def __repr__(self):
         return f"Company(name={self.name}, country={self.country})"

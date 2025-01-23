@@ -6,6 +6,22 @@ def validate_no_numbers(value):
     if re.search(r'\d', value):
         raise ValidationError("The name must not contain numbers.")
 
+
+def validate_address(address):
+    """Validate that the address contains both a street name and a house number,
+       and ensure the first letter of each word is capitalized."""
+    if not address:
+        raise ValidationError("Address is required.")
+
+    # Zkontrolovat, zda adresa obsahuje číslo popisné
+    if not re.search(r'\b\d+\b', address):
+        raise ValidationError("Address must contain a street name and a house number.")
+
+    # Zvětšit první písmena každého slova
+    address = address.strip().capitalize()
+
+    return address
+
 def validate_postcode(postcode, country):
     if not postcode:
         raise ValidationError("Postcode must not be empty.")
