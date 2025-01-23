@@ -366,6 +366,7 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     # TODO pri vytvareni Itemgroup chci podminit podle uzivatelskeho opravneni ze
     #  uzivatel muze pridat skupinu ktera patri pouze jemu
+    # FIXME pro CompanySupervisor upravit nastaveni omezit Queryset pro users a defaultne nastavit Company
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -380,34 +381,19 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         if self.request.user.groups.filter(name='CompanyUser').exists():
             kwargs['user'] = self.request.user
             kwargs['company'] = self.request.user.company
-        # elif self.request.user.groups.filter(name='CompanySupervisor').exists():
-        #     kwargs['company'] = self.request.user.company
         return kwargs
-
 
 
     # Formulář inicializujeme s kontrolou a automatickým nastavením společnosti
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-
         form.fields.pop('created_by', None)
         form.fields.pop('updated_by', None)
-        form.fields.pop('company', None)
-
-        form.instance.company = self.request.user.company  # Automaticky nastavíme společnost
-        allowed_fields = []
-        if self.request.user.groups.filter(name='CompanyUser').exists():
+        if 'user' in form.fields and self.request.user.groups.filter(name='CompanyUser').exists():
             form.instance.user = self.request.user
-            allowed_fields = ['name']
-
-        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
-            allowed_fields = ['user', 'name']
-            form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
-
-        for field_name in list(form.fields):
-            if field_name not in allowed_fields:
-                form.fields[field_name].disabled = True
-
+            form.instance.company = self.request.user.company
+            form.fields.pop('user', None)
+            form.fields.pop('company', None)
         return form
 
 
@@ -422,6 +408,7 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         item_group.save()
         messages.success(self.request, 'Item Group was successfully created.')
         return super().form_valid(form)
+
 
     def get_success_url(self):
         # Přesměrovat uživatele na detail nově vytvořené ItemGroup
