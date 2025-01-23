@@ -89,6 +89,7 @@ class CustomUserView(LoginRequiredMixin, TemplateView):
         return context
 
 class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
+    # FIXME pro CompanyUSer skryt pole Existing company
     # FIXME Busines ID a Tax id upravit hodnotu prazdneho zapisu na jinou nez None
     """Edit user data"""
     model = CustomUser
@@ -120,7 +121,7 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
 class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
     """ only for revision technician"""
     # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
-    # TODO kde se bude tato tabulka zobrazovat?
+    # TODO kde se bude tato tabulka zobrazovat viditelnost pouze pro SuperUser a RevisionTechnician
     # FIXME tato tabulka je pouze pro revision technic a admin
     model = Company
     template_name = 'company_list.html'
@@ -148,7 +149,6 @@ class CompanyView(LoginRequiredMixin, TemplateView):
     # TODO doresit tento pohled a co se v nem bude zobrazovat myslenka je takova ze tady bude mit uzivatel moznost
     #  videt sve kolegi ve firme a item_group firmy
     #  company view (pro uzivatele z firmy)
-    # FIXME nezobrazuje se Last update
     """View solely for the user assigned to the company"""
     model = Company
     form_class = CompanyForm
@@ -168,11 +168,13 @@ class CompanyView(LoginRequiredMixin, TemplateView):
 class CompanyDetailView(LoginRequiredMixin, DetailView):
     # TODO company detail (pro revizni techniky)
     # TODO doplnit do template created_by a Updated By
+    # FIXME odkazovat na item group podle company ze ktere prichazim
     model = Company
     template_name = 'company_detail.html'
     context_object_name = 'company'
 
 class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
+    # FIXME pridat create Company Pro SuperUser a RevisionTechnique
     """ Muze vytvaret pouze CompanySupervisor"""
     model = Company
     form_class = CompanyForm
@@ -192,7 +194,7 @@ class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         # Uložíme společnost bez commitu, abychom mohli přidat uživatele
         company = form.save(commit=False)
-        company.created_by = self.request.user  # Můžeš upravit podle potřeby (pokud máš např. pole manager)
+        company.created_by = self.request.user  # ulozi aktualniho uzivatele
         company.save()
 
         # Aktualizujeme uživatele, aby se přidělil k nově vytvořené společnosti
@@ -203,6 +205,7 @@ class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
+    # FIXME pridat prava pro SuperUser a RevisionTechnique
     """ Muze upravovat pouze CompanySupervisor"""
     model = Company
     form_class = CompanyForm
@@ -219,12 +222,6 @@ class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, Log
         context['view_title'] = 'Edit Company'
         return context
 
-    def get_success_url(self):
-        # Získání hodnoty next parametru z GET/POST požadavku
-        next_url = self.request.GET.get('next') or self.request.POST.get('next')
-        if next_url:
-            return next_url
-        return super().get_success_url()
 
     def form_valid(self, form):
         # Zaznamená aktuálního uživatele jako toho, kdo aktualizoval záznam
@@ -235,6 +232,13 @@ class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, Log
         messages.success(self.request, 'Company updated successfully.')
         response = super().form_valid(form)
         return response
+
+    def get_success_url(self):
+        # Získání hodnoty next parametru z GET/POST požadavku
+        next_url = self.request.GET.get('next') or self.request.POST.get('next')
+        if next_url:
+            return next_url
+        return super().get_success_url()
 
     def handle_no_permission(self):
         self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
@@ -413,6 +417,7 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         item_group = form.save(commit=False)
         item_group.created_by = self.request.user
+
         item_group.save()
         messages.success(self.request, 'Item Group was successfully created.')
         return super().form_valid(form)
@@ -423,7 +428,8 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
 class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    # TODO uzivatel muze upravit pouze skupinu ktera patri jemu
+    # TODO uzivatel muze upravit pouze skupinu ktera patri jemu pokud je CompanyUser
+    #  pokud je CompanySupervisor muze upravovat vsechny zaznamy v company
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -502,6 +508,7 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView): # UserPassesTestMixin,
     # FIXME presmerovat podle stranky ze ktere jsem prisel.
+    # TODO upravit prava uzivatelum CompanyUser muze mazat svoji skupinu, CompanySupervisor Muze mazat vse v Company
     model = ItemGroup
     template_name = 'account_delete.html'
     success_url = reverse_lazy('profile')

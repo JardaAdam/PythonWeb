@@ -2,6 +2,8 @@ from .base import *
 
 DEBUG = True
 
+# DEBUG = False   # pro testy accounts/tests/test_urls.py
+# TEMPLATES[0]['OPTIONS']['debug'] = False
 
 # In-memory databáze pro rychlost při běhu testů
 DATABASES = {

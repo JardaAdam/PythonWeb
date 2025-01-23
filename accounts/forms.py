@@ -5,14 +5,14 @@ from django.db.models import ImageField
 from django.db.transaction import atomic
 
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, Form
-from django.template.defaultfilters import default
+
 
 from revisions.models import RevisionRecord
 from .mixins import FormValidationMixin
 from .models import CustomUser, Company, ItemGroup, Country
 from .validators import validate_no_numbers
 
-CustomUser = get_user_model()
+
 """ PASSWORD RESET """
 class SecurityQuestionForm(Form):
     username = CharField(label="Username", max_length=150)
@@ -252,12 +252,12 @@ class ItemGroupForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         name = cleaned_data.get("name")
-        user = self.user or self.instance.user
-        company = self.cleaned_data.get("company") or self.company
+        user = cleaned_data.get("user", self.user)
+        company = cleaned_data.get("company", self.company)
 
 
         # Overení, zda ItemGroup s tímto názvem již neexistuje
-        # Ignorujeme objednávku samotného instance
+
         if ItemGroup.objects.filter(name=name, user=user, company=company).exclude(pk=self.instance.pk).exists():
             raise ValidationError('This item group name is already used for this user and company.')
 

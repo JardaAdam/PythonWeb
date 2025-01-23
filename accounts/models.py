@@ -42,7 +42,6 @@ class Country(Model):
 
 
 class Company(Model):
-    # TODO  Created_by, Updated_by uvidi Users CompanySupervisor kteří můžou tento zaznam menit
     # TODO doplnit Email?
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
@@ -130,7 +129,7 @@ class ItemGroup(Model):
         - Company rozdelene polozky dle zamestnancu/pracovist/aut/atd."""
     photo = ImageField(upload_to="media/item_group/", null=True, blank=True)
     name = CharField(max_length=64)
-    # TODO nechat toto pole blank=False!!!!
+    # TODO nechat toto pole blank=False?!!!!
     user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True,blank=True, related_name='user_item_groups')
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_item_groups')
     created_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='created_item_groups')

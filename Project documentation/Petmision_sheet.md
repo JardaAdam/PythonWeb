@@ -19,10 +19,10 @@ Tento dokument popisuje strukturu a požadavky pro řízení přístupových pr�
 - [ ] Je označen jako owner pro `revisionRecord`.
 - [ ] Nemůže mazat ani editovat v app `revisions`, pouze prohlížení.
 - [ ] Vidí všechny zaměstnance ve firmě v aplikaci `accounts`.
-- [ ] Může měnit informace pro svoji firmu ve `Company View` pomocí Edit.
+- [x] Může měnit informace pro svoji firmu ve `Company View` pomocí Edit.
 - [ ] Může editovat jednotlivé zaměstnance.
-- [ ] Může přidávat `ItemGroup` pro svoji firmu, nově vytvořené `ItemGroup` jsou automaticky přiřazeny jeho firmě.
-- [ ] Může upravovat `ItemGroup`, kterých je vlastníkem.
+- [x] Může přidávat `ItemGroup` pro svoji firmu, nově vytvořené `ItemGroup` jsou automaticky přiřazeny jeho firmě.
+- [x] Může upravovat `ItemGroup`, kterých je vlastníkem.
 - [ ] Může upravovat `revisionRecord` a to pridanim forky, zapisem `retire` + v budoucnu pridat komentář s 
       mimořádné události (pád z větší výšky, poškození, drobné závady)
 - [ ] Může přidávat nový výrobek `revisionRecord` s nastavením na `NEW` a datem přidání jako `first_use` pri tomto 
@@ -31,9 +31,10 @@ Tento dokument popisuje strukturu a požadavky pro řízení přístupových pr�
 
 ### Company User
 #### app accounts
-- [ ] Vidí svůj profil a může jej upravovat
-- [ ] Vidí svoji firmu, ale nemůže ji upravovat.
-- [ ] Vidí `ItemGroup`, které patří jeho firmě.
+- [x] Vidí svůj profil a může jej upravovat. 
+  - [ ] nesmi videt a moct upravit existing company
+- [x] Vidí svoji firmu, ale nemůže ji upravovat.
+- [x] Vidí `ItemGroup`, které patří jeho firmě.
 - [ ] Může upravovat pozici jednotlivých `revisionRecord` v `ItemGroup`, kde je jako `user`.
 - [ ] Může vyjmout záznam z `ItemGroup` a přesunout ho do `free_revision_records`.
 - [ ] Může přidat záznam z `free_revision_records` do své `ItemGroup`.

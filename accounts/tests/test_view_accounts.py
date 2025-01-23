@@ -68,9 +68,16 @@ class BaseTestCase(TestCase):
             first_name='Obycejny',
             last_name='Uzivatel'
         )
+
         cls.second_user.company = cls.company
-        cls.second_user.groups.add(company_user_group)
+        cls.second_user.groups.add(company_user_group) # Přidání uživatele do skupiny `CompanyUser`
         cls.second_user.save()
+
+        cls.second_item_group = ItemGroup.objects.create(
+            name='CompanyUserGroup',
+            user=cls.second_user,
+            company=cls.company
+        )
 
 
 class CustomUserViewTest(BaseTestCase):
@@ -288,6 +295,40 @@ class ItemGroupTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(ItemGroup.objects.filter(name='Another Group').exists())
 
+    def test_duplicate_item_group_creation_by_company_user(self):
+        self.client.login(username='companyuser', password='securepassword')
+        user_id = CustomUser.objects.get(username='companyuser').id
+        # Pokus o vytvoření duplicity
+        response = self.client.post(reverse('add_item_group'), {
+            'name': 'CompanyUserGroup',
+            'user': user_id,
+            'company': self.company.pk
+        })
+
+        # Kontrola, že se duplikát nevytvořil a zobrazuje se chybová hláška
+        self.assertEqual(response.status_code, 200)  # Očekáváme, že zůstane na stránce formuláře.
+        form = response.context['form']
+        # Ověření, že v chybách formuláře je daná chybová zpráva
+        self.assertIn('This item group name is already used for this user and company.', form.non_field_errors())
+
+    def test_duplicate_item_group_creation_by_company_supervisor(self):
+        self.client.login(username='testuser', password='testpassword')
+        # Získejte ID uživatele
+        user_id = CustomUser.objects.get(username='testuser').id
+        # Simulujte vytvoření duplicity
+        response = self.client.post(reverse('add_item_group'), {
+            'name': 'Test Group',
+            'user': user_id,
+            'company': self.company.pk
+        })
+        # Zajistěte, že kód odpovědi je 200 (formulář neprošel a zůstal na stránce)
+        self.assertEqual(response.status_code, 200)
+        # Extrakce formuláře z kontextu
+        form = response.context['form']
+        # Ověření, že v chybách formuláře je daná chybová zpráva
+        self.assertIn('This item group name is already used for this user and company.', form.non_field_errors())
+
+
     def test_item_group_update_view(self):
         self.client.login(username='testuser', password='testpassword')
 
@@ -321,6 +362,50 @@ class ItemGroupTestCase(BaseTestCase):
         # Aktualizace objektu z databáze a kontrola, že jméno bylo správně aktualizováno
         self.item_group.refresh_from_db()
         self.assertEqual(self.item_group.name, 'Updated Group')
+
+    def test_duplicate_item_group_update_by_company_user(self):
+        self.client.login(username='companyuser', password='securepassword')
+        user_id = CustomUser.objects.get(username='companyuser').id
+        # Vytvoření jiného skupinového záznamu pro sestavení scénáře testu
+        duplicate_group = ItemGroup.objects.create(name='Duplicate Group', user=self.second_user, company=self.company)
+
+        # Pokus o aktualizaci na duplicitní záznam
+        response = self.client.post(reverse('edit_item_group', args=[duplicate_group.pk]), {
+            'name': 'CompanyUserGroup',
+            'user': user_id,
+            'company': self.company.pk
+        })
+
+        # Kontrola, že aktualizace neproběhla a zobrazuje se chybová hláška
+        self.assertEqual(response.status_code, 200)  # Očekáváme, že zůstane na stránce formuláře.
+        # Extrakce formuláře z kontextu a kontrola na chyby
+        form = response.context['form']
+
+        # Ověřuje, zda formulář skutečně obsahuje očekávanou chybovou zprávu
+        self.assertIn('This item group name is already used for this user and company.', form.non_field_errors())
+
+
+
+    def test_duplicate_item_group_update_by_company_supervisor(self):
+        self.client.login(username='testuser', password='testpassword')
+        user_id = CustomUser.objects.get(username='testuser').id
+        # Vytvoření jiného skupinového záznamu pro sestavení scénáře testu
+        duplicate_group = ItemGroup.objects.create(name='Duplicate Group', user=self.user, company=self.company)
+
+        # Pokus o aktualizaci na duplicitní záznam
+        response = self.client.post(reverse('edit_item_group', args=[duplicate_group.pk]), {
+            'name': 'Test Group',
+            'user': user_id,
+            'company': self.company.pk
+        })
+
+        # Kontrola, že aktualizace neproběhla a zobrazuje se chybová hláška
+        self.assertEqual(response.status_code, 200)  # Očekáváme, že zůstane na stránce formuláře.
+        # Extrakce formuláře z kontextu
+        form = response.context['form']
+
+        # Ověření, že v chybách formuláře je daná chybová zpráva
+        self.assertIn('This item group name is already used for this user and company.', form.non_field_errors())
 
     def test_item_group_delete_view(self):
         self.client.login(username='testuser', password='testpassword')

@@ -3,7 +3,7 @@ from .base import *
 DEBUG = False
 
 # TODO Nahradit skutecnou domenou
-ALLOWED_HOSTS = ['.yourproductiondomain.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Databázová konfigurace pro produkci (například PostgreSQL)
 DATABASES = {
