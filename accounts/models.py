@@ -130,7 +130,7 @@ class ItemGroup(Model):
         - Company rozdelene polozky dle zamestnancu/pracovist/aut/atd."""
     photo = ImageField(upload_to="media/item_group/", null=True, blank=True)
     name = CharField(max_length=64)
-    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='user_item_groups')
+    user = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True,blank=True, related_name='user_item_groups')
     company = ForeignKey(Company, null=True, blank=True, on_delete=SET_NULL, related_name='company_item_groups')
     created_by = ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=SET_NULL, related_name='created_item_groups')
     created = DateTimeField(auto_now_add=True)
