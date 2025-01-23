@@ -129,7 +129,6 @@ class TypeOfPpe(Model):
         super().delete(*args, **kwargs)
 
 class RevisionData(Model):
-    # TODO pridat checked_data BooleanField ktery se v pripade pridani noveho zaznamu nekym jinym nez SuperUserem nastavi na False
     """Tabulka obsahující jednotlivé položky v průběhu plnění databáze - zjednodušuje zpracování revizních záznamů."""
     image_items = ImageField(upload_to="static/image/revision_data/", default=None)
     lifetime_of_ppe = ForeignKey(LifetimeOfPpe, on_delete=PROTECT, related_name='revision_datas')
@@ -138,6 +137,7 @@ class RevisionData(Model):
     standard_ppe = ManyToManyField(StandardPpe, related_name='standards_ppe')  # Množství norem
     manual_for_revision = FileField(upload_to='static/revision_data/manuals/')
     notes = TextField(blank=True, null=True)
+    checked_data = BooleanField(default=False) # kontrolni zapis pro pripad ze zaznam vytvoril nekdo jiny nez SuperUser upozorneni na potrebu kontroly zaznamu
 
     class Meta:
         verbose_name = "Revision Data"
@@ -180,7 +180,6 @@ class RevisionRecord(Model):
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
     item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records',
                             related_query_name='revision_record')
-    owner_company = ForeignKey(Company, on_delete=SET_NULL,null=True, related_name='company_records',)
     owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='owner_records')
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
