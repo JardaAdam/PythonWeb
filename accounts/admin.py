@@ -17,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
 class CustomUserInline(admin.StackedInline):  # Můžete použít také '' pro vertikální zobrazení
     model = CustomUser
     extra = 1  # Pokud nechcete mít místa pro přidání nových uživatelů zde
-    fields = ['username','groups']
+    fields = ['username','first_name','last_name','groups']
 
 # Definujeme CompanyAdmin class
 class CompanyAdmin(admin.ModelAdmin):
@@ -25,7 +25,7 @@ class CompanyAdmin(admin.ModelAdmin):
     inlines = [CustomUserInline]  # Přidání našeho inline modelu
 
 class ItemGroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user__first_name','user__last_name', 'company')  # Pole k zobrazení ve správě
+    list_display = ('name', 'user','user__first_name','user__last_name', 'company')  # Pole k zobrazení ve správě
     list_filter = ('user', 'company')  # Přidání filtračních polí
     # fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('company', 'user', 'name')}),)
 

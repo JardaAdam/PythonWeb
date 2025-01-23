@@ -12,7 +12,7 @@ from .mixins import FormValidationMixin
 from .models import CustomUser, Company, ItemGroup, Country
 from .validators import validate_no_numbers
 
-
+CustomUser = get_user_model()
 """ PASSWORD RESET """
 class SecurityQuestionForm(Form):
     username = CharField(label="Username", max_length=150)
@@ -245,6 +245,8 @@ class ItemGroupForm(ModelForm):
         self.user = kwargs.pop('user', None)
         self.company = kwargs.pop('company', None)
         super(ItemGroupForm, self).__init__(*args, **kwargs)
+
+
 
 
     def clean(self):

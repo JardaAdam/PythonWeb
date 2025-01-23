@@ -173,7 +173,7 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
     context_object_name = 'company'
 
 class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
-    # TODO muze vytvaret uzivatel Company Supervisor
+    """ Muze vytvaret pouze CompanySupervisor"""
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
@@ -203,7 +203,7 @@ class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
-    # TODO muze vytvaret uzivatel Company Supervisor
+    """ Muze upravovat pouze CompanySupervisor"""
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
@@ -332,17 +332,7 @@ class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView
         context['title'] = 'Company Item Groups'
         return context
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['title'] = 'Company Item Groups'
-    #     if self.request.user.company:
-    #         free_revision_records = RevisionRecord.objects.filter(owner_company=self.request.user.company,
-    #                                                               item_group=None)
-    #         context['company_free_revision_records'] = free_revision_records
-    #     else:
-    #         context['company_free_revision_records'] = RevisionRecord.objects.none()
-    #
-    #     return context
+
 class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 
     # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
@@ -381,26 +371,45 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
 
+    def test_func(self):
+        allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
+        return any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         if self.request.user.groups.filter(name='CompanyUser').exists():
             kwargs['user'] = self.request.user
             kwargs['company'] = self.request.user.company
+        # elif self.request.user.groups.filter(name='CompanySupervisor').exists():
+        #     kwargs['company'] = self.request.user.company
         return kwargs
 
+
+
+    # Formulář inicializujeme s kontrolou a automatickým nastavením společnosti
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-        # Dynamicky vyloučení polí při aktualizaci
+
         form.fields.pop('created_by', None)
         form.fields.pop('updated_by', None)
+        form.fields.pop('company', None)
+
+        form.instance.company = self.request.user.company  # Automaticky nastavíme společnost
+        allowed_fields = []
         if self.request.user.groups.filter(name='CompanyUser').exists():
-            # Automatické nastavení polí pro CompanyUser ještě před form validací
             form.instance.user = self.request.user
-            form.instance.company = self.request.user.company
-            # Pokud je uživatel CompanyUser, pole se odstraní z formuláře
-            form.fields.pop('user', None)
-            form.fields.pop('company', None)
+            allowed_fields = ['name']
+
+        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
+            allowed_fields = ['user', 'name']
+            form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
+
+        for field_name in list(form.fields):
+            if field_name not in allowed_fields:
+                form.fields[field_name].disabled = True
+
         return form
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -425,6 +434,26 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'account_form.html'
     success_url = reverse_lazy('item_group_user_list')
 
+    def test_func(self):
+        allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
+        is_in_allowed_group = any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
+
+        # Získání instace item group pro porovnání
+        item_group = self.get_object()
+
+        # Kontrola, zda je uživatel vlastníkem ItemGroup (CompanyUser)
+        is_owner = item_group.user == self.request.user
+
+        # Kontrola, zda je uživatel CompanySupervisor pro stejnou společnost jako ItemGroup
+        is_supervisor_for_company = (
+                self.request.user.groups.filter(name='CompanySupervisor').exists() and
+                item_group.company == self.request.user.company
+        )
+
+        # Uživateli je povoleno editovat, pokud splňuje podmínky na úrovni skupiny a buď je vlastníkem,
+        # nebo je správcem pro svou společnost
+        return is_in_allowed_group and (is_owner or is_supervisor_for_company)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         if self.request.user.groups.filter(name='CompanyUser').exists():
@@ -434,16 +463,29 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-        # Dynamicky vyloučení polí při aktualizaci
+
         form.fields.pop('created_by', None)
         form.fields.pop('updated_by', None)
+
+        # Nastavení povinného pole company na základě uživatele
+        form.instance.company = self.request.user.company
+
+        # Nastavit povolená pole pro různé uživatelské role
         if self.request.user.groups.filter(name='CompanyUser').exists():
-            # Automatické nastavení polí pro CompanyUser ještě před form validací
             form.instance.user = self.request.user
-            form.instance.company = self.request.user.company
-            # Pokud je uživatel CompanyUser, pole se odstraní z formuláře
-            form.fields.pop('user', None)
-            form.fields.pop('company', None)
+            allowed_fields = ['name']
+        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
+            allowed_fields = ['user', 'name']
+            form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
+        else:
+            # Pokud není ve specifických skupinách, nedovolovat žádné pole k úpravě
+            allowed_fields = []
+
+        # Všechna pole, která nejsou ve allowed_fields, bude zakázána
+        for field_name in list(form.fields):
+            if field_name not in allowed_fields:
+                form.fields[field_name].disabled = True
+
         return form
 
     def get_context_data(self, **kwargs):
@@ -463,12 +505,15 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         # Zajistí, že přesměrujeme na detailní pohled s `pk` aktuálního záznamu
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
-class ItemGroupDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteMixin, DeleteView):
+class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView): # UserPassesTestMixin,
     # FIXME presmerovat podle stranky ze ktere jsem prisel.
     model = ItemGroup
     template_name = 'account_delete.html'
     success_url = reverse_lazy('profile')
 
+    # def test_func(self):
+    #     allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
+    #     return any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
 
 
 class SubmittableLoginView(LoginView):

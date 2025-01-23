@@ -58,6 +58,20 @@ class BaseTestCase(TestCase):
         cls.other_user.company = cls.company
         cls.other_user.save()
 
+        # Vytvoření u prověření `CompanyUser`
+        company_user_group, created = Group.objects.get_or_create(name='CompanyUser')
+
+        # Druhý uživatel ve stejné společnosti s právy `CompanyUser`
+        cls.second_user = CustomUser.objects.create_user(
+            username='companyuser',
+            password='securepassword',
+            first_name='Obycejny',
+            last_name='Uzivatel'
+        )
+        cls.second_user.company = cls.company
+        cls.second_user.groups.add(company_user_group)
+        cls.second_user.save()
+
 
 class CustomUserViewTest(BaseTestCase):
     def test_custom_user_view_loads_correctly(self):
@@ -264,21 +278,54 @@ class ItemGroupTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(ItemGroup.objects.filter(name='Another Group').exists())
 
+    def test_item_group_create_by_companyuser_view(self):
+        self.client.login(username='companyuser', password='securepassword')
+        response = self.client.post(reverse('add_item_group'), {
+            'name': 'Another Group',
+            'user': self.user.pk,
+            'company': self.company.pk
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(ItemGroup.objects.filter(name='Another Group').exists())
+
     def test_item_group_update_view(self):
         self.client.login(username='testuser', password='testpassword')
+
+        # Provede POST request pro aktualizaci ItemGroup
         response = self.client.post(reverse('edit_item_group', args=[self.item_group.pk]), {
             'name': 'Updated Group',
             'user': self.user.pk,
             'company': self.company.pk
         })
-        self.assertRedirects(response, reverse('item_group_company_list'))
+
+        # Ujistěte se, že přesměrování zahrnuje argument pk, potřebný pro detailní pohled
+        self.assertRedirects(response, reverse('item_group_detail', kwargs={'pk': self.item_group.pk}))
+
+        # Aktualizace objektu z databáze a kontrola, že jméno bylo správně aktualizováno
+        self.item_group.refresh_from_db()
+        self.assertEqual(self.item_group.name, 'Updated Group')
+
+    def test_item_group_update_by_companyuser_view(self):
+        self.client.login(username='companyuser', password='securepassword')
+
+        # Provede POST request pro aktualizaci ItemGroup
+        response = self.client.post(reverse('edit_item_group', args=[self.item_group.pk]), {
+            'name': 'Updated Group',
+            'user': self.user.pk,
+            'company': self.company.pk
+        })
+
+        # Ujistěte se, že přesměrování zahrnuje argument pk, potřebný pro detailní pohled
+        self.assertRedirects(response, reverse('item_group_detail', kwargs={'pk': self.item_group.pk}))
+
+        # Aktualizace objektu z databáze a kontrola, že jméno bylo správně aktualizováno
         self.item_group.refresh_from_db()
         self.assertEqual(self.item_group.name, 'Updated Group')
 
     def test_item_group_delete_view(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.post(reverse('delete_item_group', args=[self.item_group.pk]))
-        self.assertRedirects(response, reverse('company_item_group'))
+        self.assertRedirects(response, reverse('profile'))
         self.assertFalse(ItemGroup.objects.filter(pk=self.item_group.pk).exists())
 
 class CompanyTestCase(BaseTestCase):
