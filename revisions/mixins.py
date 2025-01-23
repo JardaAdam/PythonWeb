@@ -45,6 +45,30 @@ Tento přístup ti umožní zpracovávat `ManyToManyField` v rámci vyhledáván
 což by mělo řešit tvůj aktuální problém s duplicitními výsledky při filtrování."""
 
 
+class ManySearchSortMixin:
+    def filter_queryset(self, queryset, search_fields, search_param='q'):
+        if not hasattr(self, 'request'):
+            raise AttributeError(
+                "Instance nemá atribut 'request', SearchSortMixin musí být použit ve třídách s 'request' atributem.")
+
+        query = self.request.GET.get(search_param)
+        if query and search_fields:
+            queries = Q()
+            for field in search_fields:
+                queries |= Q(**{f'{field}__icontains': query})
+            queryset = queryset.filter(queries).distinct()
+        return queryset
+
+    def sort_queryset(self, queryset, table_id=None, default_sort_field='id'):
+        sort_by_param = f'{table_id}_sort_by' if table_id else 'sort_by'
+        sort_order_param = f'{table_id}_sort_order' if table_id else 'sort_order'
+
+        sort_by = self.request.GET.get(sort_by_param, default_sort_field)
+        sort_order = self.request.GET.get(sort_order_param, 'asc')
+        order_field = f"-{sort_by}" if sort_order == 'desc' else sort_by
+
+        return queryset.order_by(order_field)
+
 # TODO po odladeni sprav po premeni spravi tady musim upravit spravi i v testech
 class CreateMixin:
     success_message = 'The item was successfully saved from CreateMixin'

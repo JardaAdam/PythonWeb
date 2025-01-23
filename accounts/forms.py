@@ -236,9 +236,26 @@ class CompanyForm(FormValidationMixin, ModelForm):
 class ItemGroupForm(ModelForm):
     class Meta:
         model = ItemGroup
-        fields = '__all__'
+        fields = ['name', 'user', 'company', 'created_by', 'updated_by']
         widgets = {'user': Select(attrs={'class': 'form-control select2'}),
                    'company': Select(attrs={'class': 'form-control select2'})
                    }
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.company = kwargs.pop('company', None)
+        super(ItemGroupForm, self).__init__(*args, **kwargs)
 
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get("name")
+        user = self.user or self.instance.user
+        company = self.company or self.instance.company
+
+        # Overení, zda ItemGroup s tímto názvem již neexistuje
+        # Ignorujeme objednávku samotného instance
+        if ItemGroup.objects.filter(name=name, user=user, company=company).exclude(pk=self.instance.pk).exists():
+            raise ValidationError('This item group name is already used for this user and company.')
+
+        return cleaned_data

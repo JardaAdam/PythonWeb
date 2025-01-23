@@ -4,6 +4,7 @@
 {% block title %} Company Item Groups {% endblock %}
 
 {% block content %}
+    {% include 'includes/search_account_form.html' %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-12 col-md-6">
@@ -18,9 +19,12 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">{% sort_link request 'name' 'Name' %}</th>
-                <th scope="col">{% sort_link request 'user__first_name' 'User' %}</th>
-                <th scope="col">{% sort_link request 'company__name' 'Company' %}</th>
+                <th scope="col">{% sort_links request 'company_items' 'name' 'Name' %}</th>
+                <th scope="col">{% sort_links request 'company_items' 'record_count' 'Pieces' %}</th>
+                <th scope="col">{% sort_links request 'company_items' 'user__first_name' 'User' %}</th>
+                <th scope="col">{% sort_links request 'company_items' 'company__name' 'Company' %}</th>
+                <th scope="col">{% sort_links request 'company_items' 'created' 'Created' %}</th>
+                <th scope="col">{% sort_links request 'company_items' 'updated' 'Updated' %}</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -29,8 +33,12 @@
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ group.name }}</td>
+                <td>{{ group.record_count }}</td>
                 <td>{{ group.user.first_name }} {{ group.user.last_name }}</td>
                 <td>{{ group.company.name }}</td>
+                <td>{{ group.created|date:"d.m.Y H:i" }}</td>
+                <td>{{ group.updated|date:"d.m.Y H:i" }}</td>
+                
                 <td>
                     <a href="{% url 'item_group_detail' group.pk %}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                     <a href="{% url 'edit_item_group' group.pk %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
@@ -57,21 +65,21 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">{% sort_link request 'revision_data__lifetime_of_ppe__manufacturer__name' 'Manufacturer' %}</th>
-                <th scope="col">{% sort_link request 'revision_data__type_of_ppe__group_type_ppe' 'Group Type' %}</th>
-                <th scope="col">{% sort_link request 'revision_data__name_ppe' 'Name PPE' %}</th>
-                <th scope="col">{% sort_link request 'serial_number' 'Serial Number' %}</th>
-                <th scope="col">{% sort_link request 'date_manufacture' 'Date of Manufacture' %}</th>
-                <th scope="col">{% sort_link request 'date_of_first_use' 'Date of First Use' %}</th>
-                <th scope="col">{% sort_link request 'date_of_revision' 'Date of Revision' %}</th>
-                <th scope="col">{% sort_link request 'date_of_next_revision' 'Date of Next Revision' %}</th>
-                <th scope="col">{% sort_link request 'verdict' 'Verdict' %}</th>
-                <th scope="col">{% sort_link request 'notes' 'Notes' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'revision_data__lifetime_of_ppe__manufacturer__name' 'Manufacturer' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'revision_data__type_of_ppe__group_type_ppe' 'Group Type' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'revision_data__name_ppe' 'Name PPE' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'serial_number' 'Serial Number' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'date_manufacture' 'Date of Manufacture' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'date_of_first_use' 'Date of First Use' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'date_of_revision' 'Date of Revision' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'date_of_next_revision' 'Date of Next Revision' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'verdict' 'Verdict' %}</th>
+                <th scope="col">{% sort_links request 'free_records' 'notes' 'Notes' %}</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for record in free_revision_records %}
+            {% for record in company_free_revision_records %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ record.revision_data.lifetime_of_ppe.manufacturer.name }}</td>

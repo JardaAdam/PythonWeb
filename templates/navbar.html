@@ -19,43 +19,47 @@
         </div>
 
             <ul class="navbar-nav ms-auto" style="display: grid; grid-auto-flow: column; gap: 0.4rem;">
-        {% if user.is_authenticated %}
-            <li class="nav-item">
-                    <a class="nav-link" href="{% url 'item_group_list' %}" style="padding: 0; display: inline-block;">Item groups</a>
-                    </li>
-                    <li class="nav-item" style="padding: 0 0.2rem;">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'item_group_user_list' %}" style="padding: 0; display: inline-block;">User Item groups</a>
+                </li>
+                <li class="nav-item" style="padding: 0 0.2rem;">
                     |
-                    </li>
-                    <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'item_group_company_list' %}" style="padding: 0; display: inline-block;">Company Item groups</a>
+                </li>
+                <li class="nav-item" style="padding: 0 0.2rem;">
+                    |
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'company_list' %}" style="padding: 0; display: inline-block;">Companies</a>
-                    </li>
-                    <li class="nav-item" style="padding: 0 0.2rem;">
+                </li>
+                <li class="nav-item" style="padding: 0 0.2rem;">
                     |
-                    </li>
-                    <li class="nav-item">
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile' %}" style="padding: 0; display: inline-block;">Profile</a>
-                    </li>
-                    <li class="nav-item" style="padding: 0 0.2rem;">
+                </li>
+                <li class="nav-item" style="padding: 0 0.2rem;">
                     |
-                    </li>
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'logout' %}" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link btn btn-link" style="padding: 0; border: none; background: none;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-        {% else %}
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link" style="padding: 0; border: none; background: none;"> Logout</button>
+                    </form>
+                </li>
+            {% else %}
 
-                    <li class="nav-item" >
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Sign Up</a>
-                    </li>
+                <li class="nav-item" >
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Sign Up</a>
+                </li>
 
-        {% endif %}
+            {% endif %}
             </ul>
     </div>
 </nav>

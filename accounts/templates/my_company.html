@@ -35,7 +35,7 @@
     {% if can_edit %}
     <a href="{% url 'edit_company' company.pk %}?next={{ request.path }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit Company</a>
     {% endif %}
-    <a class="btn btn-info" href="{% url 'item_group_company_list' %}"><i class="fas fa-eye"></i> Item Groups</a>
+    <a class="btn btn-info" href="{% url 'item_group_company_list' %}"><i class="fas fa-eye"></i> Company Item Groups</a>
     {% else %}
     <p>{{ no_company_message }}</p>
     <a class="btn btn-primary" href="{% url 'add_company' %}">Add Company</a>

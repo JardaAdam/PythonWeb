@@ -24,6 +24,10 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ['name', 'country', 'city', 'phone_number']  # Pole, které chcete zobrazit v seznamu
     inlines = [CustomUserInline]  # Přidání našeho inline modelu
 
+class ItemGroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user__first_name','user__last_name', 'company')  # Pole k zobrazení ve správě
+    list_filter = ('user', 'company')  # Přidání filtračních polí
+    # fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('company', 'user', 'name')}),)
 
 admin.site.register(LogEntry)
 admin.site.register(ContentType)
@@ -31,7 +35,7 @@ admin.site.register(Session)
 admin.site.register(Country)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(ItemGroup)
+admin.site.register(ItemGroup, ItemGroupAdmin)
 
 
 
