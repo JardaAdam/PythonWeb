@@ -279,7 +279,8 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
 
         free_revision_records = RevisionRecord.objects.filter(owner=self.request.user, item_group=None)
         free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
-        free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records', default_sort_field='serial_number')
+        free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
+                                                   default_sort_field='serial_number')
 
         context['user_free_revision_records'] = free_revision_records
         context['title'] = 'User Item Groups'
@@ -319,16 +320,29 @@ class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        company_users = User.objects.filter(company=self.request.user.company)
+        free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
+
+        free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
+        free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
+                                                   default_sort_field='serial_number')
+
+        context['company_free_revision_records'] = free_revision_records
         context['title'] = 'Company Item Groups'
-        if self.request.user.company:
-            # Získání uživatelů patřících do stejné firmy
-            company_users = User.objects.filter(company=self.request.user.company)
-            # Filtruje volné RevisionRecords podle uživatelů ve stejné firmě
-            free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
-            context['free_revision_records'] = free_revision_records
-        else:
-            context['free_revision_records'] = RevisionRecord.objects.none()  # Prázdný queryset
         return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = 'Company Item Groups'
+    #     if self.request.user.company:
+    #         free_revision_records = RevisionRecord.objects.filter(owner_company=self.request.user.company,
+    #                                                               item_group=None)
+    #         context['company_free_revision_records'] = free_revision_records
+    #     else:
+    #         context['company_free_revision_records'] = RevisionRecord.objects.none()
+    #
+    #     return context
 class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 
     # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
