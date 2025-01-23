@@ -10,9 +10,11 @@
         </button>
         <div class="collapse navbar-collapse" id="revisionNavbar">
             <ul class="navbar-nav">
+                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'revision_records_list' %}">Revision records</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'revision_datas_list' %}">Revision Data</a>
                 </li>

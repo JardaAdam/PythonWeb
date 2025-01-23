@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.views import LoginView
@@ -12,7 +13,7 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 
-from accounts.mixins import LoggerMixin
+from accounts.mixins import LoggerMixin, PermissionStaffMixin
 from revisions.mixins import SearchSortMixin, DeleteMixin, ManySearchSortMixin
 from .forms import  SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
@@ -57,8 +58,9 @@ def password_reset_view(request, user_id):
 
     return render(request, 'account_form.html', {'form': form})
 class UserRegisterView(View):
-    # TODO nastavit vychozi hodnotu pro Groups permision
-    """User registration"""
+    """User registration
+    po registraci uzivatele se pomoci signals.py -> assign_company_supervisor_group
+     nastavi vychozi permision Group pro uzivatele"""
     template_name = 'registration/register.html'
 
     def get(self, request):
@@ -89,13 +91,13 @@ class CustomUserView(LoginRequiredMixin, TemplateView):
         return context
 
 class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
-    # FIXME pro CompanyUSer skryt pole Existing company
     # FIXME Busines ID a Tax id upravit hodnotu prazdneho zapisu na jinou nez None
     """Edit user data"""
     model = CustomUser
     form_class = CustomUserUpdateForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -105,6 +107,12 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return get_object_or_404(CustomUser, pk=self.request.user.pk)
 
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        if self.request.user.groups.filter(name='CompanyUser').exists():
+            # Skryjte pole company pomocí HiddenInput widgetu
+            form.fields['company'].disabled = True  # Disable the field
+        return form
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -118,7 +126,7 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
 
 """ Company """
 
-class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
+class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # PermissionStaffMixin,
     """ only for revision technician"""
     # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
     # TODO kde se bude tato tabulka zobrazovat viditelnost pouze pro SuperUser a RevisionTechnician
@@ -129,6 +137,8 @@ class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
     paginate_by = 10
     search_fields_by_view = ['name', 'country__name', 'city', 'business_id']
     default_sort_field = 'name'  # Zvolte jedno, které je smysluplné pro váš případ
+
+
 
     def get_queryset(self):
         # Získáme původní queryset definovaný modelem
@@ -142,7 +152,11 @@ class CompanyListView(LoginRequiredMixin, SearchSortMixin, ListView):
 
         return queryset
 
-# Fixme upravit podminky podle prav uzivatele. pro cesty
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.add_context_data(context)
+        return context
+
 
 
 class CompanyView(LoginRequiredMixin, TemplateView):
@@ -257,7 +271,7 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
     model = ItemGroup
     template_name = 'user_item_group_list.html'
     context_object_name = 'user_item_groups'
-
+    paginate_by = 10
     search_fields = {
         'item_group': ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated'],
         'revision_record': [
@@ -295,7 +309,7 @@ class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView
     model = ItemGroup
     template_name = 'company_item_group_list.html'
     context_object_name = 'company_item_groups'
-
+    paginate_by = 10
     search_fields = {
         'item_group': ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated'],
         'revision_record': [
@@ -345,6 +359,7 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
     model = ItemGroup
     template_name = 'item_group_detail.html'
     context_object_name = 'item_group'
+    paginate_by = 10
     search_fields_by_view = ['revision_data__lifetime_of_ppe__manufacturer__name',
                              'revision_data__lifetime_of_ppe__material_type__name',
                              'revision_data__type_of_ppe__group_type_ppe',
@@ -506,16 +521,30 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         # Zajistí, že přesměrujeme na detailní pohled s `pk` aktuálního záznamu
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
-class ItemGroupDeleteView(LoginRequiredMixin, DeleteMixin, DeleteView): # UserPassesTestMixin,
+class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, DeleteView, LoggerMixin):
     # FIXME presmerovat podle stranky ze ktere jsem prisel.
     # TODO upravit prava uzivatelum CompanyUser muze mazat svoji skupinu, CompanySupervisor Muze mazat vse v Company
     model = ItemGroup
     template_name = 'account_delete.html'
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('item_group_user_list')
 
-    # def test_func(self):
-    #     allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
-    #     return any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
+    def test_func(self):
+        item_group = self.get_object()
+
+        # Pokud je uživatel ve skupině 'CompanyUser', může mazat pouze svoje skupiny
+        if self.request.user.groups.filter(name='CompanyUser').exists():
+            return item_group.user == self.request.user
+
+        # Pokud je uživatel ve skupině 'CompanySupervisor', může mazat všechny skupiny v rámci firmy
+        if self.request.user.groups.filter(name='CompanySupervisor').exists():
+            return item_group.company == self.request.user.company
+
+        # Ostatní uživatelé nebudou mít přístup
+        return False
+
+    def handle_no_permission(self):
+        self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
+        return super().handle_no_permission()
 
 
 class SubmittableLoginView(LoginView):

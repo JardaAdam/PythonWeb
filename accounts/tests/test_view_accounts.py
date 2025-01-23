@@ -79,6 +79,28 @@ class BaseTestCase(TestCase):
             company=cls.company
         )
 
+        # Vytvoření uživatele `RevisionTechnician`
+        revision_technician_group, created = Group.objects.get_or_create(name='RevisionTechnician')
+        cls.revision_user = CustomUser.objects.create_user(
+            username='revisiontech',
+            password='revpassword',
+            first_name='Revizni',
+            last_name='Technik'
+        )
+        cls.revision_user.company = cls.company
+        cls.revision_user.groups.add(revision_technician_group)
+        cls.revision_user.save()
+
+        # Vytvoření uživatele `SuperUser`
+        cls.superuser = CustomUser.objects.create_superuser(
+            username='superadmin',
+            password='superpassword',
+            first_name='Super',
+            last_name='Admin'
+        )
+        cls.superuser.company = cls.company
+        cls.superuser.save()
+
 
 class CustomUserViewTest(BaseTestCase):
     def test_custom_user_view_loads_correctly(self):
@@ -113,7 +135,7 @@ class CustomUserUpdateViewTest(BaseTestCase):
 
 class CompanyListViewTest(BaseTestCase):
     def test_company_list_display(self):
-        self.client.login(username='otheruser', password='password')
+        self.client.login(username='revisiontech', password='revpassword')
         response = self.client.get(reverse('company_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.company.name)
@@ -410,7 +432,7 @@ class ItemGroupTestCase(BaseTestCase):
     def test_item_group_delete_view(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.post(reverse('delete_item_group', args=[self.item_group.pk]))
-        self.assertRedirects(response, reverse('profile'))
+        self.assertRedirects(response, reverse('item_group_user_list'))
         self.assertFalse(ItemGroup.objects.filter(pk=self.item_group.pk).exists())
 
 class CompanyTestCase(BaseTestCase):

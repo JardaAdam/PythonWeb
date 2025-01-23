@@ -1,4 +1,8 @@
 import logging
+
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.core.exceptions import ValidationError
 
 from .validators import (
@@ -66,3 +70,16 @@ class LoggerMixin:
 
     def log_error(self, message):
         self.logger.error(message)
+
+
+class PermissionStaffMixin(UserPassesTestMixin, LoggerMixin):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists()
+
+    def handle_no_permission(self):
+        self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
+        return super().handle_no_permission()
+
+    def add_context_data(self, context):
+        context['can_view_restricted'] = self.test_func()
+        print(f"Added to context: can_view_restricted = {context['can_view_restricted']}")  # Debugovací výstup

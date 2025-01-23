@@ -158,7 +158,7 @@ class ManufacturerViewsTest(BaseViewsTest):
         response = self.client.post(url, follow=True)
 
         # Ověření, že se objevila správná chybová zpráva
-        self.assertContains(response, 'This item cannot be deleted because it is protected and has associated records.')
+        self.assertContains(response, 'This item cannot be deleted because it is protected and has associated records DeleteMixin.')
 
         # Ověření, že Manufacturer stále existuje (nebyl smazán)
         self.assertTrue(Manufacturer.objects.filter(id=self.manufacturer.id).exists())
@@ -258,7 +258,7 @@ class LifetimeOfPpeViewsTest(BaseViewsTest):
         response = self.client.post(url, follow=True)
 
         # Ověření, že se objevila správná chybová zpráva
-        self.assertContains(response, 'This item cannot be deleted because it is protected and has associated records.')
+        self.assertContains(response, 'This item cannot be deleted because it is protected and has associated records DeleteMixin.')
 
         # Ověření, že Manufacturer stále existuje (nebyl smazán)
         self.assertTrue(LifetimeOfPpe.objects.filter(id=self.manufacturer.id).exists())
@@ -329,7 +329,7 @@ class TypeOfPpeViewsTest(BaseViewsTest):
         response = self.client.post(url, follow=True)
 
         # Ověření, že se objevila správná chybová zpráva
-        self.assertContains(response, 'This item cannot be deleted because it is protected and has associated records.')
+        self.assertContains(response, 'This item cannot be deleted because it is protected and has associated records DeleteMixin.')
 
         # Ověření, že Manufacturer stále existuje (nebyl smazán)
         self.assertTrue(Manufacturer.objects.filter(id=self.manufacturer.id).exists())

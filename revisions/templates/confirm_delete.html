@@ -1,6 +1,7 @@
 {% extends "revision_base.html" %}
 
 {% block revision_content %}
+{% if user.is_authenticated %}
    <form method="post">
        {% csrf_token %}
        
@@ -18,4 +19,5 @@
        <button type="submit" class="btn btn-danger">
            <i class="fas fa-trash-alt"></i> Delete</button>
    </form>
+    {% endif %}
 {% endblock %}

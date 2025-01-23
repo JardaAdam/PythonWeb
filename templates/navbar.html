@@ -17,8 +17,7 @@
                 </li>
             </ul>
         </div>
-
-            <ul class="navbar-nav ms-auto" style="display: grid; grid-auto-flow: column; gap: 0.4rem;">
+        <ul class="navbar-nav ms-auto" style="display: grid; grid-auto-flow: column; gap: 0.4rem;">
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'item_group_user_list' %}" style="padding: 0; display: inline-block;">User Item groups</a>
@@ -29,12 +28,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'item_group_company_list' %}" style="padding: 0; display: inline-block;">Company Item groups</a>
                 </li>
+            
                 <li class="nav-item" style="padding: 0 0.2rem;">
                     |
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'company_list' %}" style="padding: 0; display: inline-block;">Companies</a>
+                
+                <a class="nav-link" href="{% url 'company_list' %}" style="padding: 0; display: inline-block;">Companies</a>
+             
+    
+
                 </li>
+            
                 <li class="nav-item" style="padding: 0 0.2rem;">
                     |
                 </li>

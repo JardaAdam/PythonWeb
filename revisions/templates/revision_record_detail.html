@@ -64,10 +64,12 @@
                     <button class="btn btn-secondary" onclick="history.back()">
                         <i class="fas fa-arrow-left"></i> <!-- Ikona šipky zpět -->
                     </button>
+                    {% if user.is_authenticated %}
                     <a href="{% url 'edit_revision_record' object.pk %}" class="btn btn-warning">
                         <i class="fas fa-edit"></i></a>
                     <a href="{% url 'delete_revision_record' object.pk %}" class="btn btn-danger">
                         <i class="fas fa-trash-alt"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -98,8 +98,8 @@ class CreateMixin:
 class UpdateMixin:
     detail_url_name = ''
     success_message = 'The changes have been successfully uploaded from UpdateMixin'
-    error_message = ''
-    warning_message = ''
+    error_message = ' error The changes could not be made from UpdateMixin'
+    warning_message = 'warning message from UpdateMixin'
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -139,8 +139,8 @@ class UpdateMixin:
             messages.warning(self.request, self.warning_message)
 
 class DeleteMixin:
-    success_message = 'The item was successfully deleted.'
-    error_message = 'This item cannot be deleted because it is protected and has associated records.'
+    success_message = 'The item was successfully deleted from DeleteMixin.'
+    error_message = 'This item cannot be deleted because it is protected and has associated records DeleteMixin.'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -149,7 +149,7 @@ class DeleteMixin:
             self.object.delete()
             messages.success(self.request, self.success_message)
         except ProtectedError:
-            messages.error(self.request, self.error_message)
+            messages.warning(self.request, self.error_message)
         return HttpResponseRedirect(success_url)
 
 

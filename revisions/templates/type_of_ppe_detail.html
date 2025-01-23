@@ -35,11 +35,13 @@ Type of PPE Detail
                     <button class="btn btn-secondary" onclick="history.back()">
                         <i class="fas fa-arrow-left"></i>
                     </button>
+                    {% if user.is_authenticated %}
                     <a href="{% url 'edit_type_of_ppe' object.pk %}" class="btn btn-warning">
                         <i class="fas fa-edit"></i>
                     </a>
                     <a href="{% url 'delete_type_of_ppe' object.pk %}" class="btn btn-danger">
                         <i class="fas fa-trash-alt"></i>
+                        {% endif %}
                     </a>
                 </div>
             </div>
