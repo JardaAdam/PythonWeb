@@ -21,7 +21,7 @@ from revisions.models import RevisionRecord
 
 
 User = get_user_model()
-# TODO skontrolovat vsechny preklady do Aj !!
+
 # Create your views here.
 """ Custom User"""
 
@@ -130,7 +130,6 @@ class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # Permis
     """ only for revision technician"""
     # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
     # TODO kde se bude tato tabulka zobrazovat viditelnost pouze pro SuperUser a RevisionTechnician
-    # FIXME tato tabulka je pouze pro revision technic a admin
     model = Company
     template_name = 'company_list.html'
     context_object_name = 'companies'
@@ -352,9 +351,6 @@ class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView
 
 
 class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
-
-    # TODO doresit upravy dat ze strany uzivatele. ? udelat si formular ktery bude mit zpristupneny uzivatel
-    #  a formular v revisions nechat pouze pro revizni techniky?,
     # TODO doplnit vyhledavani podle : Date of Manufacture,Date of First Use, Date of Revision
     model = ItemGroup
     template_name = 'item_group_detail.html'
@@ -383,9 +379,6 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 
 
 class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    # TODO pri vytvareni Itemgroup chci podminit podle uzivatelskeho opravneni ze
-    #  uzivatel muze pridat skupinu ktera patri pouze jemu
-    # FIXME pro CompanySupervisor upravit nastaveni vyresit duplicitu zaznamu nefunguje
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -443,8 +436,6 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
 class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    # TODO uzivatel muze upravit pouze skupinu ktera patri jemu pokud je CompanyUser
-    #  pokud je CompanySupervisor muze upravovat vsechny zaznamy v company
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -523,7 +514,6 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, DeleteView, LoggerMixin):
     # FIXME presmerovat podle stranky ze ktere jsem prisel.
-    # TODO upravit prava uzivatelum CompanyUser muze mazat svoji skupinu, CompanySupervisor Muze mazat vse v Company
     model = ItemGroup
     template_name = 'account_delete.html'
     success_url = reverse_lazy('item_group_user_list')
