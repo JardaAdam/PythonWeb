@@ -253,7 +253,8 @@ class ItemGroupForm(ModelForm):
         cleaned_data = super().clean()
         name = cleaned_data.get("name")
         user = self.user or self.instance.user
-        company = self.company or self.instance.company
+        company = self.cleaned_data.get("company") or self.company
+
 
         # Overení, zda ItemGroup s tímto názvem již neexistuje
         # Ignorujeme objednávku samotného instance

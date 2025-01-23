@@ -366,7 +366,7 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     # TODO pri vytvareni Itemgroup chci podminit podle uzivatelskeho opravneni ze
     #  uzivatel muze pridat skupinu ktera patri pouze jemu
-    # FIXME pro CompanySupervisor upravit nastaveni omezit Queryset pro users a defaultne nastavit Company
+    # FIXME pro CompanySupervisor upravit nastaveni vyresit duplicitu zaznamu nefunguje
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -381,6 +381,9 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         if self.request.user.groups.filter(name='CompanyUser').exists():
             kwargs['user'] = self.request.user
             kwargs['company'] = self.request.user.company
+        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
+            # Automatické nastavení společnosti pro CompanySupervisor
+            kwargs['company'] = self.request.user.company
         return kwargs
 
 
@@ -389,11 +392,16 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form = super().get_form(*args, **kwargs)
         form.fields.pop('created_by', None)
         form.fields.pop('updated_by', None)
+        form.fields.pop('company', None)
         if 'user' in form.fields and self.request.user.groups.filter(name='CompanyUser').exists():
             form.instance.user = self.request.user
             form.instance.company = self.request.user.company
             form.fields.pop('user', None)
-            form.fields.pop('company', None)
+
+        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
+            # Omezení seznamu uživatelů na ty ve stejné společnosti
+            form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
+            form.instance.company = self.request.user.company  # Automatické nastavení společnosti
         return form
 
 
