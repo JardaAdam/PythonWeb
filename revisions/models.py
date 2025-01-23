@@ -2,12 +2,13 @@ import os
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
+
 from django.utils import timezone
 
 from django.db.models import Model, ForeignKey, CharField, DecimalField, PROTECT, FileField, ImageField, \
-    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint
+    TextField, IntegerField, DateField, ManyToManyField, SET_NULL, DateTimeField, UniqueConstraint, BooleanField
 
-from accounts.models import ItemGroup
+from accounts.models import ItemGroup, Company
 from django.conf import settings
 
 '''PPE = PersonalProtectiveEquipment'''
@@ -165,7 +166,6 @@ class RevisionData(Model):
 
 
 class RevisionRecord(Model):
-    # TODO pridat checked record BooleanField v pripade ze uzivatel zadal novy zaznam default = False
     """ uchovava informace o revizi jednotlivich polozek a ma informace potrebne k upozornovani na
         - konec platnosti revize
         - konec zivotnosti
@@ -180,6 +180,7 @@ class RevisionRecord(Model):
     date_of_next_revision = DateField(null=True, blank=True) # automaticky vyplnovane po ukonceni vkladani!
     item_group = ForeignKey(ItemGroup, null=True, blank=True, on_delete=PROTECT, related_name='revision_records',
                             related_query_name='revision_record')
+    owner_company = ForeignKey(Company, on_delete=SET_NULL,null=True, related_name='company_records',)
     owner = ForeignKey(settings.AUTH_USER_MODEL, on_delete=SET_NULL, null=True, related_name='owner_records')
     VERDICT_NEW = 'new'
     VERDICT_FIT = 'fit'
@@ -197,6 +198,7 @@ class RevisionRecord(Model):
                             related_name='created_revision_records')
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
+    checked_record = BooleanField(default=False)  # kdyz zadava zaznam uzivatel upozorneni na provedeni controli zaznamu
 
 
     class Meta:
