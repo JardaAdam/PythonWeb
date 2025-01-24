@@ -246,6 +246,7 @@ class CompanyForm(BaseFileRequirementForm, FormValidationMixin, ModelForm):
 
 """ ITEM GROUP """
 class ItemGroupForm(ModelForm):
+    # TODO pridat obrazek
     class Meta:
         model = ItemGroup
         fields = ['name', 'user', 'company', 'created_by', 'updated_by']
@@ -258,20 +259,59 @@ class ItemGroupForm(ModelForm):
         self.company = kwargs.pop('company', None)
         super(ItemGroupForm, self).__init__(*args, **kwargs)
 
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         return name.strip().capitalize()
 
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     company = cleaned_data.get('company', None)
+    #
+    #     # Debugování hodnot
+    #     print(f"Debug: Company in clean method: {company}")
+    #
+    #     # Jestliže je uživatel superuser nebo ve skupině RevisionTechnician, 'company' nesmí být prázdné
+    #     if self.user and (self.user.is_superuser or self.user.groups.filter(name='RevisionTechnician').exists()):
+    #         if not company:
+    #             raise ValidationError({'company': 'This field is required for superuser or RevisionTechnician.'})
+    #
+    #     return cleaned_data
     def clean(self):
         cleaned_data = super().clean()
         name = cleaned_data.get("name")
         user = cleaned_data.get("user", self.user)
-        company = cleaned_data.get("company", self.company)
-
+        # company = cleaned_data.get("company", self.company)
+        company = cleaned_data.get("company") or self.company
 
         # Overení, zda ItemGroup s tímto názvem již neexistuje
-
         if ItemGroup.objects.filter(name=name, user=user, company=company).exclude(pk=self.instance.pk).exists():
             raise ValidationError('This item group name is already used for this user and company.')
+            # Pokud je uživatel superuser nebo RevisionTechnician, zajistit, že 'company' není prázdné
+
+        # Additional check for company requirement for superuser or RevisionTechnician
+        if self.user and (self.user.is_superuser or self.user.groups.filter(name='RevisionTechnician').exists()):
+            if not company:
+                self.add_error('company', 'This field is required for superuser or RevisionTechnician.')
 
         return cleaned_data
+
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     name = cleaned_data.get("name")
+    #     user = cleaned_data.get("user", self.user)
+    #     company = cleaned_data.get("company") or self.company
+    #
+    #     # Overení, zda ItemGroup s tímto názvem již neexistuje
+    #     if ItemGroup.objects.filter(name=name, user=user, company=company).exclude(pk=self.instance.pk).exists():
+    #         raise ValidationError('This item group name is already used for this user and company.')
+    #
+    #     # Ladicí výstup: kontrolujte zde
+    #     print(f"Debug: Company value: {company}, User: {self.user}")
+    #
+    #     # Pokud je uživatel superuser nebo RevisionTechnician, zajistit, že 'company' není prázdné
+    #     if self.user and (self.user.is_superuser or self.user.groups.filter(name='RevisionTechnician').exists()):
+    #         if not company:
+    #             self.add_error('company', 'This field is required for superuser or RevisionTechnician.')
+    #
+    #     return cleaned_data

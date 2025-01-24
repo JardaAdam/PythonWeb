@@ -408,44 +408,62 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 
 
 class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-
+    # TODO Pokud vytvari zaznam Superuser nebo RevisionTechnic musi byt pole company povinne
+    # TODO doresit testy na zadavani dat superuserem a RevisionTechnicianem
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
 
     def test_func(self):
+        if self.request.user.is_superuser:
+            return True
         allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
         return any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         if self.request.user.groups.filter(name='CompanyUser').exists():
             kwargs['user'] = self.request.user
             kwargs['company'] = self.request.user.company
         elif self.request.user.groups.filter(name='CompanySupervisor').exists():
             # Automatické nastavení společnosti pro CompanySupervisor
             kwargs['company'] = self.request.user.company
+        elif self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Podmínka pro superusera a RevisionTechnician, kteří by si mohli vybrat společnost
+            kwargs['company'] = None  # Nastaveno na None, pokud chcete umožnit výběr společnosti externě
         return kwargs
 
-
-    # Formulář inicializujeme s kontrolou a automatickým nastavením společnosti
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-        form.fields.pop('created_by', None)
-        form.fields.pop('updated_by', None)
-        form.fields.pop('company', None)
+
+        # Pro superuser a RevisionTechnician nastavit pouze určitá pole jako editovatelná
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Zobrazit všechny pole, ale omezit jejich možnosti (např. pomocí disabled)
+            for field in form.fields:
+                if field not in ['name', 'user', 'company']:
+                    form.fields[field].disabled = True
+
+        # Původní logika pro CompanyUser
         if 'user' in form.fields and self.request.user.groups.filter(name='CompanyUser').exists():
             form.instance.user = self.request.user
             form.instance.company = self.request.user.company
             form.fields.pop('user', None)
+            form.fields.pop('company', None)
+        # Omezení pro CompanySupervisor
+        if 'user' in form.fields:
+            if self.request.user.groups.filter(name='CompanySupervisor').exists():
+                form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
+                form.instance.company = self.request.user.company
+                form.fields.pop('company', None)
 
-        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
-            # Omezení seznamu uživatelů na ty ve stejné společnosti
-            form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
-            form.instance.company = self.request.user.company  # Automatické nastavení společnosti
+        # Vždy odstranit automagické pole
+        form.fields.pop('created_by', None)
+        form.fields.pop('updated_by', None)
+
+
         return form
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -455,15 +473,19 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         item_group = form.save(commit=False)
         item_group.created_by = self.request.user
-
         item_group.save()
         messages.success(self.request, 'Item Group was successfully created CreatView.')
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        # Debugování chyb formuláře
+        if form.errors:
+            print("Form errors:", form.errors)
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
-        # Přesměrovat uživatele na detail nově vytvořené ItemGroup
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
+
 
 class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = ItemGroup
@@ -472,6 +494,8 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('item_group_user_list')
 
     def test_func(self):
+        if self.request.user.is_superuser:
+            return True
         allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
         is_in_allowed_group = any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
 

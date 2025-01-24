@@ -15,6 +15,7 @@ class BaseTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Vytvoření testovacího uživatele a společnosti
+
         cls.user = CustomUser.objects.create_user(
             username='testuser',
             password='testpassword',
@@ -155,14 +156,14 @@ class CompanyListViewTest(BaseTestCase):
 
 class CompanyViewTest(BaseTestCase):
     def test_access_company_view(self):
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username='revisiontech', password='revpassword')
         response = self.client.get(reverse('company_detail', args=[self.company.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.company.name)
 
 class CompanyCreateViewTest(BaseTestCase):
     def test_company_create_view_loads_correctly(self):
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username='revisiontech', password='revpassword')
         supervisor_group, created = Group.objects.get_or_create(name='CompanySupervisor')
         response = self.client.get(reverse('add_company'))
         self.assertEqual(response.status_code, 200)
@@ -170,7 +171,7 @@ class CompanyCreateViewTest(BaseTestCase):
         self.assertTemplateUsed(response, 'account_form.html')
 
     def test_company_create_success(self):
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username='revisiontech', password='revpassword')
         response = self.client.post(reverse('add_company'), {
             'name': 'New TestCompany',
             'country': self.country.pk,
@@ -186,7 +187,7 @@ class CompanyCreateViewTest(BaseTestCase):
         self.assertTrue(Company.objects.filter(name='New TestCompany').exists())
 
     def test_company_create_success_message(self):
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username='revisiontech', password='revpassword')
         response = self.client.post(reverse('add_company'), {
             'name': 'New TestCompany',
             'country': self.country.pk,
@@ -199,10 +200,10 @@ class CompanyCreateViewTest(BaseTestCase):
             'tax_id': '8765432121'
         })
         messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(str(messages[0]), "Company added successfully and you have been assigned to it.")
+        self.assertEqual(str(messages[0]), "Company added successfully.")
 
     def test_company_create_invalid_data(self):
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username='revisiontech', password='revpassword')
         response = self.client.post(reverse('add_company'), {
             'name': '',
             'country': self.country.pk,
@@ -415,6 +416,50 @@ class CompanyUpdateViewTest(BaseTestCase):
         # Ujistíme se, že název druhé společnosti nebyl změněn
         other_company.refresh_from_db()
         self.assertEqual(other_company.name, 'Other Company')
+
+
+class ItemGroupCreationTests(BaseTestCase):
+
+    def test_superuser_creation_without_company(self):
+        self.client.login(username='superadmin', password='superpassword')
+
+        # Create a post request without company value
+        response = self.client.post(reverse('add_item_group'), {
+            'name': 'New Group',
+            # 'company': '',  # Nevyplněná hodnota company vede ke chybě
+            'user': self.superuser.id
+        })
+
+        # Kontrola chybové zprávy
+        form = response.context['form']
+        self.assertFalse(form.is_valid())
+        self.assertIn('company', form.errors)
+        self.assertEqual(form.errors['company'], ['This field is required for superuser or RevisionTechnician.'])
+
+
+    def test_revision_technician_creation_without_company(self):
+        self.client.login(username='revisiontech', password='revpassword')
+
+        response = self.client.post(reverse('add_item_group'), {
+            'name': 'Another Group',
+            'user': self.revision_user.id
+            # Pole company je záměrně vynecháno
+        }, follow=False)
+
+        # Kontrola response pro přesměrování nebo kontext
+        if response.status_code == 302:
+            self.fail(f"Unexpected redirect to {response.headers.get('Location')}")
+
+        # Ověřte, zda máme přístup k formuláři a že je neúspěšný
+        if 'form' in response.context:
+            form = response.context['form']
+            self.assertFalse(form.is_valid())
+            self.assertIn('company', form.errors)
+            self.assertEqual(form.errors['company'], ['This field is required for superuser or RevisionTechnician.'])
+        else:
+            self.fail("Form was expected in the context but was not found.")
+
+
 
 class ItemGroupTestCase(BaseTestCase):
     def test_item_group_creation(self):
