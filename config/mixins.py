@@ -35,7 +35,7 @@ class SearchSortMixin:
         return queryset.order_by(order_field)
 
 
-"""- Buď si vědom, že použití `distinct()` může ovlivnit výkon, zvláště pokud máš rozsáhlé tabulky a komplexní vazby.
+"""- použití `distinct()` může ovlivnit výkon, zvláště pokud máš rozsáhlé tabulky a komplexní vazby.
 
 - Pokud uvidíš problémy s výkonem nebo složitější chování z důvodu použití `ManyToManyField`, 
 může být nutné optimalizovat databázové vztahy nebo přístup k datům jinými způsoby, jako použití `prefetch_related`.

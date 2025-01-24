@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.urls import reverse_lazy, reverse
 
@@ -310,7 +311,7 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
     context_object_name = 'user_item_groups'
     paginate_by = 10
     search_fields = {
-        'item_group': ['name', 'user__first_name', 'user__last_name', 'company__name', 'created', 'updated'],
+        'item_group': ['name', 'user__first_name', 'user__last_name', 'created', 'updated'], # , 'company__name'
         'revision_record': [
             'revision_data__lifetime_of_ppe__manufacturer__name',
             'revision_data__lifetime_of_ppe__material_type__name',
@@ -320,6 +321,26 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
             'verdict',
         ],
     }
+
+    # def get_queryset(self):
+    #     queryset = ItemGroup.objects.filter(user=self.request.user).annotate(
+    #         record_count=Count('revision_record')
+    #     )
+    #     queryset = self.filter_queryset(queryset, self.search_fields['item_group'])
+    #     queryset = self.sort_queryset(queryset, table_id='user_items', default_sort_field='name')
+    #     return queryset
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #
+    #     free_revision_records = RevisionRecord.objects.filter(owner=self.request.user, item_group=None)
+    #     free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
+    #     free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
+    #                                                default_sort_field='serial_number')
+    #
+    #     context['user_free_revision_records'] = free_revision_records
+    #     context['title'] = 'User Item Groups'
+    #     return context
 
     def get_queryset(self):
         queryset = ItemGroup.objects.filter(user=self.request.user).annotate(
@@ -340,7 +361,6 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
         context['user_free_revision_records'] = free_revision_records
         context['title'] = 'User Item Groups'
         return context
-
 
 class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
     # TODO doresit listovani ve free revision records
@@ -378,20 +398,6 @@ class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView
                 queryset = queryset.none()  # Žádné záznamy, pokud uživatel nemá společnost
         queryset = self.sort_queryset(queryset, table_id='company_items', default_sort_field='name')
         return queryset
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #
-    #     company_users = User.objects.filter(company=self.request.user.company)
-    #     free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
-    #
-    #     free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
-    #     free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
-    #                                                default_sort_field='serial_number')
-    #
-    #     context['company_free_revision_records'] = free_revision_records
-    #     context['title'] = 'Company Item Groups'
-    #     return context
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,8 +1,6 @@
 import logging
 
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.contrib import messages
-from django.shortcuts import redirect
 from django.core.exceptions import ValidationError
 
 from .validators import (
