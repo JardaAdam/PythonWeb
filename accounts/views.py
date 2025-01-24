@@ -567,8 +567,7 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
 class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, DeleteView, LoggerMixin):
-    # FIXME Pri smazani je uzivatelovy otevrene nove okno aby zustal kde je a mazani probyha jinde.
-    #  doresit reload stranky ze ktere odesel tak aby zmizel smazany zaznam.
+    # FIXME doresit reload stranky ze ktere odesel tak aby zmizel smazany zaznam.
     model = ItemGroup
     template_name = 'account_delete.html'
 
@@ -583,8 +582,14 @@ class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, D
         if self.request.user.groups.filter(name='CompanySupervisor').exists():
             return item_group.company == self.request.user.company
 
+        # Pro Superuser nebo RevisionTechnician: mohou mazat všechny skupiny, pokud jsou prázdné
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            return not item_group.revision_records.exists()  # Vrátí True pouze, pokud neexistují žádné záznamy
+
         # Ostatní uživatelé nebudou mít přístup
         return False
+
+
 
     def handle_no_permission(self):
         self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
