@@ -42,7 +42,6 @@ class Country(Model):
 
 
 class Company(Model):
-    # TODO doplnit Email?
     """ Sdruzuje CastomUsers zamestnance do skupiny podle Company"""
     logo = ImageField(upload_to="media/company/", null=True, blank=True)
     name = CharField(max_length=255, unique=True, blank=True, null=True)

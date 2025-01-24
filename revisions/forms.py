@@ -58,6 +58,7 @@ class RevisionDataForm(BaseFileRequirementForm, ModelForm):
 
 
 class RevisionRecordForm(ModelForm):
+    image_field_name = 'image' # TODO kontrola
     # TODO upravit format zadavani datumu
     # FIXME upravit logiku zadavani verdict pole
     class Meta:

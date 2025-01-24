@@ -18,17 +18,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
+
 from accounts.views import ContactView
 from revisions.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+
     path('accounts/', include('accounts.urls')),
     # path('calculator/', include('calculator.urls')),
     path('revisions/', include('revisions.urls')),
 
     path('contact/', ContactView.as_view(), name='contact'),
+
+    path('success_delete/', TemplateView.as_view(template_name="delete_success.html"), name='delete_success'),
 ]
 
 # Přidání statických a mediálních cest

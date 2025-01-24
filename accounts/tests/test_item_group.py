@@ -91,10 +91,10 @@ class ItemGroupDeleteViewTests(BaseTestCase):
         self.client.login(username='companyuser', password='securepassword')
         url = reverse('delete_item_group', args=[self.item_group_user_own.id])
         response = self.client.post(url)
-        self.assertRedirects(response, reverse('item_group_user_list'))
+        self.assertRedirects(response, reverse('delete_success'))
 
     def test_company_supervisor_can_delete_companies_item_group(self):
         self.client.login(username='testuser', password='testpassword')
         url = reverse('delete_item_group', args=[self.item_group_company.id])
         response = self.client.post(url)
-        self.assertRedirects(response, reverse('item_group_user_list'))
+        self.assertRedirects(response, reverse('delete_success'))

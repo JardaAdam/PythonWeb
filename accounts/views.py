@@ -1,11 +1,8 @@
-from django import forms
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db import IntegrityError
 from django.db.models import Count
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 
 from django.views import View
@@ -14,7 +11,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, DeleteVie
 from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.mixins import LoggerMixin, PermissionStaffMixin
-from revisions.mixins import SearchSortMixin, DeleteMixin, ManySearchSortMixin
+from config.mixins import SearchSortMixin, DeleteMixin, ManySearchSortMixin
 from .forms import  SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
@@ -24,9 +21,11 @@ User = get_user_model()
 
 # Create your views here.
 """ Custom User"""
+# TODO detail View pro SuperUsera atd.
 
 class ContactView(TemplateView):
     template_name = 'contact.html'
+
 
 
 def forgot_password_view(request):
@@ -135,7 +134,7 @@ class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # Permis
     context_object_name = 'companies'
     paginate_by = 10
     search_fields_by_view = ['name', 'country__name', 'city', 'business_id']
-    default_sort_field = 'name'  # Zvolte jedno, které je smysluplné pro váš případ
+    default_sort_field = 'name'
 
 
 
@@ -153,7 +152,6 @@ class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # Permis
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.add_context_data(context)
         return context
 
 
@@ -172,13 +170,17 @@ class CompanyView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         if self.request.user.company:
             context['company'] = self.request.user.company
-            context['can_edit'] = self.request.user.groups.filter(name='CompanySupervisor').exists()
+            context['can_edit'] = (
+                    self.request.user.is_superuser or
+                    self.request.user.groups.filter(name='RevisionTechnician').exists() or
+                    self.request.user.groups.filter(name='CompanySupervisor').exists()
+            )
         else:
             context['company'] = None
             context['no_company_message'] = "No company assigned."
         return context
 
-class CompanyDetailView(LoginRequiredMixin, DetailView):
+class CompanyDetailView(PermissionStaffMixin, DetailView):
     # TODO company detail (pro revizni techniky)
     # TODO doplnit do template created_by a Updated By
     # FIXME odkazovat na item group podle company ze ktere prichazim
@@ -195,40 +197,69 @@ class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
     success_url = reverse_lazy('profile')
 
     def test_func(self):
-        # Zkontroluje, zda je uživatel ve skupině 'Company Supervisor'
-        return self.request.user.groups.filter(name='CompanySupervisor').exists()
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            return True
+
+        # Uživatelé ve 'CompanySupervisor' mají povolení pouze pokud nemají přiřazenou společnost
+        if self.request.user.groups.filter(name='CompanySupervisor').exists() and not self.request.user.company:
+            return True
+        # Jiní uživatelé nemají povolení
+        return False
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['view_title'] = 'Add Company'
         return context
 
-
     def form_valid(self, form):
         # Uložíme společnost bez commitu, abychom mohli přidat uživatele
         company = form.save(commit=False)
-        company.created_by = self.request.user  # ulozi aktualniho uzivatele
+        company.created_by = self.request.user  # uloží aktuálního uživatele
         company.save()
 
-        # Aktualizujeme uživatele, aby se přidělil k nově vytvořené společnosti
-        self.request.user.company = company
-        self.request.user.save()
+        # Automaticky aktualizujeme uživatele, aby se přidělil k nově vytvořené společnosti
+        # pouze pokud je uživatel ve skupině CompanySupervisor
+        if self.request.user.groups.filter(name='CompanySupervisor').exists():
+            self.request.user.company = company
+            self.request.user.save()
 
-        messages.success(self.request, 'Company added successfully and you have been assigned to it.')
+        messages.success(self.request, 'Company added successfully.')
         return super().form_valid(form)
 
-class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
-    # FIXME pridat prava pro SuperUser a RevisionTechnique
+
+    def get_success_url(self):
+        # Zjistit, zda je uživatel CompanySupervisor
+        if self.request.user.groups.filter(name='CompanySupervisor').exists():
+            # Přesměrovat na pohled 'company_view'
+            return reverse('company_view')
+
+        # Zjistit, zda je uživatel superuživatel nebo ve skupině 'RevisionTechnician'
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Přesměrovat na detail nově vytvořené společnosti
+            return reverse('company_detail', kwargs={'pk': self.object.pk})
+
+        # Pokud by nějaký uživatel nepatřil mezi tyto, vrátíme ho třeba na úvodní stránku
+        return reverse('profile')
+
+class CompanyUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView, LoggerMixin):
     """ Muze upravovat pouze CompanySupervisor"""
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
-    success_url = reverse_lazy('my_company')
 
 
     def test_func(self):
-        # Zkontroluje, zda je uživatel ve skupině 'Company Supervisor'
-        return self.request.user.groups.filter(name='CompanySupervisor').exists()
+        # Pokud je uživatel superuser nebo 'RevisionTechnician', má přístup bez omezení
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            return True
+        if self.request.user.groups.filter(name='CompanyUser').exists():
+            return False
+        # Pokud je uživatel ve skupině 'CompanySupervisor', zkontroluj firmu
+        if self.request.user.groups.filter(name='CompanySupervisor').exists():
+            company = self.get_object()
+            return company == self.request.user.company  # Uživatel může měnit pouze svou vlastní firmu
+
+        return False
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -257,13 +288,11 @@ class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, Log
         self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
         return super().handle_no_permission()
 
-class CompanyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteMixin, DeleteView):
-    # TODO muze pouze Admin (Superuser)
+
+class CompanyDeleteView(PermissionStaffMixin, DeleteMixin, DeleteView):
     model = Company
     template_name = 'account_delete.html'
-    success_url = reverse_lazy('profile')
-
-
+    success_url = 'delete_success'
 """ ItemGroup """
 
 class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
@@ -379,6 +408,7 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
 
 
 class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -513,10 +543,10 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
 class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, DeleteView, LoggerMixin):
-    # FIXME presmerovat podle stranky ze ktere jsem prisel.
+    # FIXME Pri smazani je uzivatelovy otevrene nove okno aby zustal kde je a mazani probyha jinde.
+    #  doresit reload stranky ze ktere odesel tak aby zmizel smazany zaznam.
     model = ItemGroup
     template_name = 'account_delete.html'
-    success_url = reverse_lazy('item_group_user_list')
 
     def test_func(self):
         item_group = self.get_object()

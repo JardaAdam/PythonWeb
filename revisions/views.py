@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from django.urls import reverse_lazy
 
-from .mixins import SearchSortMixin, CreateMixin, UpdateMixin, DeleteMixin
+from config.mixins import SearchSortMixin, CreateMixin, UpdateMixin, DeleteMixin
 
 from .forms import MaterialTypeForm, StandardPpeForm, ManufacturerForm, TypeOfPpeForm, RevisionDataForm, \
     RevisionRecordForm, LifetimeOfPpeForm

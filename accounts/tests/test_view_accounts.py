@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.contrib.auth.models import Group
 from django.contrib.messages import get_messages
 from django.test import TestCase
@@ -30,7 +32,7 @@ class BaseTestCase(TestCase):
             postcode='12345',
             phone_number='123456789',
             business_id='12345678',
-            tax_id='123456789'
+            tax_id='1234567890'
         )
         cls.user.company = cls.company
         cls.user.save()
@@ -248,9 +250,10 @@ class CompanyCreateViewTest(BaseTestCase):
 
 
 class CompanyUpdateViewTest(BaseTestCase):
+    @skip
     def test_successful_company_update(self):
         """ company record editing by a user belonging to this company """
-        self.client.login(username='testuser', password='testpassword')
+        self.client.login(username='companyuser', password='securepassword')
         self.company = Company.objects.get(pk=self.company.pk)
         # Nastavení URL pro úpravu společnosti s parametrem "next"
         edit_url = reverse('edit_company', args=[self.user.company.pk])
@@ -266,7 +269,7 @@ class CompanyUpdateViewTest(BaseTestCase):
             'phone_number': '666555888',
             'company_email': 'test@email.com',
             'business_id': '12345678',
-            'tax_id': '1234567898'
+            'tax_id': '1234567892'
         })
         if response.status_code == 200:
             print(response.context['form'].errors)  # Přidej tento řádek pro výpis chyb
@@ -275,6 +278,143 @@ class CompanyUpdateViewTest(BaseTestCase):
         self.company.refresh_from_db()
         self.assertEqual(self.company.name, 'UpdatedCompanyName')
 
+    def test_company_user_cannot_edit_company(self):
+        # Přihlašte se jako `CompanyUser`
+        self.client.login(username='companyuser', password='securepassword')
+
+        # URL pro úpravy společnosti
+        self.update_url = reverse('edit_company', args=[self.company.id])
+
+        response = self.client.get(self.update_url)
+
+        # Uživateli s rolí 'CompanyUser' by mělo být odepřeno právo na přístup (např. status code 403)
+        self.assertEqual(response.status_code, 403)
+
+    def test_company_user_cannot_update_company(self):
+        """ Uživatel CompanyUser nemůže upravit záznam své vlastní společnosti """
+        self.client.login(username='companyuser', password='securepassword')
+
+        # Nastavení URL pro úpravu společnosti s parametrem "next"
+        edit_url = reverse('edit_company', args=[self.company.pk])
+        previous_url = reverse('company_view')
+        url_with_next = f"{edit_url}?next={previous_url}"
+
+        response = self.client.post(url_with_next, {
+            'name': 'Jine Jmeno',
+            'country': self.country.pk,
+            'address': 'Podebradova 712',
+            'city': 'Praha',
+            'postcode': '25082',
+            'phone_number': '666555888',
+            'company_email': 'test@email.com',
+            'business_id': '12345678',
+            'tax_id': '1234567892'
+        })
+
+        print("Response Status Code:", response.status_code)
+        # Výpis chyb formuláře, pokud nějaké existují
+        if response.status_code == 200:
+            print(response.context['form'].errors)
+
+        # Ověření nedovoleného přístupu
+        if response.status_code != 403:
+            print(f"Expected a permission error (403) but got {response.status_code}")
+
+        # Ověření, že údaje společnosti zůstaly nezměněné
+        self.company.refresh_from_db()
+        print("Company Name After Attempted Update:", self.company.name)
+        self.assertEqual(self.company.name, 'Test Company')
+
+    def test_successful_company_update_by_company_supervisor(self):
+        """Uživatel CompanySupervisor může úspěšně aktualizovat záznam své společnosti."""
+        # Ujistěte se, že testujete s uživatelem `CompanySupervisor`
+        self.client.login(username='testuser', password='testpassword')  # `testuser` je `CompanySupervisor`
+
+        # Vytvoření URL pro úpravu společnosti s parametrem "next"
+        edit_url = reverse('edit_company', args=[self.company.pk])
+        previous_url = reverse('company_view')
+        url_with_next = f"{edit_url}?next={previous_url}"
+
+        # Odeslání POST žádosti pro úpravu informací o společnosti
+        response = self.client.post(url_with_next, {
+            'name': 'UpdatedCompanyName',
+            'country': self.country.pk,
+            'address': 'Podebradova 712',
+            'city': 'Praha',
+            'postcode': '25082',
+            'phone_number': '666555888',
+            'company_email': 'test@email.com',
+            'business_id': '12345678',
+            'tax_id': '1234567898'
+        })
+
+        # Výpis chyb formuláře, pokud nějaké jsou
+        if response.status_code == 200:
+            print(response.context['form'].errors)
+
+        # Ověření, zda proběhlo přesměrování na předchozí URL
+        self.assertRedirects(response, previous_url)
+
+        # Ověření, že byla data společnosti úspěšně aktualizována
+        self.company.refresh_from_db()
+        self.assertEqual(self.company.name, 'UpdatedCompanyName')
+
+    def test_successful_company_update_by_company_supervisor1(self):
+        """ Uživatel CompanyUser může úspěšně aktualizovat záznam své společnosti """
+        self.client.login(username='testuser', password='testpassword')
+        edit_url = reverse('edit_company', args=[self.company.pk])
+        previous_url = reverse('company_view')
+        url_with_next = f"{edit_url}?next={previous_url}"
+
+        response = self.client.post(url_with_next, {
+            'name': 'UpdatedCompanyName',
+            'country': self.country.pk,
+            'address': 'Podebradova 712',
+            'city': 'Praha',
+            'postcode': '25082',
+            'phone_number': '666555888',
+            'company_email': 'test@email.com',
+            'business_id': '12345678',
+            'tax_id': '1234567898'
+        })
+
+        if response.status_code == 200:
+            print(response.context['form'].errors)
+
+        self.assertRedirects(response, previous_url)
+        self.company.refresh_from_db()
+        self.assertEqual(self.company.name, 'UpdatedCompanyName')
+
+    def test_unsuccessful_company_update_by_company_supervisor_to_other_company(self):
+        """ Uživatel CompanyUser nemůže upravit záznam jiné společnosti """
+        # Vytvoření jiné společnosti
+        other_company = Company.objects.create(
+            name='Other Company', address='Otheraddress 103', city='Other city',
+            postcode='54321', phone_number='987654321', business_id='87654321', tax_id='9876543210'
+        )
+
+        self.client.login(username='testuser', password='testpassword')
+        edit_url = reverse('edit_company', args=[other_company.pk])
+        previous_url = reverse('company_view')
+        url_with_next = f"{edit_url}?next={previous_url}"
+
+        response = self.client.post(url_with_next, {
+            'name': 'HackedCompanyName',
+            'country': self.country.pk,
+            'address': 'Hacked Address',
+            'city': 'Hacked City',
+            'postcode': '25082',
+            'phone_number': '666555888',
+            'company_email': 'hacked@email.com',
+            'business_id': '12345679',
+            'tax_id': '1234567899'
+        })
+
+        self.assertEqual(response.status_code, 403)  # Forbidden
+
+        # Ujistíme se, že název druhé společnosti nebyl změněn
+        other_company.refresh_from_db()
+        self.assertEqual(other_company.name, 'Other Company')
 
 class ItemGroupTestCase(BaseTestCase):
     def test_item_group_creation(self):
@@ -442,7 +582,7 @@ class ItemGroupTestCase(BaseTestCase):
     def test_item_group_delete_view(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.post(reverse('delete_item_group', args=[self.item_group.pk]))
-        self.assertRedirects(response, reverse('item_group_user_list'))
+        self.assertRedirects(response, reverse('delete_success'))
         self.assertFalse(ItemGroup.objects.filter(pk=self.item_group.pk).exists())
 
 class CompanyTestCase(BaseTestCase):

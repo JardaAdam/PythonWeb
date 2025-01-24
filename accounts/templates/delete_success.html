@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Successful Deletion
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success!</h4>
+        <p>The item has been successfully deleted.</p>
+        <hr>
+        <button type="button" class="btn btn-secondary" onclick="window.close()">Close</button>
+    </div>
+</div>
+{% endblock %}

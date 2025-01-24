@@ -3,8 +3,7 @@ from django.contrib import messages
 from django.db.models import Q, ProtectedError, FileField, ImageField
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse
-from django.views.generic import UpdateView, CreateView, DeleteView
+from django.urls import reverse, reverse_lazy
 
 
 # TODO vyhledávání dat které maji háčky a čárky je case sensitive !
@@ -141,6 +140,10 @@ class UpdateMixin:
 class DeleteMixin:
     success_message = 'The item was successfully deleted from DeleteMixin.'
     error_message = 'This item cannot be deleted because it is protected and has associated records DeleteMixin.'
+
+    def get_success_url(self):
+        # Přesměrovat na stránku s potvrzením úspěchu
+        return reverse_lazy('delete_success')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()

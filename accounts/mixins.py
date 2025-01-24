@@ -95,6 +95,3 @@ class PermissionStaffMixin(UserPassesTestMixin, LoggerMixin):
         self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
         return super().handle_no_permission()
 
-    def add_context_data(self, context):
-        context['can_view_restricted'] = self.test_func()
-        print(f"Added to context: can_view_restricted = {context['can_view_restricted']}")  # Debugovací výstup

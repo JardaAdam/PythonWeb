@@ -7,10 +7,12 @@ from django.db.transaction import atomic
 
 from django.forms import CharField, ModelForm, PasswordInput, ModelChoiceField, Select, EmailInput, Form
 
+from revisions.base_forms import BaseFileRequirementForm
 from revisions.models import RevisionRecord
 from .mixins import FormValidationMixin
 from .models import CustomUser, Company, ItemGroup, Country
 from .validators import validate_no_numbers
+
 
 
 """ PASSWORD RESET """
@@ -201,8 +203,10 @@ class CustomUserUpdateForm(FormValidationMixin, ModelForm):
         return city  # Vrátí původní hodnotu None, pokud `city` bylo None
 
 """ COMPANY """
-class CompanyForm(FormValidationMixin, ModelForm):
-    logo = ImageField()
+class CompanyForm(BaseFileRequirementForm, FormValidationMixin, ModelForm):
+    image_field_name = 'logo'
+    require_files = False
+    logo = ImageField(blank=True, null=True)
     name = CharField(required=True, validators=[validate_no_numbers])
     country = ModelChoiceField(required=True, queryset=Country.objects)
     address = CharField(max_length=128, required=True)
