@@ -1,8 +1,9 @@
+from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.urls import reverse_lazy, reverse
 
 from django.views import View
@@ -12,20 +13,22 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.mixins import LoggerMixin, PermissionStaffMixin
 from config.mixins import SearchSortMixin, DeleteMixin, ManySearchSortMixin
-from .forms import  SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, ItemGroupForm
+
+from .forms import SecurityQuestionForm, PasswordResetForm, UserRegistrationForm, CompanyForm, CustomUserUpdateForm, \
+    ItemGroupForm
 from .models import Company, CustomUser, ItemGroup
 from revisions.models import RevisionRecord
-
 
 User = get_user_model()
 
 # Create your views here.
 """ Custom User"""
+
+
 # TODO detail View pro SuperUsera atd.
 
 class ContactView(TemplateView):
     template_name = 'contact.html'
-
 
 
 def forgot_password_view(request):
@@ -40,6 +43,7 @@ def forgot_password_view(request):
         form = SecurityQuestionForm()
 
     return render(request, 'account_form.html', {'form': form})
+
 
 def password_reset_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
@@ -56,6 +60,8 @@ def password_reset_view(request, user_id):
         form = PasswordResetForm()
 
     return render(request, 'account_form.html', {'form': form})
+
+
 class UserRegisterView(View):
     """User registration
     po registraci uzivatele se pomoci signals.py -> assign_company_supervisor_group
@@ -80,6 +86,7 @@ class UserRegisterView(View):
         # Pokud form není validní, zobrazí chyby zpět na template
         return render(request, self.template_name, {'user_form': user_form})
 
+
 class CustomUserView(LoginRequiredMixin, TemplateView):
     """User profile"""
     template_name = 'profile.html'
@@ -89,6 +96,7 @@ class CustomUserView(LoginRequiredMixin, TemplateView):
         context['user'] = self.request.user
         return context
 
+
 class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
     # FIXME Busines ID a Tax id upravit hodnotu prazdneho zapisu na jinou nez None
     """Edit user data"""
@@ -96,7 +104,6 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CustomUserUpdateForm
     template_name = 'account_form.html'
     success_url = reverse_lazy('profile')
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -123,9 +130,11 @@ class CustomUserUpdateView(LoginRequiredMixin, UpdateView):
         print(form.errors)
         return super().form_valid(form)
 
+
 """ Company """
 
-class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # PermissionStaffMixin,
+
+class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView):  # PermissionStaffMixin,
     """ only for revision technician"""
     # TODO upravit vyhledavani tak aby nebyl problem s velkym a malim pismenem
     # TODO kde se bude tato tabulka zobrazovat viditelnost pouze pro SuperUser a RevisionTechnician
@@ -135,8 +144,6 @@ class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # Permis
     paginate_by = 10
     search_fields_by_view = ['name', 'country__name', 'city', 'business_id']
     default_sort_field = 'name'
-
-
 
     def get_queryset(self):
         # Získáme původní queryset definovaný modelem
@@ -153,7 +160,6 @@ class CompanyListView(PermissionStaffMixin, SearchSortMixin, ListView): # Permis
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-
 
 
 class CompanyView(LoginRequiredMixin, TemplateView):
@@ -180,6 +186,7 @@ class CompanyView(LoginRequiredMixin, TemplateView):
             context['no_company_message'] = "No company assigned."
         return context
 
+
 class CompanyDetailView(PermissionStaffMixin, DetailView):
     # TODO company detail (pro revizni techniky)
     # TODO doplnit do template created_by a Updated By
@@ -188,7 +195,8 @@ class CompanyDetailView(PermissionStaffMixin, DetailView):
     template_name = 'company_detail.html'
     context_object_name = 'company'
 
-class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
+
+class CompanyCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     # FIXME pridat create Company Pro SuperUser a RevisionTechnique
     """ Muze vytvaret pouze CompanySupervisor"""
     model = Company
@@ -226,7 +234,6 @@ class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         messages.success(self.request, 'Company added successfully.')
         return super().form_valid(form)
 
-
     def get_success_url(self):
         # Zjistit, zda je uživatel CompanySupervisor
         if self.request.user.groups.filter(name='CompanySupervisor').exists():
@@ -241,12 +248,12 @@ class CompanyCreateView(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         # Pokud by nějaký uživatel nepatřil mezi tyto, vrátíme ho třeba na úvodní stránku
         return reverse('profile')
 
-class CompanyUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView, LoggerMixin):
+
+class CompanyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
     """ Muze upravovat pouze CompanySupervisor"""
     model = Company
     form_class = CompanyForm
     template_name = 'account_form.html'
-
 
     def test_func(self):
         # Pokud je uživatel superuser nebo 'RevisionTechnician', má přístup bez omezení
@@ -265,7 +272,6 @@ class CompanyUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView, Logg
         context = super().get_context_data(**kwargs)
         context['view_title'] = 'Edit Company'
         return context
-
 
     def form_valid(self, form):
         # Zaznamená aktuálního uživatele jako toho, kdo aktualizoval záznam
@@ -293,7 +299,10 @@ class CompanyDeleteView(PermissionStaffMixin, DeleteMixin, DeleteView):
     model = Company
     template_name = 'account_delete.html'
     success_url = 'delete_success'
+
+
 """ ItemGroup """
+
 
 class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
     model = ItemGroup
@@ -332,7 +341,10 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
         context['title'] = 'User Item Groups'
         return context
 
+
 class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
+    # TODO doresit listovani ve free revision records
+
     """View pro firemni uceli"""
     model = ItemGroup
     template_name = 'company_item_group_list.html'
@@ -353,33 +365,58 @@ class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = self.filter_queryset(queryset, self.search_fields['item_group'])
-
-        # Filtruje ItemGroups podle společnosti uživatele
-        if self.request.user.company:
-            queryset = queryset.filter(company=self.request.user.company).annotate(
-                record_count=Count('revision_record')
-            )
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Uživateli dovolujeme vidět všechny záznamy, bez filtru podle společnosti
+            queryset = queryset.annotate(record_count=Count('revision_record'))
         else:
-            queryset = queryset.none()  # Žádné záznamy, pokud uživatel nemá společnost
+            # Filtruje ItemGroups podle společnosti uživatele
+            if self.request.user.company:
+                queryset = queryset.filter(company=self.request.user.company).annotate(
+                    record_count=Count('revision_record')
+                )
+            else:
+                queryset = queryset.none()  # Žádné záznamy, pokud uživatel nemá společnost
         queryset = self.sort_queryset(queryset, table_id='company_items', default_sort_field='name')
         return queryset
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #
+    #     company_users = User.objects.filter(company=self.request.user.company)
+    #     free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
+    #
+    #     free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
+    #     free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
+    #                                                default_sort_field='serial_number')
+    #
+    #     context['company_free_revision_records'] = free_revision_records
+    #     context['title'] = 'Company Item Groups'
+    #     return context
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        company_users = User.objects.filter(company=self.request.user.company)
-        free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
+        # Určení, zda je uživatel superuser nebo v roli RevisionTechnician
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Pokud je uživatel 'superuser' nebo 'RevisionTechnician', zobrazit všechny
+            free_revision_records = RevisionRecord.objects.filter(item_group=None)
+        else:
+            # Pro ostatní uživatele omezit na specifickou společnost
+            company_users = User.objects.filter(company=self.request.user.company)
+            free_revision_records = RevisionRecord.objects.filter(owner__in=company_users, item_group=None)
 
+        # Použití existující logiky filtrování a třídění
         free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
         free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
                                                    default_sort_field='serial_number')
 
         context['company_free_revision_records'] = free_revision_records
         context['title'] = 'Company Item Groups'
+
         return context
 
 
-class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
+class ItemGroupDetailView(LoginRequiredMixin, SearchSortMixin, DetailView):
     # TODO doplnit vyhledavani podle : Date of Manufacture,Date of First Use, Date of Revision
     model = ItemGroup
     template_name = 'item_group_detail.html'
@@ -403,8 +440,6 @@ class ItemGroupDetailView(LoginRequiredMixin,SearchSortMixin, DetailView):
             'user_full_name'] = f"{self.object.user.first_name} {self.object.user.last_name}" \
             if self.object.user else "Unknown user"
         return context
-
-
 
 
 class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -462,7 +497,6 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         form.fields.pop('created_by', None)
         form.fields.pop('updated_by', None)
 
-
         return form
 
     def get_context_data(self, **kwargs):
@@ -488,7 +522,7 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
 class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
-    # FIXME doresit upravy pro
+    # FIXME doresit chybove spravy je jich tu vice
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -569,7 +603,6 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, L
         context['view_title'] = 'Update Item Group'
         return context
 
-
     def form_valid(self, form):
         item_group = form.save(commit=False)
         item_group.updated_by = self.request.user
@@ -592,7 +625,8 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, L
         # Zajistí, že přesměrujeme na detailní pohled s `pk` aktuálního záznamu
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
-class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, DeleteView, LoggerMixin):
+
+class ItemGroupDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteMixin, DeleteView, LoggerMixin):
     # FIXME doresit reload stranky ze ktere odesel tak aby zmizel smazany zaznam.
     model = ItemGroup
     template_name = 'account_delete.html'
@@ -615,8 +649,6 @@ class ItemGroupDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteMixin, D
         # Ostatní uživatelé nebudou mít přístup
         return False
 
-
-
     def handle_no_permission(self):
         self.log_warning(f"Unauthorized access attempt by user ID {self.request.user.id}")
         return super().handle_no_permission()
@@ -628,6 +660,7 @@ class SubmittableLoginView(LoginView):
 
     def get_success_url(self):
         return self.success_url
+
 
 class LoginSuccessView(TemplateView):
     template_name = 'login_success.html'
