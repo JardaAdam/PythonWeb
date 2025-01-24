@@ -487,7 +487,8 @@ class ItemGroupCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return reverse('item_group_detail', kwargs={'pk': self.object.pk})
 
 
-class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView, LoggerMixin):
+    # FIXME doresit upravy pro
     model = ItemGroup
     form_class = ItemGroupForm
     template_name = 'account_form.html'
@@ -496,7 +497,10 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         if self.request.user.is_superuser:
             return True
-        allowed_groups = ['CompanyUser', 'CompanySupervisor', 'RevisionTechnician']
+        # pokud je uživatel ve skupině RevisionTechnician
+        if self.request.user.groups.filter(name='RevisionTechnician').exists():
+            return True
+        allowed_groups = ['CompanyUser', 'CompanySupervisor']
         is_in_allowed_group = any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
 
         # Získání instace item group pro porovnání
@@ -520,7 +524,14 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user.groups.filter(name='CompanyUser').exists():
             kwargs['user'] = self.request.user
             kwargs['company'] = self.request.user.company
-        return kwargs
+        elif self.request.user.groups.filter(name='CompanySupervisor').exists():
+            kwargs['company'] = self.request.user.company
+        elif self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Nebylo vráceno kwargs, aktuálně by to neudělalo nic, pokud by uživatel byl superuser nebo revison technician
+            pass
+
+            # Oprava: zaručit, že kwargs zůstane slovníkem
+        return kwargs or {}
 
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
@@ -538,6 +549,10 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         elif self.request.user.groups.filter(name='CompanySupervisor').exists():
             allowed_fields = ['user', 'name']
             form.fields['user'].queryset = CustomUser.objects.filter(company=self.request.user.company)
+
+        elif self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Povolit všechna pole pro Superuser a RevisionTechnician
+            allowed_fields = ['name', 'user', 'company']
         else:
             # Pokud není ve specifických skupinách, nedovolovat žádné pole k úpravě
             allowed_fields = []
@@ -561,6 +576,17 @@ class ItemGroupUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         item_group.save()
         messages.success(self.request, 'Item Group was successfully updated.')
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        # Zaznamenání chyb ve formuláři pro ladění
+        for field, errors in form.errors.items():
+            for error in errors:
+                self.logger.error(f"Error in {field}: {error}")
+        # Zobrazení chybové zprávy uživateli
+        messages.error(self.request, "There was an error with your submission. Please check the form and try again.")
+
+        # Vrátí neplatnou odpověď formuláře, která opakuje stránku s formulářem
+        return super().form_invalid(form)
 
     def get_success_url(self):
         # Zajistí, že přesměrujeme na detailní pohled s `pk` aktuálního záznamu
