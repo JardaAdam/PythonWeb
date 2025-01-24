@@ -322,6 +322,7 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
         ],
     }
 
+
     # def get_queryset(self):
     #     queryset = ItemGroup.objects.filter(user=self.request.user).annotate(
     #         record_count=Count('revision_record')
@@ -342,26 +343,43 @@ class ItemGroupUserListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
     #     context['title'] = 'User Item Groups'
     #     return context
 
+    ''' pokus s all'''
     def get_queryset(self):
-        queryset = ItemGroup.objects.filter(user=self.request.user).annotate(
-            record_count=Count('revision_record')
-        )
+        queryset = super().get_queryset()
         queryset = self.filter_queryset(queryset, self.search_fields['item_group'])
+
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Umožnit vidění všech záznamů bez filtru
+            queryset = queryset.annotate(record_count=Count('revision_record'))
+        else:
+            # Filtrovat podle uživatele
+            if self.request.user:
+                queryset = queryset.filter(user=self.request.user).annotate(
+                    record_count=Count('revision_record')
+                )
+            else:
+                queryset = queryset.none()  # Žádné záznamy, pokud uživatel nemá společnost
+
         queryset = self.sort_queryset(queryset, table_id='user_items', default_sort_field='name')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        free_revision_records = RevisionRecord.objects.filter(owner=self.request.user, item_group=None)
-        free_revision_records = self.filter_queryset(free_revision_records, self.search_fields['revision_record'])
-        free_revision_records = self.sort_queryset(free_revision_records, table_id='free_records',
-                                                   default_sort_field='serial_number')
+        if self.request.user.is_superuser or self.request.user.groups.filter(name='RevisionTechnician').exists():
+            # Zobrazit všechny nezávislé záznamy, pokud je uživatel superuser nebo RevisionTechnician
+            free_related_records = RevisionRecord.objects.filter(item_group=None)
+        else:
+            # Omezit na záznamy podle uživatelské společnosti
+            free_related_records = RevisionRecord.objects.filter(owner=self.request.user, item_group=None)
 
-        context['user_free_revision_records'] = free_revision_records
-        context['title'] = 'User Item Groups'
+        # Aplikovat stejné filtrování a třídění jako v querysetu
+        free_related_records = self.filter_queryset(free_related_records, self.search_fields['revision_record'])
+        free_related_records = self.sort_queryset(free_related_records, table_id='free_records', default_sort_field='serial_number')
+
+        context['user_free_revision_records'] = free_related_records
+        context['title'] = 'Your View Title'
         return context
-
 class ItemGroupCompanyListView(LoginRequiredMixin, ManySearchSortMixin, ListView):
     # TODO doresit listovani ve free revision records
 
